@@ -26,10 +26,9 @@ export const aiService = {
     } as any);
 
     const response = await api.post(API_ROUTES.AI_FOOD.ANALYZE_IMAGE, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+      // Axios genera automáticamente el header Content-Type con el boundary en React Native
       // Puede tomar más tiempo procesar la imagen con IA
+
       timeout: 30000,
     });
 
