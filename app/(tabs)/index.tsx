@@ -26,7 +26,8 @@ export default function HomeScreen() {
       carbs: { current: 0, total: 220 },
       fat: { current: 0, total: 65 },
     },
-    water: 0
+    water: 0,
+    comidas: [] // Agregado para almacenar las comidas
   });
 
   useEffect(() => {
@@ -51,7 +52,8 @@ export default function HomeScreen() {
             carbs: { current: summary.carbohidratos || 0, total: activeGoal?.carbsGrams || 220 },
             fat: { current: summary.grasas || 0, total: activeGoal?.fatGrams || 65 },
           },
-          water: summary.vasosAgua || 0
+          water: summary.vasosAgua || 0,
+          comidas: summary.comidas || [] // Guardamos las comidas reales de la DB
         });
       } catch (error) {
         console.error('Error cargando datos del dashboard:', error);
@@ -105,7 +107,7 @@ export default function HomeScreen() {
         <DailyGoalCard 
           title="Meta Diaria" 
           subtitle="Completada" 
-          progress={65} 
+          progress={dailyData.calories.goal > 0 ? Math.round((dailyData.calories.consumed / dailyData.calories.goal) * 100) : 0} 
         />
 
         {/* Acciones Rápidas */}
@@ -113,13 +115,13 @@ export default function HomeScreen() {
 
         {/* Banner de Hidratación */}
         <HydrationBanner 
-          currentGlasses={4} 
+          currentGlasses={dailyData.water} 
           goalGlasses={8} 
           onAddGlass={() => console.log('Añadir vaso')} 
         />
 
         {/* Comidas Recientes */}
-        <RecentMeals />
+        <RecentMeals meals={dailyData.comidas as any[]} />
 
       </ScrollView>
     </SafeAreaView>

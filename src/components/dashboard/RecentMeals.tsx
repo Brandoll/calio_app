@@ -1,14 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { colors } from '../../theme/colors';
+import { MealRecord } from '../../types/tracking';
 
-export const RecentMeals = () => {
-  // Datos de prueba, luego vendrán del TrackingService
-  const meals = [
-    { id: '1', name: 'Avena con frutas', calories: 320, time: '08:30', type: 'Desayuno' },
-    { id: '2', name: 'Ensalada de pollo', calories: 450, time: '13:45', type: 'Almuerzo' },
-  ];
+interface RecentMealsProps {
+  meals: MealRecord[];
+}
 
+export const RecentMeals = ({ meals = [] }: RecentMealsProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,16 +16,18 @@ export const RecentMeals = () => {
       </View>
       
       {meals.length > 0 ? (
-        meals.map((meal) => (
-          <View key={meal.id} style={styles.mealCard}>
+        meals.map((meal, index) => (
+          <View key={index.toString()} style={styles.mealCard}>
             <View style={styles.mealIconPlaceholder}>
-              <Text style={styles.mealIconText}>{meal.name.charAt(0)}</Text>
+              <Text style={styles.mealIconText}>{meal.nombre ? meal.nombre.charAt(0).toUpperCase() : '?'}</Text>
             </View>
             <View style={styles.mealInfo}>
-              <Text style={styles.mealName}>{meal.name}</Text>
-              <Text style={styles.mealTime}>{meal.type} • {meal.time}</Text>
+              <Text style={styles.mealName}>{meal.nombre}</Text>
+              <Text style={styles.mealTime}>
+                {meal.tipoComida} • {meal.hora ? meal.hora.substring(0,5) : ''}
+              </Text>
             </View>
-            <Text style={styles.mealCalories}>{meal.calories} kcal</Text>
+            <Text style={styles.mealCalories}>{meal.calorias} kcal</Text>
           </View>
         ))
       ) : (
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
   mealTime: {
     fontSize: 13,
     color: colors.textSecondary,
+    textTransform: 'capitalize',
   },
   mealCalories: {
     fontSize: 16,
