@@ -1,5 +1,5 @@
-import api from './api';
-import { API_ROUTES } from '../constants/api';
+import { API_BASE_URL, API_ROUTES } from '../constants/api';
+import { useAuthStore } from '../stores/authStore';
 
 export interface FoodItem {
   nombre: string;
@@ -16,7 +16,7 @@ export interface AiAnalysisResult {
 
 export const aiService = {
   analyzeImage: async (imageUri: string, mimeType: string = 'image/jpeg', fileName: string = 'food.jpg'): Promise<AiAnalysisResult> => {
-    // Para enviar archivos en React Native usamos FormData
+    // Usar FormData nativo
     const formData = new FormData();
     
     formData.append('imagen', {
@@ -25,13 +25,29 @@ export const aiService = {
       type: mimeType,
     } as any);
 
-    const response = await api.post(API_ROUTES.AI_FOOD.ANALYZE_IMAGE, formData, {
-      // Axios genera automáticamente el header Content-Type con el boundary en React Native
-      // Puede tomar más tiempo procesar la imagen con IA
+    // Obtenemos el token de zustand
+    const token = useAuthStore.getState().accessToken;
 
-      timeout: 30000,
+    // Usamos FETCH nativo en lugar de Axios porque Axios tiene un bug conocido en React Native 
+    // que rompe el boundary del FormData o no envía los archivos correctamente causando un 400.
+    const url = `${API_BASE_URL}${API_ROUTES.AI_FOOD.ANALYZE_IMAGE}`;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json'
+        // IMPORTANTE: NO SETEAR Content-Type, fetch inyecta el boundary de multipart automáticamente
+      },
+      body: formData,
     });
 
-    return response.data;
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || data.message || 'Error analizando la imagen');
+    }
+
+    return data;
   },
 };
