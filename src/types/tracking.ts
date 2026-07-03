@@ -1,0 +1,29 @@
+export interface MealRecord {
+  userId: number;
+  alimentoId: number;
+  nombre: string;
+  calorias: number;
+  proteinas: number;
+  grasas: number;
+  carbohidratos: number;
+  cantidad: number;
+  fecha: string;
+  hora: string;
+  tipoComida: 'DESAYUNO' | 'ALMUERZO' | 'CENA' | 'SNACK';
+}
+
+export interface WaterRecord {
+  userId: number;
+  vasos: number;
+  fecha: string;
+}
+
+export interface DailySummary {
+  caloriasConsumidas: number;
+  metaCalorias: number;
+  proteinas: number;
+  carbohidratos: number;
+  grasas: number;
+  vasosAgua: number;
+  comidas: MealRecord[];
+}

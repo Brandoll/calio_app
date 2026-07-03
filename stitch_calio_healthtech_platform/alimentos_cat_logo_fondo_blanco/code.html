@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Calio - Alimentos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e8ead5",
+                        "inverse-surface": "#2f3224",
+                        "secondary-container": "#e2dfde",
+                        "on-surface": "#1a1d10",
+                        "primary-fixed": "#ccf21b",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#454933",
+                        "outline": "#757961",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f1f2de",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-bright": "#fafbe6",
+                        "surface-tint": "#546500",
+                        "on-primary-container": "#607400",
+                        "primary-container": "#d8ff2e",
+                        "surface-variant": "#e3e4d0",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#3e4c00",
+                        "tertiary-container": "#f0efef",
+                        "surface-container-low": "#f4f5e0",
+                        "inverse-primary": "#b2d400",
+                        "surface-container-highest": "#e3e4d0",
+                        "on-tertiary-container": "#6c6c6c",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "on-background": "#1a1d10",
+                        "on-primary-fixed": "#171e00",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#636262",
+                        "surface": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#c7c6c6",
+                        "outline-variant": "#c5c9ad",
+                        "primary-fixed-dim": "#b2d400",
+                        "tertiary-fixed": "#e3e2e2",
+                        "secondary": "#5f5e5e",
+                        "surface-dim": "#dadcc7",
+                        "primary": "#546500",
+                        "background": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "surface-container": "#eeefdb",
+                        "tertiary": "#5e5e5f",
+                        "on-tertiary-fixed-variant": "#464747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "margin-desktop": "40px",
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "8px",
+                        "safe-bottom": "env(safe-area-inset-bottom)"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "30px", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "26px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-white text-on-surface font-body-lg min-h-screen flex flex-col pb-[100px]">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-white/80 backdrop-blur-md dark:bg-background/80 flat no-shadows flex justify-between items-center px-margin-mobile h-16 w-full z-40 sticky border-b border-black/10">
+<div class="flex items-center gap-xs">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed">Alimentos</h1>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface dark:text-inverse-on-surface hover:opacity-80 transition-opacity active:scale-95 duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container-high border-2 border-primary-container">
+<img alt="User profile photo of Ana" class="w-full h-full object-cover" data-alt="A small circular avatar showing a young woman with a warm smile, well-lit in a bright studio environment, modern health app style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJdP6mKOS4BF6kZDGwd1F97g5rpRa_8svGFUd3JwGZP_tBpbGMskMZOVgl7TIX-dsXIp6DuQEMGIc64bimFSITZwjNClV_urIuY7jCSAtLHlCft9YhFeGjEXeWqr8XjgTwE5-969KdtKXHg0Nd9IIKjNI57nNNdqKTNUzF2DJYcRa2-0UaH3ruPOdp1TDCx2_svgTCbGN7XIiYY0e-dLmV7orEfn1oLScxi34I56JEW5b_xQdK8v5VOmixPxRFGrq8UgxTpxFHYsg"/>
+</div>
+</div>
+</header>
+<main class="flex-1 w-full max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-md flex flex-col gap-lg">
+<!-- Search Bar -->
+<div class="relative w-full group">
+<div class="absolute inset-y-0 left-0 pl-sm flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+</div>
+<input class="w-full bg-black/5 backdrop-blur-md border border-black/10 shadow-[0px_4px_16px_rgba(0,0,0,0.03)] rounded-[12px] py-[12px] pl-[40px] pr-[40px] font-body-sm text-on-surface placeholder:text-on-surface-variant focus:ring-0 focus:border-black/20 focus:bg-black/10 transition-all outline-none" placeholder="Buscar alimentos..." type="text"/>
+<button class="absolute inset-y-0 right-0 pr-sm flex items-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+<!-- Filter Chips -->
+<div class="flex overflow-x-auto no-scrollbar gap-xs pb-1 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0">
+<button class="whitespace-nowrap px-[16px] py-[8px] rounded-full font-label-md bg-primary-container/80 backdrop-blur-sm border border-primary-container/50 shadow-sm text-[#1C1C1C] transition-colors flex-shrink-0">Todos</button>
+<button class="whitespace-nowrap px-[16px] py-[8px] rounded-full font-label-md bg-black/5 backdrop-blur-sm border border-black/10 shadow-sm text-on-surface hover:bg-black/10 transition-colors flex-shrink-0">Frutas</button>
+<button class="whitespace-nowrap px-[16px] py-[8px] rounded-full font-label-md bg-black/5 backdrop-blur-sm border border-black/10 shadow-sm text-on-surface hover:bg-black/10 transition-colors flex-shrink-0">Verduras</button>
+<button class="whitespace-nowrap px-[16px] py-[8px] rounded-full font-label-md bg-black/5 backdrop-blur-sm border border-black/10 shadow-sm text-on-surface hover:bg-black/10 transition-colors flex-shrink-0">Proteínas</button>
+<button class="whitespace-nowrap px-[16px] py-[8px] rounded-full font-label-md bg-black/5 backdrop-blur-sm border border-black/10 shadow-sm text-on-surface hover:bg-black/10 transition-colors flex-shrink-0">Granos</button>
+<button class="whitespace-nowrap px-[16px] py-[8px] rounded-full font-label-md bg-black/5 backdrop-blur-sm border border-black/10 shadow-sm text-on-surface hover:bg-black/10 transition-colors flex-shrink-0">Lácteos</button>
+</div>
+<!-- Categorías -->
+<section class="flex flex-col gap-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Categorías</h2>
+<div class="grid grid-cols-5 gap-xs md:gap-md">
+<div class="flex flex-col items-center gap-xs cursor-pointer group">
+<div class="w-[60px] h-[60px] md:w-[80px] md:h-[80px] rounded-full overflow-hidden shadow-[0px_4px_16px_rgba(0,0,0,0.06)] bg-black/5 backdrop-blur-md border border-black/10 group-hover:scale-105 transition-transform flex items-center justify-center">
+<img alt="Frutas" class="w-full h-full object-cover" data-alt="A brightly lit, top-down shot of assorted fresh fruits like apples, oranges, and berries on a pure white background, vibrant and healthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUaUhzsd864sr802tmvhI22Dll7IZVc7JJF75dKSQKQa53WRCyHHLTefbzAUln7Lz07GBPAUpfQeLSHjhaFU8lFQq6D2E5TETmZe840iUlLaY1EvluHTrTJNbS6qpjMfEaamfGw3J_vaEJtIkFgjRRIRwogvrWnKFNVbzkOYY6V4P2Da0hbbFh7c2YTprYVBDEOWOSkKSw4DP3jMEPMSzJtnx2_YtvzRALfArxfcGiHXKjXncbobXgxl1Ks7lAW0dIpJK4bxf8uik"/>
+</div>
+<span class="font-label-md text-on-surface-variant group-hover:text-primary transition-colors">Frutas</span>
+</div>
+<div class="flex flex-col items-center gap-xs cursor-pointer group">
+<div class="w-[60px] h-[60px] md:w-[80px] md:h-[80px] rounded-full overflow-hidden shadow-[0px_4px_16px_rgba(0,0,0,0.06)] bg-black/5 backdrop-blur-md border border-black/10 group-hover:scale-105 transition-transform flex items-center justify-center">
+<img alt="Verduras" class="w-full h-full object-cover" data-alt="A brightly lit, top-down shot of fresh leafy greens, broccoli, and peppers on a pure white background, vibrant and crisp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-N7wBxcbIyqf0xLEE8ceH1ODv5GUcA67YgoynDfynsRmbCGk20gvSH-h1g4XSLunHPBsNythbd8oRPrXBImx8ZFb3FH-pPfKLLjFrc3FoM1aBibdWRs22vjHVd7PL2mbH6t5r1ueueDCt8DHJT2gW-chgx-mlLzVVqwwnVqfrburGtT_UlaFeVDp0rPcLvqAwmN0Jc66aZH18-CE6u7EUpqSJ09zzTwATxbZSGpOfQHQeMXerHHqhQTvbUFUx6XVFhEtx8HETXEQ"/>
+</div>
+<span class="font-label-md text-on-surface-variant group-hover:text-primary transition-colors">Verduras</span>
+</div>
+<div class="flex flex-col items-center gap-xs cursor-pointer group">
+<div class="w-[60px] h-[60px] md:w-[80px] md:h-[80px] rounded-full overflow-hidden shadow-[0px_4px_16px_rgba(0,0,0,0.06)] bg-black/5 backdrop-blur-md border border-black/10 group-hover:scale-105 transition-transform flex items-center justify-center">
+<img alt="Proteínas" class="w-full h-full object-cover" data-alt="A brightly lit, top-down shot of lean chicken breast, eggs, and almonds on a pure white background, showcasing protein sources." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtrzdeN_Xa0JnNzaaOuHMeo3r0_fRzr_Sat8hEIjadDUizfVgt3aIHrQ11ZAVFltr6DosrLdsPT346FPrXXCZp4AbB7WrZ8NNFEwRe3RpAwi7prFA9oiq_ZOb160Gnhi5XD3nHUGUNwJTK35TR-1psXHWLx2Wbon191ZTMhU_sZRjFgjKrr8euSxxQRhYSMlySDuz_tNK8dPkgPI4pQZQG_lT3FsK6LkSY3wPNhiVMlQKjtPAh10M0-MDZBtcJdf1AvTEZnh3EaR8"/>
+</div>
+<span class="font-label-md text-on-surface-variant group-hover:text-primary transition-colors">Proteínas</span>
+</div>
+<div class="flex flex-col items-center gap-xs cursor-pointer group">
+<div class="w-[60px] h-[60px] md:w-[80px] md:h-[80px] rounded-full overflow-hidden shadow-[0px_4px_16px_rgba(0,0,0,0.06)] bg-black/5 backdrop-blur-md border border-black/10 group-hover:scale-105 transition-transform flex items-center justify-center">
+<img alt="Granos" class="w-full h-full object-cover" data-alt="A brightly lit, top-down shot of a wooden bowl filled with uncooked quinoa and oats on a pure white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC39oonK1jjJinm21tE7M75U-IGWfmaSIVOPYqmQRQuWRT15KMA9VHWxNABkhrFxRElmT8XpS-ROlOzCjKfwYTTQlwiHnL-a_-LzhNBDLs9EkG1pstyYFC4TarwQmY1oBm2H2VA48qLbKE7k_QcDy7u0_8seCiyxTYfZQRBoIIm2QDhDBbEYdMkO279eeT03sNHVBjuAP6z-cfQ6dvbX4kibZIDOj3zynq1hWfxxWGPhhtqzxOwhfqh8UNHi_Mm31rngJTYVVEf1o4"/>
+</div>
+<span class="font-label-md text-on-surface-variant group-hover:text-primary transition-colors">Granos</span>
+</div>
+<div class="flex flex-col items-center gap-xs cursor-pointer group">
+<div class="w-[60px] h-[60px] md:w-[80px] md:h-[80px] rounded-full overflow-hidden shadow-[0px_4px_16px_rgba(0,0,0,0.06)] bg-black/5 backdrop-blur-md border border-black/10 group-hover:scale-105 transition-transform flex items-center justify-center p-2">
+<img alt="Lácteos" class="w-full h-full object-contain" data-alt="A brightly lit, top-down shot of a glass of milk and a piece of cheese on a pure white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVSXyV1CanqF0f91mK3lZFx5H5tRrREBI23zWGxfa1e12KwJRr5SlZZeZv8l2z9n9K4RmmNCIuda-ezsijKzhm006Vgo1sqvLY8lAfbwQ7JC9HAXzw-LLl0Di5cgoax1ZSaNYshnshN-zALHzTtSUjDkHPDwx1unNMmjsbAmHvzINHGTBXu1wxQUUhaAz06o16gjIl6S56dmPvUynvR0bktBxEc3LHdg78lzZ286zkW1lI3CfyCkDN7Se-YgJkqQTuCM92lFmFKe8"/>
+</div>
+<span class="font-label-md text-on-surface-variant group-hover:text-primary transition-colors">Lácteos</span>
+</div>
+</div>
+</section>
+<!-- Alimentos Populares -->
+<section class="flex flex-col gap-md">
+<h2 class="font-headline-md text-headline-md text-on-surface">Alimentos populares</h2>
+<div class="flex flex-col gap-sm">
+<!-- Card 1 -->
+<div class="bg-black/5 backdrop-blur-md border border-black/10 rounded-lg p-md shadow-[0px_4px_16px_rgba(0,0,0,0.03)] flex items-center justify-between group cursor-pointer hover:bg-black/10 transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-[50px] h-[50px] rounded-full overflow-hidden bg-white flex-shrink-0">
+<img alt="Quinua" class="w-full h-full object-cover" data-alt="A high-quality close-up of a small bowl of cooked quinoa, softly lit against a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_LuBbJlLleHOY2r9NBnv8I-ChTlfHogIMchn5Pn4c2P64XyEIehV_Go6INtY3O59gHZnd7RjjkhCslt1W2vnNtabyxn8JgyNouOfg-0PF-JGC00o4J0yBWpJWXRqtf5xrvcUgIoVEEEu4hf-gBnt52xHXMy97-MhqJEG1oui0DndZPjTjZHkvI_ZtCtsIrZcmtvDMNkryS97pQK0D8p0csPh5YqAT8UbgQkvElahnDuPD_8Rsz0Aicd_asLlHMk9HzfwMbXzppYE"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-lg text-on-surface font-semibold">Quinua</span>
+<span class="font-body-sm text-on-surface-variant">368 kcal / 100g</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-xs">
+<span class="bg-[#E7F6E7]/80 backdrop-blur-sm border border-black/5 text-[#2E7D32] font-label-caps px-2 py-1 rounded-sm shadow-sm">Autóctono</span>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[20px]">favorite_border</span>
+</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-black/5 backdrop-blur-md border border-black/10 rounded-lg p-md shadow-[0px_4px_16px_rgba(0,0,0,0.03)] flex items-center justify-between group cursor-pointer hover:bg-black/10 transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-[50px] h-[50px] rounded-full overflow-hidden bg-white flex-shrink-0">
+<img alt="Palta" class="w-full h-full object-cover" data-alt="A high-quality close-up of a perfectly halved avocado with the pit visible, softly lit against a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwRITCmLRYndQQ3ibEjw2tTcIyUU6CJHSmHjR50S78zCIXIQe3Gasmz_hlfqe9uuQHhSNfPlwWsqUcU176Wt1WHmEz_1tEd9DP9dUi6-GtDSTFUKyG9N3dOoerugOGgQCS49ZWbIPLCxH-UR7tuvqpiLSvlptQRhjblVBizYDmbdTLRN3eBIGYpSRMRP82BtjxvWsikqviI7Vuvo5TiuzDwQXLaoqzdZtRCIEbcxf_Qhvz6C7gLK4VpnDJkMO6J3lkNvaGV0q4yfc"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-lg text-on-surface font-semibold">Palta</span>
+<span class="font-body-sm text-on-surface-variant">160 kcal / 100g</span>
+</div>
+</div>
+<div class="flex flex-col items-end justify-center h-full">
+<button class="text-on-surface-variant hover:text-error transition-colors mt-auto">
+<span class="material-symbols-outlined text-[20px]">favorite_border</span>
+</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-black/5 backdrop-blur-md border border-black/10 rounded-lg p-md shadow-[0px_4px_16px_rgba(0,0,0,0.03)] flex items-center justify-between group cursor-pointer hover:bg-black/10 transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-[50px] h-[50px] rounded-full overflow-hidden bg-white flex-shrink-0">
+<img alt="Pollo a la plancha" class="w-full h-full object-cover" data-alt="A high-quality close-up of a piece of grilled chicken breast on a small plate, softly lit against a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBm1PTnviPlJDj2h0cDqopzkeK-3EFhKSW3ZgV5uPaqfqN7ztIF7LD25Zbh-fQyv-CI_pXpna2Uw51PsFNdilwZ26rRngb00KwePb4Iyjwr0c5dW_uIgSObeGEj-C-vt7chdJuYQSf21v13KW8r0JkGKYQghr9jhzSXI5iOG_9KKDIDjrN6pGq5TpjqXpDkZKqnxGOONPu6Cb_PCwJlruDhpPY0Sjy4ArszgjsJIg-lwFBRZM5GEQkamZDP11IXMcCjSsZ2k70IYi0"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-lg text-on-surface font-semibold">Pollo a la plancha</span>
+<span class="font-body-sm text-on-surface-variant">165 kcal / 100g</span>
+</div>
+</div>
+<div class="flex flex-col items-end justify-center h-full">
+<button class="text-on-surface-variant hover:text-error transition-colors mt-auto">
+<span class="material-symbols-outlined text-[20px]">favorite_border</span>
+</button>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-black/5 backdrop-blur-md border border-black/10 rounded-lg p-md shadow-[0px_4px_16px_rgba(0,0,0,0.03)] flex items-center justify-between group cursor-pointer hover:bg-black/10 transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-[50px] h-[50px] rounded-full overflow-hidden bg-white flex-shrink-0">
+<img alt="Camote" class="w-full h-full object-cover" data-alt="A high-quality close-up of baked sweet potato wedges, softly lit against a white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgTgSuhD6KT2Dr_XqmQifR8u_sOawEIbAsQzdUIomAMG_TZKTe0pfvESn4YLq7M1bydNYQT0cbD-1Qsu5d-OxVWwuFOPJGqqqiJN8hHk2PYEBcGq6f2kOy1Wp-iJh3Jdyz7HNYz6K51AScvMlDmddxrwrzp2QGxP-u8wWUf6pRAkxbsLLran3iMb-itYSCU32Oax5MZQ85oH6l9NLdnb7pR3hztEKPpxEC-gmY5bNyKhPqx3ncJM90oeR9S1Yf_F_h_57NdYWL7BQ"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-lg text-on-surface font-semibold">Camote</span>
+<span class="font-body-sm text-on-surface-variant">86 kcal / 100g</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-xs">
+<span class="bg-[#E7F6E7]/80 backdrop-blur-sm border border-black/5 text-[#2E7D32] font-label-caps px-2 py-1 rounded-sm shadow-sm">Autóctono</span>
+<button class="text-on-surface-variant hover:text-error transition-colors mt-auto">
+<span class="material-symbols-outlined text-[20px]">favorite_border</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB -->
+<button class="fixed right-margin-mobile bottom-[100px] w-[56px] h-[56px] bg-primary-container/90 backdrop-blur-md border border-primary-container/50 rounded-full flex items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.1)] text-[#1C1C1C] hover:scale-105 active:scale-95 transition-transform z-40 md:hidden">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-4 pb-safe h-20 bg-white/80 backdrop-blur-xl border-t border-black/10 dark:bg-surface-container-highest/60 shadow-[0px_-4px_24px_rgba(0,0,0,0.06)] rounded-t-2xl md:hidden">
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary transition-colors flex-1">
+<span class="material-symbols-outlined text-[24px] mb-1">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed font-bold hover:text-primary transition-colors flex-1 active:scale-90 duration-150">
+<span class="material-symbols-outlined text-[24px] mb-1" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="font-label-md text-label-md">Alimentos</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary transition-colors flex-1">
+<span class="material-symbols-outlined text-[24px] mb-1">fitness_center</span>
+<span class="font-label-md text-label-md">Ejercicios</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary transition-colors flex-1">
+<span class="material-symbols-outlined text-[24px] mb-1">bar_chart</span>
+<span class="font-label-md text-label-md">Estadísticas</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary transition-colors flex-1">
+<span class="material-symbols-outlined text-[24px] mb-1">grid_view</span>
+<span class="font-label-md text-label-md">Más</span>
+</button>
+</nav>
+</body></html>

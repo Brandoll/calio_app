@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Calio - Estadísticas</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config from Brand Anchors -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e8ead5",
+                        "inverse-surface": "#2f3224",
+                        "secondary-container": "#e2dfde",
+                        "on-surface": "#1a1d10",
+                        "primary-fixed": "#ccf21b",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#454933",
+                        "outline": "#757961",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f1f2de",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-bright": "#fafbe6",
+                        "surface-tint": "#546500",
+                        "on-primary-container": "#607400",
+                        "primary-container": "#d8ff2e",
+                        "surface-variant": "#e3e4d0",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#3e4c00",
+                        "tertiary-container": "#f0efef",
+                        "surface-container-low": "#f4f5e0",
+                        "inverse-primary": "#b2d400",
+                        "surface-container-highest": "#e3e4d0",
+                        "on-tertiary-container": "#6c6c6c",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "on-background": "#1a1d10",
+                        "on-primary-fixed": "#171e00",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#636262",
+                        "surface": "#fafbe6",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#c7c6c6",
+                        "outline-variant": "#c5c9ad",
+                        "primary-fixed-dim": "#b2d400",
+                        "tertiary-fixed": "#e3e2e2",
+                        "secondary": "#5f5e5e",
+                        "surface-dim": "#dadcc7",
+                        "primary": "#546500",
+                        "background": "#fafbe6",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "surface-container": "#eeefdb",
+                        "tertiary": "#5e5e5f",
+                        "on-tertiary-fixed-variant": "#464747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "margin-desktop": "40px",
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "label-caps": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "30px", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "26px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Custom Scrollbar hide */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-[#F5F5F5] text-on-background min-h-screen pb-24 font-body-lg">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-margin-mobile h-16 w-full docked full-width top-0 bg-white/50 backdrop-blur-xl border-b border-white/40 flat no shadows sticky z-40 transition-shadow duration-300" id="topAppBar">
+<div class="flex items-center">
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-on-surface">Estadísticas</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-100 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[24px]" data-icon="calendar_month">calendar_month</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="px-margin-mobile pt-4 pb-20 max-w-[1200px] mx-auto md:px-margin-desktop relative z-10">
+<!-- Period Selector (Chips) -->
+<div class="flex overflow-x-auto no-scrollbar gap-sm mb-lg">
+<button class="bg-[#D8FF2E] text-[#3e4c00] px-4 py-2 rounded-full font-label-md text-label-md whitespace-nowrap active:scale-95 transition-transform shadow-[0_4px_12px_rgba(216,255,46,0.3)]">
+                7 días
+            </button>
+<button class="bg-white/60 backdrop-blur-md text-on-surface px-4 py-2 rounded-full font-label-md text-label-md border border-white/60 whitespace-nowrap active:scale-95 transition-transform hover:bg-white/80 shadow-sm">
+                30 días
+            </button>
+<button class="bg-white/60 backdrop-blur-md text-on-surface px-4 py-2 rounded-full font-label-md text-label-md border border-white/60 whitespace-nowrap active:scale-95 transition-transform hover:bg-white/80 shadow-sm">
+                3 meses
+            </button>
+<button class="bg-white/60 backdrop-blur-md text-on-surface px-4 py-2 rounded-full font-label-md text-label-md border border-white/60 whitespace-nowrap active:scale-95 transition-transform hover:bg-white/80 shadow-sm">
+                1 año
+            </button>
+</div>
+<!-- Weekly Chart Card (Premium Lime Hero) -->
+<div class="bg-gradient-to-br from-[#D8FF2E]/90 to-[#b2d400]/80 backdrop-blur-xl border border-white/50 rounded-2xl p-md mb-gutter shadow-[0_8px_32px_rgba(178,212,0,0.2)] relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-primary-container">Resumen semanal</h3>
+<p class="font-body-sm text-body-sm text-on-primary-container opacity-80">12 - 18 Mayo</p>
+</div>
+<button class="bg-white/80 backdrop-blur-md text-on-surface px-3 py-1.5 rounded-full font-label-md text-label-md flex items-center gap-1 shadow-sm border border-white/60">
+                    Calorías <span class="material-symbols-outlined text-[16px]" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<!-- Synthetic Chart Area -->
+<div class="h-40 w-full relative mt-6">
+<!-- Y-axis labels -->
+<div class="absolute left-0 top-0 h-full flex flex-col justify-between font-label-md text-label-md text-on-primary-container opacity-70 z-10 py-4">
+<span>3k</span>
+<span>2k</span>
+<span>1k</span>
+<span>0</span>
+</div>
+<!-- Chart Line & Area -->
+<svg class="w-full h-full absolute inset-0 z-0 pl-6" preserveaspectratio="none" viewbox="0 0 300 100">
+<path d="M0,80 Q30,70 50,50 T100,55 T150,30 T200,60 T250,40 T300,50" fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<path d="M0,80 Q30,70 50,50 T100,55 T150,30 T200,60 T250,40 T300,50 L300,100 L0,100 Z" fill="rgba(255,255,255,0.2)"></path>
+</svg>
+<!-- X-axis labels -->
+<div class="absolute bottom-0 left-6 right-0 flex justify-between font-label-md text-label-md text-on-primary-container opacity-70">
+<span>Lun</span>
+<span>Mar</span>
+<span>Mié</span>
+<span>Jue</span>
+<span>Vie</span>
+<span>Sáb</span>
+<span>Dom</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid: Stats Cards -->
+<div class="grid grid-cols-2 gap-gutter mb-gutter">
+<!-- Daily Average -->
+<div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-2xl p-md shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+<h4 class="font-body-sm text-body-sm text-on-surface-variant mb-2">Promedio diario</h4>
+<div class="flex items-baseline gap-1 mb-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">1,650</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-body-sm text-body-sm text-on-surface-variant">kcal</span>
+<div class="bg-surface-container text-primary p-1.5 rounded-full">
+<span class="material-symbols-outlined text-[20px]" data-icon="restaurant">restaurant</span>
+</div>
+</div>
+</div>
+<!-- Goal Compliance -->
+<div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-2xl p-md shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+<h4 class="font-body-sm text-body-sm text-on-surface-variant mb-2">Cumplimiento</h4>
+<div class="flex items-baseline gap-1 mb-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">78%</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-body-sm text-body-sm text-on-surface-variant">de tu meta</span>
+<div class="text-[#b2d400] flex items-end h-5 gap-0.5">
+<div class="w-1.5 bg-[#b2d400] h-2 rounded-sm opacity-40"></div>
+<div class="w-1.5 bg-[#b2d400] h-3 rounded-sm opacity-70"></div>
+<div class="w-1.5 bg-[#b2d400] h-5 rounded-sm"></div>
+</div>
+</div>
+</div>
+<!-- Streak -->
+<div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-2xl p-md shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+<h4 class="font-body-sm text-body-sm text-on-surface-variant mb-2">Racha actual</h4>
+<div class="flex items-baseline gap-1 mb-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface">7</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-body-sm text-body-sm text-on-surface-variant">días</span>
+<div class="text-orange-500 p-1.5">
+<span class="material-symbols-outlined text-[20px] icon-fill text-[#FF9800]" data-icon="local_fire_department">local_fire_department</span>
+</div>
+</div>
+</div>
+<!-- Current Weight -->
+<div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-2xl p-md shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+<h4 class="font-body-sm text-body-sm text-on-surface-variant mb-2">Peso actual</h4>
+<div class="flex items-baseline gap-1 mb-2">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">61.5 kg</span>
+</div>
+<div class="flex justify-between items-end">
+<span class="font-body-sm text-body-sm text-green-600">-1.2 kg</span>
+<div class="text-green-600 p-1.5">
+<span class="material-symbols-outlined text-[20px]" data-icon="trending_down">trending_down</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Macronutrients Card -->
+<div class="bg-white/60 backdrop-blur-xl border border-white/60 rounded-2xl p-md shadow-[0_8px_24px_rgba(0,0,0,0.04)] mb-gutter">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Distribución de macronutrientes</h3>
+<div class="flex items-center gap-6">
+<!-- Donut Chart Container -->
+<div class="relative w-24 h-24 flex-shrink-0">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<!-- Background Circle -->
+<path class="text-white/40" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="4"></path>
+<!-- Carbs 50% (Blue) -->
+<path class="text-blue-500" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="50, 100" stroke-width="4"></path>
+<!-- Protein 25% (Greenish/Lime) -->
+<path class="text-[#D8FF2E]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="25, 100" stroke-dashoffset="-50" stroke-width="4"></path>
+<!-- Fats 25% (Purple) -->
+<path class="text-purple-500" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="25, 100" stroke-dashoffset="-75" stroke-width="4"></path>
+</svg>
+</div>
+<!-- Legend -->
+<div class="flex-1 space-y-3">
+<div class="flex justify-between items-center font-body-sm text-body-sm text-on-surface">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#D8FF2E] shadow-[0_0_8px_rgba(216,255,46,0.5)] block"></span>
+<span>Proteínas</span>
+</div>
+<span class="font-bold">25%</span>
+</div>
+<div class="flex justify-between items-center font-body-sm text-body-sm text-on-surface">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-blue-500 block"></span>
+<span>Carbohidratos</span>
+</div>
+<span class="font-bold">50%</span>
+</div>
+<div class="flex justify-between items-center font-body-sm text-body-sm text-on-surface">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-purple-500 block"></span>
+<span>Grasas</span>
+</div>
+<span class="font-bold">25%</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-4 md:right-[calc(50%-580px)] w-14 h-14 bg-[#D8FF2E]/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-[0_8px_24px_rgba(216,255,46,0.4)] border border-white/50 text-[#171e00] z-40 active:scale-95 transition-transform hover:opacity-100 md:bottom-8">
+<span class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-4 pb-safe h-20 shadow-[0_-8px_32px_rgba(0,0,0,0.04)] bg-white/70 backdrop-blur-xl border-t border-white/40 md:hidden rounded-t-2xl">
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors flex-1 h-full pt-2">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors flex-1 h-full pt-2">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="restaurant">restaurant</span>
+<span class="font-label-md text-label-md">Alimentos</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors flex-1 h-full pt-2">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="fitness_center">fitness_center</span>
+<span class="font-label-md text-label-md">Ejercicios</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary font-bold hover:text-primary transition-colors flex-1 h-full pt-2 relative">
+<div class="absolute -top-3 w-10 h-1 rounded-full bg-[#D8FF2E] shadow-[0_0_8px_rgba(216,255,46,0.8)]"></div>
+<span class="material-symbols-outlined text-[24px] icon-fill mb-1" data-icon="bar_chart">bar_chart</span>
+<span class="font-label-md text-label-md">Estadísticas</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors flex-1 h-full pt-2">
+<span class="material-symbols-outlined text-[24px] mb-1" data-icon="grid_view">grid_view</span>
+<span class="font-label-md text-label-md">Más</span>
+</button>
+</nav>
+<!-- Desktop Sidebar/Nav Alternative -->
+<nav class="hidden md:flex fixed left-0 top-0 h-full w-64 bg-white/70 backdrop-blur-xl border-r border-white/50 shadow-lg flex-col pt-16 z-30">
+<div class="px-6 py-4 flex flex-col gap-4">
+<span class="font-headline-lg text-headline-lg font-bold text-primary">Calio</span>
+</div>
+</nav>
+<script>
+        // Simple scroll shadow logic for TopAppBar
+        const topAppBar = document.getElementById('topAppBar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                topAppBar.classList.add('shadow-md');
+            } else {
+                topAppBar.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>

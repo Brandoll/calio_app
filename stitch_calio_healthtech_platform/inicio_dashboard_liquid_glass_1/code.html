@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Calio - Inicio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .progress-circle {
+            transition: stroke-dashoffset 1s ease-out;
+        }
+        
+        /* Glassmorphism utilities */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+        }
+        
+        .glass-primary {
+            background: linear-gradient(135deg, rgba(216, 255, 46, 0.9), rgba(204, 242, 27, 0.8));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 8px 24px rgba(216, 255, 46, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e8ead5",
+                        "inverse-surface": "#2f3224",
+                        "secondary-container": "#e2dfde",
+                        "on-surface": "#1a1d10",
+                        "primary-fixed": "#ccf21b",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#454933",
+                        "outline": "#757961",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f1f2de",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-bright": "#F5F5F5",
+                        "surface-tint": "#546500",
+                        "on-primary-container": "#607400",
+                        "primary-container": "#d8ff2e",
+                        "surface-variant": "#e3e4d0",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#3e4c00",
+                        "tertiary-container": "#f0efef",
+                        "surface-container-low": "#f4f5e0",
+                        "inverse-primary": "#b2d400",
+                        "surface-container-highest": "#e3e4d0",
+                        "on-tertiary-container": "#6c6c6c",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "on-background": "#1a1d10",
+                        "on-primary-fixed": "#171e00",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#636262",
+                        "surface": "#F5F5F5",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#c7c6c6",
+                        "outline-variant": "#c5c9ad",
+                        "primary-fixed-dim": "#b2d400",
+                        "tertiary-fixed": "#e3e2e2",
+                        "secondary": "#5f5e5e",
+                        "surface-dim": "#dadcc7",
+                        "primary": "#546500",
+                        "background": "#F5F5F5",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "surface-container": "#eeefdb",
+                        "tertiary": "#5e5e5f",
+                        "on-tertiary-fixed-variant": "#464747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "margin-desktop": "40px",
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "8px",
+                        "safe": "env(safe-area-inset-bottom, 20px)"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter", "sans-serif"],
+                        "headline-lg-mobile": ["Inter", "sans-serif"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "headline-lg": ["Inter", "sans-serif"],
+                        "label-caps": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "30px", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["20px", {"lineHeight": "26px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-lg": ["28px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "label-caps": ["11px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-[#F5F5F5] text-on-surface font-body-lg min-h-screen pb-32 relative">
+<!-- Background ambient glow -->
+<div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#D8FF2E] rounded-full blur-[120px] opacity-20 pointer-events-none z-0"></div>
+<div class="fixed bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#A855F7] rounded-full blur-[150px] opacity-10 pointer-events-none z-0"></div>
+<!-- TopAppBar -->
+<header class="glass-card text-primary dark:text-primary-fixed docked full-width top-0 flex justify-between items-center px-margin-mobile h-16 w-full sticky z-40">
+<div class="flex items-center gap-xs">
+<div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-secondary-container shadow-sm border border-white/50">
+<img alt="Ana" class="w-full h-full object-cover" data-alt="A portrait photography of a fit, smiling young woman with dark hair in a bright outdoor setting, representing a user profile picture for a health app. Natural lighting, shallow depth of field, modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXDEUHuIQwLOL8jxlku93lxZ9gY5e_F6oLx64EcqaK1K3byIXMM8jD9X200EbCYxusMz7rg7G0keJRS6zXdJztVUdi3KzomRv2vd7PBwPK1T8F7HLvp01NXQj4n4yjdUgmG4_9PjYepoa9lnmZteI8311GouI-WCPaKzw9iB9lxDp-8FrQxqPm7LLxnoqUIE7OXM0BIrLzHJg7zA4b2ztaSWguysnu-vphMmOKHitFvQLNj77dDZJLnzDUqXFjbaf1RCnMI0fBVQs"/>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface">¡Hola, Ana! 👋</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Listo para lograr tus metas</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-100 p-2 rounded-full relative bg-white/50 backdrop-blur-md border border-white/50 shadow-sm">
+<span class="material-symbols-outlined text-on-surface" style="font-variation-settings: 'FILL' 0;">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-[#D8FF2E] rounded-full shadow-[0_0_8px_rgba(216,255,46,0.8)]"></span>
+</button>
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-100 p-2 rounded-full hidden md:block bg-white/50 backdrop-blur-md border border-white/50 shadow-sm">
+<span class="material-symbols-outlined text-on-surface" style="font-variation-settings: 'FILL' 0;">calendar_today</span>
+</button>
+</div>
+</header>
+<main class="w-full max-w-md mx-auto md:max-w-7xl px-margin-mobile pt-4 flex flex-col gap-lg relative z-10">
+<!-- Toggle Tabs -->
+<div class="glass-card p-1 rounded-full flex relative z-0 mb-2">
+<div class="w-1/2 glass-primary text-on-primary-fixed rounded-full py-2 text-center font-label-md text-label-md cursor-pointer z-10 shadow-sm transition-all duration-300">Resumen</div>
+<div class="w-1/2 text-on-surface-variant rounded-full py-2 text-center font-label-md text-label-md cursor-pointer z-10 hover:text-on-surface transition-colors duration-300">Progreso</div>
+</div>
+<!-- Main Nutrition Card -->
+<section class="glass-card rounded-2xl p-lg flex flex-col gap-md relative overflow-hidden">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#D8FF2E] drop-shadow-[0_0_8px_rgba(216,255,46,0.6)]" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Calorías de hoy</h2>
+</div>
+<div class="flex flex-col mb-4">
+<div class="flex items-baseline gap-1">
+<span class="font-display-lg text-display-lg font-bold text-on-surface">1,350</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/ 2,000 kcal</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-3 bg-black/5 rounded-full mt-sm relative overflow-hidden inset-shadow-sm">
+<div class="absolute top-0 left-0 h-full bg-gradient-to-r from-[#D8FF2E] to-[#B2D400] rounded-full shadow-[0_0_10px_rgba(216,255,46,0.5)]" style="width: 67%;"></div>
+</div>
+<div class="w-full text-right mt-1">
+<span class="font-label-md text-label-md text-on-surface-variant">67%</span>
+</div>
+</div>
+<!-- Macros Breakdown -->
+<div class="flex justify-between mt-2 pt-md border-t border-black/5">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-[#D8FF2E] shadow-[0_0_4px_rgba(216,255,46,0.8)]"></div>
+<span class="font-label-md text-label-md text-on-surface-variant">Proteínas</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">78 / 120 g</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-[#3B82F6] shadow-[0_0_4px_rgba(59,130,246,0.8)]"></div>
+<span class="font-label-md text-label-md text-on-surface-variant">Carbohidratos</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">152 / 250 g</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1">
+<div class="w-2 h-2 rounded-full bg-[#A855F7] shadow-[0_0_4px_rgba(168,85,247,0.8)]"></div>
+<span class="font-label-md text-label-md text-on-surface-variant">Grasas</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface">42 / 70 g</span>
+</div>
+</div>
+</section>
+<!-- Quick Actions Bento Grid -->
+<section class="grid grid-cols-4 gap-2">
+<button class="flex flex-col items-center gap-2 group active:scale-95 transition-transform">
+<div class="w-14 h-14 rounded-full glass-card flex items-center justify-center group-hover:bg-[#D8FF2E]/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface">Registrar<br/>comida</span>
+</button>
+<button class="flex flex-col items-center gap-2 group active:scale-95 transition-transform">
+<div class="w-14 h-14 rounded-full glass-card flex items-center justify-center group-hover:bg-[#D8FF2E]/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface" style="font-variation-settings: 'FILL' 1;">camera_alt</span>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface">Analizar<br/>foto</span>
+</button>
+<button class="flex flex-col items-center gap-2 group active:scale-95 transition-transform">
+<div class="w-14 h-14 rounded-full glass-card flex items-center justify-center group-hover:bg-[#D8FF2E]/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface" style="font-variation-settings: 'FILL' 1;">fact_check</span>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface">Plan<br/>alimenticio</span>
+</button>
+<button class="flex flex-col items-center gap-2 group active:scale-95 transition-transform">
+<div class="w-14 h-14 rounded-full glass-card flex items-center justify-center group-hover:bg-[#D8FF2E]/20 transition-colors">
+<span class="material-symbols-outlined text-on-surface" style="font-variation-settings: 'FILL' 1;">directions_run</span>
+</div>
+<span class="font-label-md text-label-md text-center text-on-surface">Registrar<br/>actividad</span>
+</button>
+</section>
+<!-- Wearable Card -->
+<section class="glass-primary rounded-2xl p-md flex items-center justify-between overflow-hidden relative">
+<!-- Decorative elements -->
+<div class="absolute -right-10 -bottom-10 w-32 h-32 bg-white/30 rounded-full blur-xl pointer-events-none"></div>
+<div class="absolute -left-10 -top-10 w-24 h-24 bg-white/20 rounded-full blur-lg pointer-events-none"></div>
+<div class="flex items-center gap-md z-10">
+<div class="w-14 h-14 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50 shadow-sm">
+<img alt="Avocado mascot" class="w-10 h-10 object-contain drop-shadow-md" data-alt="A cute 3D stylized avocado character with a happy face, running or doing fitness, set against a clean white background. Vibrant colors, smooth lighting, premium 3D icon style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDhep75yYYLgzHBzeZLsXUX1MTsMp-ozM7TM1y9LWCv2g2y4mHW9OR2aScyzN9jR6hip2735UZDrvQYUmpqCymt8PHEewErmwLDSg2dKLFWg56YsWv7qzriLozkeuSPydwcmC2_7M6B8GH7KrdnkO0gJ_eubEiAzcdQvcKS7adl_i51icy96XiL5-dcq36d1h54Ner_cELzp8BLcjWVQInzxQ5IKzOiGitZ7i8yA261LV2ODFdtcT9VPHN8TFFzAfEXigN-F7G5SRg"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#3E4C00]/80">Meta diaria</span>
+<span class="font-headline-md text-headline-md text-[#171E00]">Camina 8,000 pasos</span>
+<span class="font-body-sm text-body-sm text-[#3E4C00] mt-1">5,230 / 8,000 pasos</span>
+</div>
+</div>
+<!-- Circular Progress -->
+<div class="relative w-16 h-16 z-10 bg-white/20 rounded-full backdrop-blur-sm border border-white/30 flex items-center justify-center p-1">
+<svg class="w-full h-full transform -rotate-90 absolute inset-0" viewbox="0 0 36 36">
+<circle class="stroke-white/30" cx="18" cy="18" fill="none" r="16" stroke-width="3"></circle>
+<circle class="stroke-white progress-circle drop-shadow-[0_0_4px_rgba(255,255,255,0.8)]" cx="18" cy="18" fill="none" r="16" stroke-dasharray="100" stroke-dashoffset="35" stroke-linecap="round" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-label-md text-label-md text-[#171E00] font-bold">65%</span>
+</div>
+</div>
+</section>
+<!-- Recent Meals List -->
+<section class="flex flex-col gap-sm">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-headline-md text-headline-md text-on-surface">Últimas comidas</h3>
+<button class="font-label-md text-label-md text-primary hover:opacity-80 transition-opacity">Ver todas</button>
+</div>
+<div class="glass-card rounded-2xl p-2 flex flex-col gap-1">
+<div class="flex items-center justify-between p-2 rounded-xl hover:bg-white/40 transition-colors cursor-pointer group">
+<div class="flex items-center gap-md">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-white/50 shadow-sm">
+<img alt="Almuerzo" class="w-full h-full object-cover" data-alt="A top-down view of a healthy, colorful chicken salad bowl with greens, tomatoes, and grilled chicken strips on a minimalist white table. High key lighting, appetizing, modern food photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0UJr_49cGS5WFqu4LYs6CUp3fBLFEDXTS0Ltiilp0SkFIKqQ3u8aTqB8eNR7DMDUVLuuGB3OySlC9VK4-8k5O1q2Xe7eiqOZqZQVOFRaXXmhUSnOORNPIzyO9h_D72991ctxVNRbEriOQU1dEYDS3RzLUBqYE9iK2WNgy-8QFurgQvF35mxK08kT3v5OBUzrmrP-940Ju3obeCqMe2tq5ySW-jX40zuXCfDZ75-PT5sYNCeAtDtZvJqEDhGqH29jfO7CfsRoa9xY"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Almuerzo</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Ensalada con pollo</span>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">schedule</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">12:30 PM • 520 kcal</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<div class="h-px w-[85%] mx-auto bg-gradient-to-r from-transparent via-black/10 to-transparent"></div>
+<div class="flex items-center justify-between p-2 rounded-xl hover:bg-white/40 transition-colors cursor-pointer group">
+<div class="flex items-center gap-md">
+<div class="w-14 h-14 rounded-full overflow-hidden border-2 border-white/50 shadow-sm">
+<img alt="Desayuno" class="w-full h-full object-cover" data-alt="A close-up shot of a healthy breakfast spread featuring a bowl of oatmeal with berries and a cup of black coffee on a sleek, light wooden surface. Bright, morning natural light, clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2isJviHgQtMqEP8KdnUR_fchKS8tXlZnVk8_zhryhWEVsDjke0jcE93egNfmjxYevcnWIl9yqKDhj3o2weXQf8ZnKOyrQtN7Qr9HT0WnKMgiuLw6r5jFXEcGlV5Nr9hJAZITf7zntvX_GiUEJ_y2qUD9-dv55x8qKe2spWtOwszLF7cS7VuHV4m8YPgGEMBeTSHDR8q77otm9qdRxRrIR_ZNw0j7CJJ2AmIc9ykw4SxouCB8NG_-uo0XU-yHl96CCQkY9csMcGNs"/>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Desayuno</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Avena con frutas</span>
+<div class="flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">schedule</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">08:00 AM • 350 kcal</span>
+</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Hydration Card -->
+<section class="glass-card rounded-2xl p-md flex items-center justify-between mt-2">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-[#E0F2FE]/50 backdrop-blur-sm rounded-full flex items-center justify-center border border-[#E0F2FE]">
+<span class="material-symbols-outlined text-[#0EA5E9] drop-shadow-[0_0_4px_rgba(14,165,233,0.4)]" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">¡Hidrátate!</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Lleva 4 vasos de agua hoy 💧</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full glass-primary text-[#171E00] flex items-center justify-center hover:opacity-90 transition-opacity active:scale-95">
+<span class="material-symbols-outlined">add</span>
+</button>
+</section>
+<!-- Bottom padding for FAB and Nav -->
+<div class="h-10"></div>
+</main>
+<!-- FAB -->
+<div class="fixed bottom-24 right-4 z-50 md:hidden">
+<button class="w-14 h-14 glass-primary text-[#171E00] rounded-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-200">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+</div>
+<!-- BottomNavBar -->
+<nav class="glass-card docked full-width bottom-0 rounded-t-3xl fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-4 pb-safe h-20 md:hidden border-t border-white/60">
+<button class="flex flex-col items-center justify-center text-primary font-bold hover:text-primary transition-colors active:scale-90 duration-150 w-1/5">
+<div class="bg-[#D8FF2E]/30 px-4 py-1 rounded-full mb-1">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">home</span>
+</div>
+<span class="font-label-md text-label-md text-primary">Inicio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 duration-150 w-1/5">
+<span class="material-symbols-outlined text-[24px] mb-1">restaurant</span>
+<span class="font-label-md text-label-md">Alimentos</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 duration-150 w-1/5">
+<span class="material-symbols-outlined text-[24px] mb-1">fitness_center</span>
+<span class="font-label-md text-label-md">Ejercicios</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 duration-150 w-1/5">
+<span class="material-symbols-outlined text-[24px] mb-1">bar_chart</span>
+<span class="font-label-md text-label-md">Estadísticas</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary hover:text-primary transition-colors active:scale-90 duration-150 w-1/5">
+<span class="material-symbols-outlined text-[24px] mb-1">grid_view</span>
+<span class="font-label-md text-label-md">Más</span>
+</button>
+</nav>
+<!-- SideNav for Desktop (Hidden on mobile) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-16 w-64 h-[calc(100vh-64px)] glass-card border-r border-white/50 p-4 gap-2 z-30">
+<button class="flex items-center gap-3 px-4 py-3 glass-primary text-[#171E00] rounded-xl font-bold transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md">Inicio</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-white/40 rounded-xl transition-colors">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label-md text-label-md">Alimentos</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-white/40 rounded-xl transition-colors">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-label-md text-label-md">Ejercicios</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-white/40 rounded-xl transition-colors">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-label-md text-label-md">Estadísticas</span>
+</button>
+<div class="mt-auto">
+<button class="flex items-center gap-3 px-4 py-3 text-secondary hover:bg-white/40 rounded-xl transition-colors w-full">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-md text-label-md">Más</span>
+</button>
+</div>
+</aside>
+<!-- Script to animate progress bar on load -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const circles = document.querySelectorAll('.progress-circle');
+                circles.forEach(circle => {
+                    // Trigger reflow to ensure animation plays
+                    void circle.offsetWidth;
+                    // Initial animation is handled by CSS transition
+                });
+            }, 100);
+        });
+    </script>
+</body></html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Calio - Más</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e8ead5",
+                        "inverse-surface": "#2f3224",
+                        "secondary-container": "#e2dfde",
+                        "on-surface": "#1a1d10",
+                        "primary-fixed": "#ccf21b",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#454933",
+                        "outline": "#757961",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f1f2de",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-bright": "#fafbe6",
+                        "surface-tint": "#546500",
+                        "on-primary-container": "#607400",
+                        "primary-container": "#d8ff2e",
+                        "surface-variant": "#e3e4d0",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#3e4c00",
+                        "tertiary-container": "#f0efef",
+                        "surface-container-low": "#f4f5e0",
+                        "inverse-primary": "#b2d400",
+                        "surface-container-highest": "#e3e4d0",
+                        "on-tertiary-container": "#6c6c6c",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "on-background": "#1a1d10",
+                        "on-primary-fixed": "#171e00",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#636262",
+                        "surface": "#fafbe6",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#c7c6c6",
+                        "outline-variant": "#c5c9ad",
+                        "primary-fixed-dim": "#b2d400",
+                        "tertiary-fixed": "#e3e2e2",
+                        "secondary": "#5f5e5e",
+                        "surface-dim": "#dadcc7",
+                        "primary": "#546500",
+                        "background": "#fafbe6",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "surface-container": "#eeefdb",
+                        "tertiary": "#5e5e5f",
+                        "on-tertiary-fixed-variant": "#464747"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "margin-desktop": "40px",
+                        "sm": "12px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "30px", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "26px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #F5F5F5;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .list-divider:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 56px;
+            right: 0;
+            height: 1px;
+            background-color: rgba(238, 238, 238, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-lg text-on-surface antialiased flex flex-col min-h-screen relative pb-28 md:pb-0">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-white/60 backdrop-blur-xl border-b border-white/50 dark:bg-background/80 text-primary dark:text-primary-fixed flex justify-between items-center px-margin-mobile h-16 w-full sticky z-40 flat no shadows">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tight">Más</h1>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-[1200px] mx-auto px-margin-mobile md:px-margin-desktop py-md pb-32">
+<!-- Profile Header Card -->
+<section class="bg-white/50 backdrop-blur-lg border border-white/60 rounded-2xl p-md shadow-sm mb-lg flex items-center justify-between cursor-pointer hover:bg-white/60 transition-colors">
+<div class="flex items-center gap-md">
+<img alt="User avatar" class="w-16 h-16 rounded-full object-cover shadow-sm border-2 border-white/80" data-alt="A detailed portrait of a young woman with brown hair, smiling warmly in a bright, modern, minimalist setting. High key lighting, premium fintech health app aesthetic, soft white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlmigBYjdnNNZ6rZ5ZnWnYSN5Jjo-E6tbe7zPD5bUnuQNCOMtoJdMvycRriR9vzTeirf9P7HYhVSb5HSrAtp11dsVeizmI2lbM099q1y4jRz8Pna05pn32xMiboky7mlA8cDrbnaaJbgNLVvN6jeEC9CxXoiDn6IPrjw2ImGD6PzpeAd_LO1HlCcNZpMazn0UGHL6dmYvBwwfgc4GpFv0LAEeyj-HVn4uc1QQyrLkfcZN4jRcKurastBMT-4zedXleWVDyP23eNTc"/>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1">Ana Rodríguez</h2>
+<p class="font-body-sm text-body-sm text-secondary">ana.rodriguez@email.com</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 0;">chevron_right</span>
+</section>
+<!-- Premium Status Card -->
+<section class="bg-[#D8FF2E]/10 backdrop-blur-md border border-[#D8FF2E]/40 rounded-2xl p-md mb-xl flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-[#D8FF2E] flex items-center justify-center text-primary shadow-sm border border-white/50">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface text-[16px]">Miembro Premium</span>
+</div>
+<span class="font-body-sm text-body-sm text-primary font-semibold">Plan activo</span>
+</section>
+<!-- Tools List -->
+<section class="mb-xl">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-md">Herramientas</h3>
+<div class="bg-white/50 backdrop-blur-lg border border-white/60 rounded-2xl shadow-sm overflow-hidden">
+<a class="flex items-center justify-between p-md relative list-divider hover:bg-white/60 transition-colors active:scale-95 duration-100" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#D8FF2E]/20 border border-white/50 flex items-center justify-center text-[#546500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">assignment</span>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-surface font-semibold">Plan alimenticio</div>
+<div class="font-body-sm text-body-sm text-secondary">Tu plan personalizado</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-md relative list-divider hover:bg-white/60 transition-colors active:scale-95 duration-100" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#D8FF2E]/20 border border-white/50 flex items-center justify-center text-[#546500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">check_circle</span>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-surface font-semibold">Mis metas</div>
+<div class="font-body-sm text-body-sm text-secondary">Objetivos y seguimiento</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-md relative list-divider hover:bg-white/60 transition-colors active:scale-95 duration-100" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#D8FF2E]/20 border border-white/50 flex items-center justify-center text-[#546500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-surface font-semibold">Recordatorios</div>
+<div class="font-body-sm text-body-sm text-secondary">Gestión de alertas</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-md relative list-divider hover:bg-white/60 transition-colors active:scale-95 duration-100" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#D8FF2E]/20 border border-white/50 flex items-center justify-center text-[#546500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">straighten</span>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-surface font-semibold">Medidas corporales</div>
+<div class="font-body-sm text-body-sm text-secondary">Registro de progreso</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-md relative list-divider hover:bg-white/60 transition-colors active:scale-95 duration-100" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#D8FF2E]/20 border border-white/50 flex items-center justify-center text-[#546500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">history</span>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-surface font-semibold">Historial</div>
+<div class="font-body-sm text-body-sm text-secondary">Actividades y comidas</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-md relative hover:bg-white/60 transition-colors active:scale-95 duration-100" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#D8FF2E]/20 border border-white/50 flex items-center justify-center text-[#546500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">watch</span>
+</div>
+<div>
+<div class="font-body-lg text-body-lg text-on-surface font-semibold">Dispositivos</div>
+<div class="font-body-sm text-body-sm text-secondary">Conectar wearable</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Support List -->
+<section>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-md">Soporte</h3>
+<div class="bg-white/50 backdrop-blur-lg border border-white/60 rounded-2xl shadow-sm overflow-hidden">
+<a class="flex items-center justify-between p-md relative list-divider hover:bg-white/60 transition-colors active:scale-95 duration-100" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#D8FF2E]/20 border border-white/50 flex items-center justify-center text-[#546500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">help_outline</span>
+</div>
+<div class="font-body-lg text-body-lg text-on-surface font-semibold">Ayuda</div>
+</div>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-md relative hover:bg-white/60 transition-colors active:scale-95 duration-100" href="#">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#D8FF2E]/20 border border-white/50 flex items-center justify-center text-[#546500]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+</div>
+<div class="font-body-lg text-body-lg text-on-surface font-semibold">Configuración</div>
+</div>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</a>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed right-margin-mobile bottom-[100px] md:bottom-xl w-14 h-14 bg-[#D8FF2E] text-[#1a1d10] rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition-transform z-50 border border-white/50 backdrop-blur-sm">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 0;">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="md:hidden docked full-width bottom-0 rounded-t-2xl border-t border-white/60 shadow-[0px_-4px_20px_rgba(0,0,0,0.04)] bg-white/70 backdrop-blur-xl dark:bg-surface-container-highest/80 fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-4 pb-safe h-20">
+<a aria-label="Inicio" class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary transition-colors flex-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-md text-label-md mt-1">Inicio</span>
+</a>
+<a aria-label="Alimentos" class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary transition-colors flex-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">restaurant</span>
+<span class="font-label-md text-label-md mt-1">Alimentos</span>
+</a>
+<a aria-label="Ejercicios" class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary transition-colors flex-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">fitness_center</span>
+<span class="font-label-md text-label-md mt-1">Ejercicios</span>
+</a>
+<a aria-label="Estadísticas" class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-container hover:text-primary transition-colors flex-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">bar_chart</span>
+<span class="font-label-md text-label-md mt-1">Estadísticas</span>
+</a>
+<!-- Active Tab: Más -->
+<a aria-label="Más" class="flex flex-col items-center justify-center text-[#546500] dark:text-primary-fixed font-bold hover:text-primary transition-colors flex-1 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-label-md text-label-md mt-1">Más</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Detalle de Ejercicio - Calio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-bright": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#e3e2e2",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#1b1b1b",
+                        "secondary-container": "#e2dfde",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#607400",
+                        "tertiary": "#5e5e5f",
+                        "tertiary-container": "#f0efef",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "surface-container-high": "#e8ead5",
+                        "background": "#ffffff",
+                        "on-background": "#1a1d10",
+                        "outline-variant": "#c5c9ad",
+                        "surface-dim": "#dadcc7",
+                        "secondary": "#5f5e5e",
+                        "surface-container-highest": "#e3e4d0",
+                        "primary-fixed-dim": "#b2d400",
+                        "outline": "#757961",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#171e00",
+                        "inverse-on-surface": "#f1f2de",
+                        "surface-container-low": "#f4f5e0",
+                        "surface": "#ffffff",
+                        "on-tertiary-container": "#6c6c6c",
+                        "surface-container": "#eeefdb",
+                        "on-tertiary-fixed-variant": "#464747",
+                        "inverse-surface": "#2f3224",
+                        "primary": "#546500",
+                        "primary-fixed": "#ccf21b",
+                        "on-surface-variant": "#454933",
+                        "primary-container": "#d8ff2e",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "on-primary-fixed-variant": "#3e4c00",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#c7c6c6",
+                        "surface-variant": "#e3e4d0",
+                        "on-secondary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#1a1d10",
+                        "surface-tint": "#546500",
+                        "inverse-primary": "#b2d400",
+                        "secondary-fixed": "#e5e2e1",
+                        "on-secondary-container": "#636262"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "margin-desktop": "40px",
+                        "gutter": "16px",
+                        "base": "4px",
+                        "xl": "32px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "sm": "12px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg": ["28px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "26px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "30px", "fontWeight": "700" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .squircle {
+            border-radius: 24px;
+        }
+        .safe-area-pt { padding-top: env(safe-area-inset-top, 0px); }
+        .safe-area-pb { padding-bottom: env(safe-area-inset-bottom, 0px); }
+        
+        /* Subtle animation for the exercise hero */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .hero-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-lg antialiased flex flex-col min-h-screen">
+<!-- Transparent Glass Header -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md safe-area-pt transition-colors duration-300" id="main-header">
+<div class="flex items-center justify-between px-margin-mobile h-16 max-w-7xl mx-auto w-full">
+<button class="w-10 h-10 flex items-center justify-center bg-surface-container-highest rounded-full text-on-surface hover:bg-surface-variant transition-colors" onclick="history.back()">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 600;">arrow_back</span>
+</button>
+<div class="flex-1 flex justify-end">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 600;">favorite_border</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto pb-32">
+<!-- Hero Image Section -->
+<div class="relative w-full h-[397px] min-h-[350px] bg-surface-container-low rounded-b-[40px] flex items-center justify-center overflow-hidden">
+<!-- Decorative background blob -->
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-container rounded-full blur-3xl mix-blend-multiply"></div>
+</div>
+<img alt="Person doing squats" class="hero-float w-3/4 max-h-full object-contain relative z-10" data-alt="A detailed, modern 3D illustration or high-quality stylized 2D graphic of a person performing a perfect form squat. The character should have athletic proportions, wearing sleek modern workout gear. The background should be purely transparent or white to blend into the container. The lighting should be soft, bright, and studio-like, matching a high-end health tech aesthetic, with a primary lime green accent subtly integrated into their apparel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAh_9a990n6CK6n1qfjOQRexWLEWV56NP_rIvHG0SeVfGPBOq1csSovzjMzKcgPu5FYgIZAHZWrZmoX8p4OVyHgCt2OM1ctDiLiiTRYKEynDAbhBMsMd5GyftpzG_fzS54RFMWe6Dx8q5s2WlTRnx89SpYYG0rOgxPp2NxM_70ne8PhFqpCpYA2cqvoym96C60cVRulLft3rE59Htt6jwZCkkPzoGRnGgSWEG4tzqvAfAFUHgCPLrfqDOscG0i6yJHlhvGAWZT3pEE"/>
+</div>
+<div class="px-margin-mobile mt-lg max-w-3xl mx-auto w-full">
+<!-- Title & Meta -->
+<div class="mb-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-background mb-base">Sentadillas</h1>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="font-semibold text-primary">Fuerza</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>Piernas</span>
+</div>
+<div class="flex items-center gap-3 mt-sm">
+<div class="flex items-center gap-1 bg-surface-container-highest px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">cycle</span>
+<span class="font-label-md text-label-md text-on-surface">12 repeticiones</span>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-highest px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">layers</span>
+<span class="font-label-md text-label-md text-on-surface">3 series</span>
+</div>
+</div>
+</div>
+<!-- Description -->
+<div class="mb-lg">
+<h2 class="font-headline-md text-headline-md text-on-background mb-xs">Descripción</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    Ejercicio compuesto que fortalece piernas y glúteos. Mantén la espalda recta, el pecho arriba y baja como si te sentaras en una silla invisible hasta que los muslos estén paralelos al suelo.
+                </p>
+</div>
+<!-- Muscles Worked (Bento-style Grid) -->
+<div class="mb-xl">
+<h2 class="font-headline-md text-headline-md text-on-background mb-md">Músculos trabajados</h2>
+<div class="grid grid-cols-2 gap-md">
+<!-- Glutes Card -->
+<div class="bg-surface-container-lowest rounded-[24px] p-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center justify-center aspect-square border border-surface-variant">
+<img alt="Glutes highlighted" class="w-20 h-20 object-contain mb-3" data-alt="A clean, minimalist medical-style diagram highlighting the gluteus muscles in a bright lime green color on a simplified human figure, set against a pristine white background. The style should be high-end, fintech-health aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCryMbRG7LzW1pNMezRePpKahRcA1v1Vn0_lOYvODj4coEU4O7KmjyvaEycZso0U0M_8D3haGWTplKvZuHOoHwghSZejNCKO29Av_PBjtKCtuYEo-OHiUFHuMGtPkW8VilxF07SXr64P5D1EECIkcT5e3jktc0t2d_8V4TElb2LO6TNYLVskS1AqlunplcaKsQWj-AZ4nrOI3r8pNKg4QN0jnrCSdmN5xKnyPpB4U0qc5xHM_v4gR2zOd30cmyDQ8WEOZu4rKi5Hf0"/>
+<span class="font-label-md text-label-md text-on-surface text-center">Glúteos</span>
+<span class="font-label-caps text-label-caps text-primary mt-1">PRINCIPAL</span>
+</div>
+<!-- Quads Card -->
+<div class="bg-surface-container-lowest rounded-[24px] p-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] flex flex-col items-center justify-center aspect-square border border-surface-variant">
+<img alt="Quads highlighted" class="w-20 h-20 object-contain mb-3" data-alt="A clean, minimalist medical-style diagram highlighting the quadriceps muscles in a bright lime green color on a simplified human figure, set against a pristine white background. The style should be high-end, fintech-health aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpEV8Ba1NZLjZ_g8B0tizJgMFevt3j5QTv4SKpsy_n42BwPJek4kk6RKBUQJTRBkCYUHqrdXByX3I0Mai46AFAOutBhsITMt4YfOrIcvpuzdb6Fn1yH_mw93dh7naG7OH6om01syTmVeLBpAjFl8v0Ilq6sSD-oLwvNX2m7F070M_iRQD8LxNgq4yFQAYa8hIqwP04KXTlJJUSIQf85vdnLIInyrs_cQw-F3SBb0AMMTVuIZxd5UZF5RKG8exP271nk2gD2QuoBN0"/>
+<span class="font-label-md text-label-md text-on-surface text-center">Cuádriceps</span>
+<span class="font-label-caps text-label-caps text-primary mt-1">PRINCIPAL</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 left-0 right-0 p-margin-mobile safe-area-pb bg-gradient-to-t from-background via-background/95 to-transparent z-40">
+<div class="max-w-3xl mx-auto w-full">
+<button class="w-full bg-primary-container text-on-primary-fixed font-headline-md text-headline-md py-4 rounded-full shadow-lg hover:opacity-90 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                Iniciar ejercicio
+            </button>
+</div>
+</div>
+<script>
+        // Header scroll effect
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-sm');
+                header.classList.replace('bg-background/80', 'bg-surface/95');
+            } else {
+                header.classList.remove('shadow-sm');
+                header.classList.replace('bg-surface/95', 'bg-background/80');
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,57 @@
+import api from './api';
+import { API_ROUTES } from '../constants/api';
+import {
+  LoginRequest,
+  RegisterRequest,
+  AuthResponse,
+  User,
+  BiometricData,
+  UserGoal,
+} from '../types/auth';
+
+export const authService = {
+  // Login
+  login: async (data: LoginRequest): Promise<AuthResponse> => {
+    const response = await api.post(API_ROUTES.AUTH.LOGIN, data);
+    return response.data;
+  },
+
+  // Registro
+  register: async (data: RegisterRequest): Promise<AuthResponse> => {
+    const response = await api.post(API_ROUTES.AUTH.REGISTER, data);
+    return response.data;
+  },
+
+  // Cerrar sesión
+  logout: async (refreshToken: string): Promise<void> => {
+    await api.post(API_ROUTES.AUTH.LOGOUT, { refreshToken });
+  },
+
+  // Obtener perfil del usuario autenticado
+  getProfile: async (): Promise<User> => {
+    const response = await api.get(API_ROUTES.AUTH.PROFILE);
+    return response.data;
+  },
+
+  // Guardar datos biométricos (setup inicial)
+  saveBiometrics: async (data: BiometricData): Promise<void> => {
+    await api.post(API_ROUTES.AUTH.BIOMETRICS, data);
+  },
+
+  // Obtener datos biométricos
+  getBiometrics: async (): Promise<BiometricData> => {
+    const response = await api.get(API_ROUTES.AUTH.BIOMETRICS);
+    return response.data;
+  },
+
+  // Guardar objetivo del usuario
+  saveGoal: async (data: UserGoal): Promise<void> => {
+    await api.post(API_ROUTES.AUTH.GOALS, data);
+  },
+
+  // Obtener objetivo activo
+  getActiveGoal: async (): Promise<UserGoal> => {
+    const response = await api.get(API_ROUTES.AUTH.ACTIVE_GOAL);
+    return response.data;
+  },
+};
