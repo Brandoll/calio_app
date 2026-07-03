@@ -16,7 +16,8 @@ export const useAuth = () => {
       setUser(response.user);
       return true;
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Error al iniciar sesión';
+      console.error('Error en login:', error.message, error.response?.data, error.config?.url);
+      const message = error.response?.data?.message || 'Error al iniciar sesión: ' + error.message;
       Alert.alert('Error', message);
       return false;
     } finally {
@@ -32,7 +33,8 @@ export const useAuth = () => {
       setUser(response.user);
       return true;
     } catch (error: any) {
-      const message = error.response?.data?.message || 'Error al registrarse';
+      console.error('Error en register:', error.message, error.response?.data, error.config?.url);
+      const message = error.response?.data?.message || 'Error al registrarse: ' + error.message;
       Alert.alert('Error', message);
       return false;
     } finally {

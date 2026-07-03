@@ -21,7 +21,6 @@ export interface RegisterRequest {
 // RESPONSES
 // ==========================================
 
-/** Wrapper genérico que el backend envuelve en TODA respuesta */
 export interface ApiResponseWrapper<T> {
   success: boolean;
   message: string;
@@ -29,7 +28,6 @@ export interface ApiResponseWrapper<T> {
   timestamp: string;
 }
 
-/** Respuesta del backend al hacer login/register */
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
@@ -38,7 +36,6 @@ export interface AuthResponse {
   user: User;
 }
 
-/** Usuario devuelto por el backend (coincide con UserResponse.java) */
 export interface User {
   id: number;
   email: string;
@@ -52,19 +49,35 @@ export interface User {
 }
 
 // ==========================================
-// PERFIL / SETUP
+// PERFIL / SETUP (Mapped to backend DTOs)
 // ==========================================
-export interface BiometricData {
-  edad: number;
-  peso: number;
-  altura: number;
-  genero: string;
-  nivelActividad: string;
+
+export interface UpdateProfileRequest {
+  firstName?: string;
+  lastName?: string;
+  birthDate?: string;
+  gender?: string; // MALE, FEMALE, OTHER
+}
+
+export interface BiometricRequest {
+  weightKg: number;
+  heightCm: number;
+  bodyFatPct?: number;
+}
+
+export interface GoalRequest {
+  goalType: string; // LOSE_WEIGHT, GAIN_MUSCLE, MAINTAIN, EAT_HEALTHY
+  activityLevel: string; // SEDENTARY, LIGHT, MODERATE, ACTIVE, VERY_ACTIVE
+  targetWeightKg?: number;
+  dailyCalories?: number;
 }
 
 export interface UserGoal {
   id?: number;
-  tipo: 'PERDER_PESO' | 'GANAR_MASA' | 'MANTENER_PESO' | 'MEJORAR_RENDIMIENTO';
-  pesoObjetivo?: number;
-  activo?: boolean;
+  goalType: string;
+  targetWeightKg?: number;
+  dailyCalories?: number;
+  proteinGrams?: number;
+  carbsGrams?: number;
+  fatGrams?: number;
 }

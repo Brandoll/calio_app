@@ -1,5 +1,5 @@
 // Constantes de la API — Toda comunicación pasa por el Gateway
-const DEV_URL = 'http://10.0.2.2:8080'; // Android emulator → localhost
+const DEV_URL = 'https://api.calio360.app'; // Apuntamos al VPS incluso en desarrollo por ahora
 const PROD_URL = 'https://api.calio360.app'; // Producción Azure VPS
 
 export const API_BASE_URL = __DEV__ ? DEV_URL : PROD_URL;

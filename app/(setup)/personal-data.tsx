@@ -37,24 +37,54 @@ export default function PersonalDataScreen() {
 
     setIsLoading(true);
     try {
-      // Guardar biométricos
-      await authService.saveBiometrics({
-        edad: parseInt(edad),
-        peso: parseFloat(peso),
-        altura: parseFloat(altura),
-        genero,
-        nivelActividad,
+      // 1. Mapear Género: 'Masculino' -> 'MALE', 'Femenino' -> 'FEMALE'
+      const genderEnum = genero === 'Masculino' ? 'MALE' : 'FEMALE';
+      
+      // Calcular año de nacimiento aproximado a partir de la edad
+      const currentYear = new Date().getFullYear();
+      const birthYear = currentYear - parseInt(edad);
+      const birthDate = `${birthYear}-01-01`;
+
+      // Guardar edad y género (UpdateProfile)
+      await authService.updateProfile({
+        gender: genderEnum,
+        birthDate: birthDate
       });
+
+      // 2. Guardar biométricos (peso, altura)
+      await authService.saveBiometrics({
+        weightKg: parseFloat(peso),
+        heightCm: parseFloat(altura),
+      });
+
+      // 3. Mapear Nivel de Actividad a Enums del Backend
+      const activityMap: Record<string, string> = {
+        'Sedentario': 'SEDENTARY',
+        'Ligero': 'LIGHT',
+        'Moderado': 'MODERATE',
+        'Activo': 'ACTIVE',
+        'Muy activo': 'VERY_ACTIVE'
+      };
+      
+      // Mapear Objetivo a Enums del Backend
+      const goalMap: Record<string, string> = {
+        'PERDER_PESO': 'LOSE_WEIGHT',
+        'GANAR_MASA': 'GAIN_MUSCLE',
+        'MANTENER_PESO': 'MAINTAIN',
+        'MEJORAR_RENDIMIENTO': 'EAT_HEALTHY'
+      };
 
       // Guardar objetivo
       await authService.saveGoal({
-        tipo: goal as any,
+        goalType: goalMap[goal] || 'MAINTAIN',
+        activityLevel: activityMap[nivelActividad] || 'SEDENTARY'
       });
 
       await setSetupCompleted();
       router.replace('/(tabs)');
     } catch (error: any) {
-      Alert.alert('Error', error.response?.data?.error || 'No se pudieron guardar los datos');
+      console.error('Error guardando setup:', error.response?.data || error.message);
+      Alert.alert('Error', error.response?.data?.message || 'No se pudieron guardar los datos');
     } finally {
       setIsLoading(false);
     }
