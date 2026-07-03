@@ -1,9 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bell, UserCircle } from 'lucide-react-native';
 import { colors } from '../../src/theme/colors';
 import { useAuthStore } from '../../src/stores/authStore';
+import { authService } from '../../src/services/authService';
+import { trackingService } from '../../src/services/trackingService';
 
 // Componentes
 import { CaloriesCard } from '../../src/components/dashboard/CaloriesCard';
@@ -15,16 +17,60 @@ import { DailyGoalCard } from '../../src/components/dashboard/DailyGoalCard';
 
 export default function HomeScreen() {
   const { user } = useAuthStore();
-
-  // Datos mockeados por ahora, en la siguiente fase se conectarán con trackingService
-  const dailyData = {
-    calories: { consumed: 1350, goal: 2000 },
+  
+  const [isLoading, setIsLoading] = useState(true);
+  const [dailyData, setDailyData] = useState({
+    calories: { consumed: 0, goal: 2000 },
     macros: {
-      protein: { current: 65, total: 120 },
-      carbs: { current: 150, total: 220 },
-      fat: { current: 40, total: 65 },
-    }
-  };
+      protein: { current: 0, total: 120 },
+      carbs: { current: 0, total: 220 },
+      fat: { current: 0, total: 65 },
+    },
+    water: 0
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!user) return;
+        
+        // 1. Obtener la meta activa del usuario para sacar los totales (calorias y macros)
+        const activeGoal = await authService.getActiveGoal();
+        
+        // 2. Obtener el tracking de hoy (calorias y macros consumidos)
+        const today = new Date().toISOString().split('T')[0];
+        const summary = await trackingService.getDailySummary(user.id, today);
+
+        setDailyData({
+          calories: { 
+            consumed: summary.caloriasConsumidas || 0, 
+            goal: activeGoal?.dailyCalories || 2000 
+          },
+          macros: {
+            protein: { current: summary.proteinas || 0, total: activeGoal?.proteinGrams || 120 },
+            carbs: { current: summary.carbohidratos || 0, total: activeGoal?.carbsGrams || 220 },
+            fat: { current: summary.grasas || 0, total: activeGoal?.fatGrams || 65 },
+          },
+          water: summary.vasosAgua || 0
+        });
+      } catch (error) {
+        console.error('Error cargando datos del dashboard:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
+
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -32,7 +78,7 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.userInfo}>
-            <Text style={styles.greeting}>¡Hola, {user?.nombre?.split(' ')[0] || 'Usuario'}! 👋</Text>
+            <Text style={styles.greeting}>¡Hola, {user?.firstName?.split(' ')[0] || 'Usuario'}! 👋</Text>
             <Text style={styles.subtitle}>Listo para lograr tus metas</Text>
           </View>
           <View style={styles.headerActions}>

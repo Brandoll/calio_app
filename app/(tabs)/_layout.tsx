@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Home, UtensilsCrossed, Dumbbell, BarChart3, MoreHorizontal, Plus } from 'lucide-react-native';
+import { Home, UtensilsCrossed, Dumbbell, BarChart3, MoreHorizontal, Plus, Camera } from 'lucide-react-native';
 import { colors } from '../../src/theme/colors';
 
 export default function TabsLayout() {
@@ -57,6 +57,27 @@ export default function TabsLayout() {
         options={{
           title: 'Más',
           tabBarIcon: ({ color, size }) => <MoreHorizontal size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="ai-camera"
+        options={{
+          title: 'IA Comida',
+          tabBarIcon: ({ focused, size }) => (
+            <View style={{ 
+              backgroundColor: colors.primary, 
+              padding: 10, 
+              borderRadius: 24,
+              marginTop: -15, // Para que sobresalga un poco hacia arriba
+              shadowColor: colors.primary,
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.3,
+              shadowRadius: 8,
+              elevation: 5
+            }}>
+               <Camera size={size} color={colors.secondary} />
+            </View>
+          ),
         }}
       />
     </Tabs>

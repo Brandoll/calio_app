@@ -35,13 +35,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ accessToken, refreshToken, isAuthenticated: true });
   },
 
-  setUser: (user: User) => {
+  setUser: async (user: User) => {
+    await SecureStore.setItemAsync('user', JSON.stringify(user));
     set({ user });
   },
 
   logout: async () => {
     await SecureStore.deleteItemAsync('accessToken');
     await SecureStore.deleteItemAsync('refreshToken');
+    await SecureStore.deleteItemAsync('user');
     set({
       accessToken: null,
       refreshToken: null,
@@ -67,10 +69,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const refreshToken = await SecureStore.getItemAsync('refreshToken');
       const onboardingCompleted = await SecureStore.getItemAsync('onboardingCompleted');
       const setupCompleted = await SecureStore.getItemAsync('setupCompleted');
+      const userStr = await SecureStore.getItemAsync('user');
+      
+      let user = null;
+      if (userStr) {
+        try { user = JSON.parse(userStr); } catch (e) {}
+      }
 
       set({
         accessToken,
         refreshToken,
+        user,
         isAuthenticated: !!accessToken,
         hasCompletedOnboarding: onboardingCompleted === 'true',
         hasCompletedSetup: setupCompleted === 'true',
