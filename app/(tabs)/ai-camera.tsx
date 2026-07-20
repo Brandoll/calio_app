@@ -87,7 +87,10 @@ export default function AiCameraScreen() {
       
       let hourNumber = realNow.getHours();
       let tipoComida: 'DESAYUNO' | 'ALMUERZO' | 'CENA' | 'SNACK' = 'SNACK';
-      if (hourNumber > 5 && hourNumber < 11) tipoComida = 'DESAYUNO';
+      if (hourNumber >= 5 && hourNumber < 11) tipoComida = 'DESAYUNO';
+      else if (hourNumber >= 11 && hourNumber < 17) tipoComida = 'ALMUERZO';
+      else if (hourNumber >= 18 && hourNumber < 23) tipoComida = 'CENA';
+      
       // Registramos cada item encontrado
       for (const item of results.items) {
         await trackingService.registerMeal({

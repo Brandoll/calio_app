@@ -242,7 +242,7 @@ export default function HomeScreen() {
 
       {/* Efecto borroso inferior (bajo la barra de navegación) */}
       <BlurView 
-        intensity={30} 
+        intensity={80} 
         tint="light" 
         style={styles.bottomBlur} 
         pointerEvents="none"
