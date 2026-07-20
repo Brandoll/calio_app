@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from '../src/stores/authStore';
+import { DesktopBlocker } from '../src/components/ui/DesktopBlocker';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,14 +23,16 @@ export default function RootLayout() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(onboarding)" />
-        <Stack.Screen name="(auth)" />
-        <Stack.Screen name="(setup)" />
-        <Stack.Screen name="(tabs)" />
-      </Stack>
+      <DesktopBlocker>
+        <StatusBar style="dark" />
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="(onboarding)" />
+          <Stack.Screen name="(auth)" />
+          <Stack.Screen name="(setup)" />
+          <Stack.Screen name="(tabs)" />
+        </Stack>
+      </DesktopBlocker>
     </QueryClientProvider>
   );
 }

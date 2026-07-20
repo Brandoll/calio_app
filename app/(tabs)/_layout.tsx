@@ -1,11 +1,11 @@
 import { Tabs, useSegments } from 'expo-router';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import { Home, Dumbbell, Camera, UtensilsCrossed, User } from 'lucide-react-native';
+import { Home, Dumbbell, Camera, UtensilsCrossed, BarChart3 } from 'lucide-react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 
 function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   // Filtramos los tabs normales en el orden deseado
-  const orderedRouteNames = ['index', 'exercises', 'foods', 'more'];
+  const orderedRouteNames = ['index', 'exercises', 'foods', 'stats'];
   const normalTabs = orderedRouteNames.map(name => state.routes.find(r => r.name === name)).filter(Boolean) as typeof state.routes;
   const cameraRoute = state.routes.find(r => r.name === 'ai-camera');
   const segments = useSegments();
@@ -35,7 +35,7 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           let Icon = Home;
           if (route.name === 'exercises') Icon = Dumbbell;
           if (route.name === 'foods') Icon = UtensilsCrossed;
-          if (route.name === 'more') Icon = User;
+          if (route.name === 'stats') Icon = BarChart3;
 
           return (
             <TouchableOpacity key={route.key} onPress={onPress} style={styles.tabItem}>
@@ -76,8 +76,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="exercises" />
       <Tabs.Screen name="ai-camera" />
       <Tabs.Screen name="foods" />
-      <Tabs.Screen name="more" />
-      <Tabs.Screen name="stats" options={{ href: null }} />
+      <Tabs.Screen name="stats" />
     </Tabs>
   );
 }

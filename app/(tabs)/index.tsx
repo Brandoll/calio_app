@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Bell, UserCircle, Flame } from 'lucide-react-native';
@@ -20,6 +20,7 @@ import { WaterModal } from '../../src/components/dashboard/WaterModal';
 
 export default function HomeScreen() {
   const { user } = useAuthStore();
+  const router = useRouter();
   
   const [isLoading, setIsLoading] = useState(true);
   const [dailyData, setDailyData] = useState({
@@ -173,7 +174,7 @@ export default function HomeScreen() {
             <TouchableOpacity style={styles.iconButton}>
               <Bell color={colors.secondary} size={24} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.profileButton}>
+            <TouchableOpacity style={styles.profileButton} onPress={() => router.push('/profile')}>
               <UserCircle color={colors.secondary} size={32} />
             </TouchableOpacity>
           </View>

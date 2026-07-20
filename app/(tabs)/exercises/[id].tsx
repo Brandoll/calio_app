@@ -2,16 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft, Play, Info } from 'lucide-react-native';
+import { ArrowLeft, Info, Play, Plus, Check, Flame, Repeat, Layers } from 'lucide-react-native';
 import { colors } from '../../../src/theme/colors';
 import { Exercise } from '../../../src/types/exercise';
 import { exerciseService } from '../../../src/services/exerciseService';
+import { useExerciseListStore } from '../../../src/stores/exerciseStore';
+import { ActiveExerciseModal } from '../../../src/components/exercises/ActiveExerciseModal';
+import { API_BASE_URL } from '../../../src/constants/api';
+
+const buildFullGifUrl = (gifUrl?: string): string | null => {
+  if (!gifUrl) return null;
+  if (gifUrl.startsWith('http')) return gifUrl;
+  return `${API_BASE_URL}/api/exercises${gifUrl}`;
+};
+
+const difficultyConfig: Record<string, { color: string; label: string }> = {
+  principiante: { color: '#4CAF50', label: 'Principiante' },
+  intermedio: { color: '#FFC107', label: 'Intermedio' },
+  avanzado: { color: '#FF5252', label: 'Avanzado' },
+};
 
 export default function ExerciseDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const { addExercise, removeExercise, isInList } = useExerciseListStore();
   const [exercise, setExercise] = useState<Exercise | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [imgError, setImgError] = useState(false);
+  const [showActiveModal, setShowActiveModal] = useState(false);
+
+  const inList = exercise ? isInList(exercise.id) : false;
 
   useEffect(() => {
     loadExercise();
@@ -23,20 +43,28 @@ export default function ExerciseDetailScreen() {
       const data = await exerciseService.getById(parseInt(id));
       setExercise(data);
     } catch (error) {
-      // Mock fallback
       setExercise({
         id: parseInt(id),
-        nombre: 'Sentadillas',
-        grupoMuscular: 'Piernas',
+        nombre: 'Ejercicio',
+        grupoMuscular: 'General',
         equipo: 'Sin equipo',
-        dificultad: 'Principiante',
-        seriesRecomendadas: 4,
+        dificultad: 'intermedio',
+        seriesRecomendadas: 3,
         repeticionesRecomendadas: '12',
-        caloriasPorMinuto: 8.5,
-        instrucciones: 'Párate con los pies separados a la altura de los hombros. Baja las caderas como si te fueras a sentar en una silla, manteniendo la espalda recta.',
+        caloriasPorMinuto: 6,
+        instrucciones: 'Mantén buena postura durante todo el movimiento.',
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const toggleList = () => {
+    if (!exercise) return;
+    if (inList) {
+      removeExercise(exercise.id);
+    } else {
+      addExercise(exercise);
     }
   };
 
@@ -48,77 +76,145 @@ export default function ExerciseDetailScreen() {
     );
   }
 
+  const gifUrl = buildFullGifUrl(exercise.gifUrl);
+  const diff = difficultyConfig[exercise.dificultad?.toLowerCase()] || { color: colors.textMuted, label: exercise.dificultad || '—' };
+  const capitalize = (s: string) => s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+
+  // Parse instrucciones into numbered steps
+  const steps = exercise.instrucciones
+    ? exercise.instrucciones.split('.').map(s => s.trim()).filter(s => s.length > 3)
+    : [];
+
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.header} edges={['top']}>
         <TouchableOpacity style={styles.iconButton} onPress={() => router.back()}>
-          <ArrowLeft color={colors.secondary} size={24} />
+          <ArrowLeft color={colors.secondary} size={22} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Detalle</Text>
-        <View style={{ width: 40 }} /> {/* Spacer */}
+        <Text style={styles.headerTitle} numberOfLines={1}>{exercise.nombre}</Text>
+        <TouchableOpacity
+          style={[styles.iconButton, inList && styles.iconButtonActive]}
+          onPress={toggleList}
+        >
+          {inList ? <Check color={colors.secondary} size={20} /> : <Plus color={colors.secondary} size={20} />}
+        </TouchableOpacity>
       </SafeAreaView>
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        {/* GIF Container */}
         <View style={styles.imageContainer}>
-          {exercise.gifUrl ? (
-            <Image source={{ uri: exercise.gifUrl }} style={styles.image} />
+          {gifUrl && !imgError ? (
+            <Image
+              source={{ uri: gifUrl }}
+              style={styles.image}
+              resizeMode="contain"
+              onError={() => setImgError(true)}
+            />
           ) : (
             <View style={styles.placeholder}>
-              <Text style={styles.placeholderText}>{exercise.nombre.charAt(0)}</Text>
+              <Text style={styles.placeholderText}>{exercise.nombre?.charAt(0) || '?'}</Text>
             </View>
           )}
-          
-          <View style={styles.playOverlay}>
-            <View style={styles.playIconContainer}>
-              <Play color={colors.white} size={32} fill={colors.white} />
-            </View>
+        </View>
+
+        {/* Title + Badges */}
+        <Text style={styles.name}>{exercise.nombre}</Text>
+        <View style={styles.badges}>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{capitalize(exercise.grupoMuscular)}</Text>
+          </View>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>
+              {capitalize(exercise.equipo === 'ninguno' ? 'Sin equipo' : exercise.equipo || 'Sin equipo')}
+            </Text>
+          </View>
+          <View style={[styles.diffBadge, { backgroundColor: `${diff.color}18` }]}>
+            <View style={[styles.diffDot, { backgroundColor: diff.color }]} />
+            <Text style={[styles.diffBadgeText, { color: diff.color }]}>{diff.label}</Text>
           </View>
         </View>
 
-        <View style={styles.titleContainer}>
-          <Text style={styles.name}>{exercise.nombre}</Text>
-          <View style={styles.badges}>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{exercise.grupoMuscular}</Text>
-            </View>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{exercise.equipo || 'Sin equipo'}</Text>
-            </View>
-            <View style={[styles.badge, { backgroundColor: 'rgba(0,0,0,0.05)' }]}>
-              <Text style={[styles.badgeText, { color: colors.textSecondary }]}>{exercise.dificultad}</Text>
-            </View>
-          </View>
-        </View>
-
+        {/* Stats Grid */}
         <View style={styles.statsGrid}>
           <View style={styles.statItem}>
+            <View style={styles.statIconContainer}>
+              <Layers color={colors.secondary} size={18} />
+            </View>
             <Text style={styles.statValue}>{exercise.seriesRecomendadas || 3}</Text>
             <Text style={styles.statLabel}>Series</Text>
           </View>
+          <View style={styles.statDivider} />
           <View style={styles.statItem}>
+            <View style={styles.statIconContainer}>
+              <Repeat color={colors.secondary} size={18} />
+            </View>
             <Text style={styles.statValue}>{exercise.repeticionesRecomendadas || '12'}</Text>
-            <Text style={styles.statLabel}>Repeticiones</Text>
+            <Text style={styles.statLabel}>Reps</Text>
           </View>
+          <View style={styles.statDivider} />
           <View style={styles.statItem}>
+            <View style={styles.statIconContainer}>
+              <Flame color={colors.error} size={18} />
+            </View>
             <Text style={styles.statValue}>{exercise.caloriasPorMinuto || 5}</Text>
-            <Text style={styles.statLabel}>Kcal / min</Text>
+            <Text style={styles.statLabel}>Kcal/min</Text>
           </View>
         </View>
 
-        <View style={styles.descriptionContainer}>
-          <View style={styles.descriptionHeader}>
-            <Info color={colors.secondary} size={20} />
-            <Text style={styles.descriptionTitle}>Técnica</Text>
+        {/* Instructions */}
+        {steps.length > 0 && (
+          <View style={styles.instructionsContainer}>
+            <View style={styles.instructionsHeader}>
+              <Info color={colors.secondary} size={20} />
+              <Text style={styles.instructionsTitle}>Técnica paso a paso</Text>
+            </View>
+            {steps.map((step, idx) => (
+              <View key={idx} style={styles.stepRow}>
+                <View style={styles.stepNumber}>
+                  <Text style={styles.stepNumberText}>{idx + 1}</Text>
+                </View>
+                <Text style={styles.stepText}>{step}.</Text>
+              </View>
+            ))}
           </View>
-          <Text style={styles.descriptionText}>
-            {exercise.instrucciones || 'Técnica no especificada. Asegúrate de mantener una buena postura durante todo el movimiento.'}
-          </Text>
-        </View>
+        )}
 
-        <TouchableOpacity style={styles.startButton}>
-          <Text style={styles.startButtonText}>Iniciar Ejercicio</Text>
-        </TouchableOpacity>
+        {/* Action Buttons */}
+        <View style={styles.actionsContainer}>
+          <TouchableOpacity
+            style={styles.startButton}
+            onPress={() => setShowActiveModal(true)}
+          >
+            <Play color={colors.white} size={20} fill={colors.white} />
+            <Text style={styles.startButtonText}>Iniciar Ejercicio</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.addListButton, inList && styles.addListButtonActive]}
+            onPress={toggleList}
+          >
+            {inList ? (
+              <>
+                <Check color={colors.secondary} size={18} />
+                <Text style={styles.addListButtonTextActive}>En Mi Lista</Text>
+              </>
+            ) : (
+              <>
+                <Plus color={colors.secondary} size={18} />
+                <Text style={styles.addListButtonText}>Agregar a Mi Lista</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
       </ScrollView>
+
+      {/* Active Exercise Modal */}
+      <ActiveExerciseModal
+        visible={showActiveModal}
+        exercise={exercise}
+        onClose={() => setShowActiveModal(false)}
+        onComplete={() => setShowActiveModal(false)}
+      />
     </View>
   );
 }
@@ -130,80 +226,78 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-    backgroundColor: colors.white,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    backgroundColor: colors.card,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
-  headerTitle: { fontSize: 16, fontWeight: '700', color: colors.secondary },
+  headerTitle: { flex: 1, fontSize: 16, fontWeight: '700', color: colors.secondary, textAlign: 'center', marginHorizontal: 8 },
   iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 40, height: 40, borderRadius: 20,
     backgroundColor: colors.background,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'center', alignItems: 'center',
   },
-  content: { padding: 20 },
+  iconButtonActive: { backgroundColor: colors.primary },
+  content: { padding: 20, paddingBottom: 40 },
   imageContainer: {
     width: '100%',
-    height: 240,
+    height: 300,
     borderRadius: 20,
-    backgroundColor: colors.white,
+    backgroundColor: '#1C1C1C',
     overflow: 'hidden',
-    marginBottom: 24,
+    marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 4,
   },
   image: { width: '100%', height: '100%' },
-  placeholder: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.card },
-  placeholderText: { fontSize: 80, fontWeight: '800', color: colors.textMuted },
-  playOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  playIconContainer: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: colors.secondary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingLeft: 4, // Visual center tweak
-  },
-  titleContainer: { marginBottom: 20 },
-  name: { fontSize: 24, fontWeight: '800', color: colors.secondary, marginBottom: 12 },
-  badges: { flexDirection: 'row', gap: 8 },
-  badge: { backgroundColor: colors.primary, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12 },
-  badgeText: { fontSize: 12, fontWeight: '700', color: colors.secondary },
+  placeholder: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  placeholderText: { fontSize: 80, fontWeight: '800', color: '#333' },
+  name: { fontSize: 22, fontWeight: '800', color: colors.secondary, marginBottom: 12 },
+  badges: { flexDirection: 'row', gap: 8, flexWrap: 'wrap', marginBottom: 20 },
+  badge: { backgroundColor: colors.card, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, borderWidth: 1, borderColor: colors.border },
+  badgeText: { fontSize: 12, fontWeight: '700', color: colors.textSecondary },
+  diffBadge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12, gap: 5 },
+  diffDot: { width: 7, height: 7, borderRadius: 4 },
+  diffBadgeText: { fontSize: 12, fontWeight: '700' },
   statsGrid: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     backgroundColor: colors.card,
     borderRadius: 20,
     padding: 20,
     marginBottom: 24,
     borderWidth: 1,
     borderColor: colors.border,
+    alignItems: 'center',
   },
   statItem: { alignItems: 'center', flex: 1 },
-  statValue: { fontSize: 20, fontWeight: '800', color: colors.secondary, marginBottom: 4 },
+  statIconContainer: { marginBottom: 6 },
+  statValue: { fontSize: 22, fontWeight: '800', color: colors.secondary, marginBottom: 2 },
   statLabel: { fontSize: 12, color: colors.textSecondary },
-  descriptionContainer: { marginBottom: 40 },
-  descriptionHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 8 },
-  descriptionTitle: { fontSize: 18, fontWeight: '700', color: colors.secondary },
-  descriptionText: { fontSize: 15, color: colors.textSecondary, lineHeight: 24 },
+  statDivider: { width: 1, height: 40, backgroundColor: colors.border },
+  instructionsContainer: { marginBottom: 28 },
+  instructionsHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 16, gap: 8 },
+  instructionsTitle: { fontSize: 18, fontWeight: '700', color: colors.secondary },
+  stepRow: { flexDirection: 'row', marginBottom: 12, gap: 12 },
+  stepNumber: {
+    width: 28, height: 28, borderRadius: 14,
+    backgroundColor: colors.primary,
+    justifyContent: 'center', alignItems: 'center',
+  },
+  stepNumberText: { fontSize: 13, fontWeight: '800', color: colors.secondary },
+  stepText: { flex: 1, fontSize: 14, color: colors.textSecondary, lineHeight: 22, paddingTop: 3 },
+  actionsContainer: { gap: 12 },
   startButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
     backgroundColor: colors.secondary,
     paddingVertical: 18,
     borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 40,
     shadowColor: colors.secondary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -211,4 +305,18 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   startButtonText: { fontSize: 16, fontWeight: '700', color: colors.white },
+  addListButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: colors.card,
+    paddingVertical: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  addListButtonActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  addListButtonText: { fontSize: 15, fontWeight: '600', color: colors.secondary },
+  addListButtonTextActive: { fontSize: 15, fontWeight: '700', color: colors.secondary },
 });
