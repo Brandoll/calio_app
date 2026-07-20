@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Flame } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { MealRecord } from '../../types/tracking';
@@ -16,13 +16,17 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingHorizontal: 24 }]}>
         <Text style={styles.headerTitle}>Comidas del día</Text>
         <Text style={styles.seeAll}>Ver todo</Text>
       </View>
       
       {meals.length > 0 ? (
-        <View style={styles.listContainer}>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.listContainer}
+        >
           {meals.map((meal, index) => (
             <TouchableOpacity 
               key={meal.id ? meal.id.toString() : index.toString()} 
@@ -79,9 +83,9 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
               </View>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       ) : (
-        <View style={styles.emptyState}>
+        <View style={[styles.emptyState, { marginHorizontal: 24 }]}>
           <Text style={styles.emptyTitle}>No hay comidas registradas</Text>
           <Text style={styles.emptyText}>Comienza a registrar tus comidas tomando una foto.</Text>
         </View>
@@ -120,6 +124,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     gap: 16,
+    paddingHorizontal: 24,
   },
   card: {
     flexDirection: 'row',
@@ -132,6 +137,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     padding: 12,
     alignItems: 'center',
+    width: Dimensions.get('window').width * 0.85, // 85% de la pantalla para ver el siguiente
   },
   imageContainer: {
     width: 90,

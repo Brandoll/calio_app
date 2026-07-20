@@ -13,7 +13,6 @@ import { trackingService } from '../../src/services/trackingService';
 import { CaloriesCard } from '../../src/components/dashboard/CaloriesCard';
 import { MacroCardsRow } from '../../src/components/dashboard/MacroCardsRow';
 import { MacroInfoModal, MacroInfoData } from '../../src/components/dashboard/MacroInfoModal';
-import { QuickActions } from '../../src/components/dashboard/QuickActions';
 import { RecentMeals } from '../../src/components/dashboard/RecentMeals';
 import { HydrationBanner } from '../../src/components/dashboard/HydrationBanner';
 import { DailyGoalCard } from '../../src/components/dashboard/DailyGoalCard';
@@ -207,18 +206,17 @@ export default function HomeScreen() {
           progress={dailyData.calories.goal > 0 ? Math.round((dailyData.calories.consumed / dailyData.calories.goal) * 100) : 0} 
         />
 
-        {/* Acciones Rápidas */}
-        <QuickActions />
-
         {/* Banner de Hidratación */}
-        <HydrationBanner 
-          currentGlasses={dailyData.water} 
-          goalGlasses={10} 
-          onAddGlass={() => handleChangeWater(1)} 
-          onPress={() => setIsWaterModalVisible(true)}
-        />
+        <View style={{ paddingHorizontal: 24 }}>
+          <HydrationBanner 
+            currentGlasses={dailyData.water} 
+            goalGlasses={10} 
+            onAddGlass={() => handleChangeWater(1)} 
+            onPress={() => setIsWaterModalVisible(true)}
+          />
+        </View>
 
-        {/* Comidas Recientes */}
+        {/* Comidas Recientes (ahora en carrusel, el padding lo maneja adentro) */}
         <RecentMeals meals={dailyData.comidas as any[]} onDelete={handleDeleteMeal} />
 
       </ScrollView>
