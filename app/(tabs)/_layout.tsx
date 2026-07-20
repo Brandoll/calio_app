@@ -16,12 +16,18 @@ export default function TabsLayout() {
           backgroundColor: '#FFFFFF',
           borderRadius: 40, // Forma de píldora
           height: 70,
+          paddingBottom: 0, // Elimina el padding de iOS que empuja los iconos hacia arriba
+          paddingTop: 0,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 10 },
           shadowOpacity: 0.1,
           shadowRadius: 15,
           elevation: 5,
           borderTopWidth: 0,
+        },
+        tabBarItemStyle: {
+          justifyContent: 'center',
+          alignItems: 'center',
         },
       }}
     >
@@ -53,7 +59,7 @@ export default function TabsLayout() {
           tabBarIcon: () => (
             <View style={styles.floatingButtonContainer}>
               <View style={styles.floatingButton}>
-                <Camera size={30} color="#9DFF20" /> {/* Verde neón como en la imagen */}
+                <Camera size={30} color="#9DFF20" />
               </View>
             </View>
           ),
