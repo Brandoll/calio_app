@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Bell, UserCircle } from 'lucide-react-native';
 import { colors } from '../../src/theme/colors';
@@ -30,40 +31,79 @@ export default function HomeScreen() {
     comidas: [] // Agregado para almacenar las comidas
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!user) return;
-        
-        // 1. Obtener la meta activa del usuario para sacar los totales (calorias y macros)
-        const activeGoal = await authService.getActiveGoal();
-        
-        // 2. Obtener el tracking de hoy (calorias y macros consumidos)
-        const today = new Date().toISOString().split('T')[0];
-        const summary = await trackingService.getDailySummary(user.id, today);
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      const fetchData = async () => {
+        try {
+          if (!user) return;
+          
+          // 1. Obtener la meta activa del usuario para sacar los totales (calorias y macros)
+          const activeGoal = await authService.getActiveGoal();
+          
+          // 2. Obtener el tracking de hoy (calorias y macros consumidos)
+          // Usamos la fecha local en lugar de UTC para evitar el desfase de zona horaria
+          const d = new Date();
+          d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+          const today = d.toISOString().split('T')[0];
 
-        setDailyData({
-          calories: { 
-            consumed: summary.caloriasConsumidas || 0, 
-            goal: activeGoal?.dailyCalories || 2000 
+          const summary = await trackingService.getDailySummary(user.id, today);
+
+          if (isActive) {
+            setDailyData({
+              calories: { 
+                consumed: summary.totalCalorias || 0, 
+                goal: activeGoal?.dailyCalories || 2000 
+              },
+              macros: {
+                protein: { current: summary.totalProteinas || 0, total: activeGoal?.proteinGrams || 120 },
+                carbs: { current: summary.totalCarbohidratos || 0, total: activeGoal?.carbsGrams || 220 },
+                fat: { current: summary.totalGrasas || 0, total: activeGoal?.fatGrams || 65 },
+              },
+              water: summary.aguaVasos || 0,
+              comidas: summary.comidas || [] // Guardamos las comidas reales de la DB
+            });
+          }
+        } catch (error) {
+          console.error('Error cargando datos del dashboard:', error);
+        } finally {
+          if (isActive) setIsLoading(false);
+        }
+      };
+
+      fetchData();
+      return () => { isActive = false; };
+    }, [user])
+  );
+
+  const handleDeleteMeal = async (mealId: number) => {
+    try {
+      await trackingService.deleteMeal(mealId);
+      // Actualizar el estado local para reflejar el cambio inmediatamente
+      setDailyData(prev => {
+        const deletedMeal = prev.comidas.find((m: any) => m.id === mealId) as any;
+        if (!deletedMeal) return prev;
+
+        const newComidas = prev.comidas.filter((m: any) => m.id !== mealId);
+        
+        return {
+          ...prev,
+          calories: {
+            ...prev.calories,
+            consumed: Math.max(0, prev.calories.consumed - deletedMeal.calorias)
           },
           macros: {
-            protein: { current: summary.proteinas || 0, total: activeGoal?.proteinGrams || 120 },
-            carbs: { current: summary.carbohidratos || 0, total: activeGoal?.carbsGrams || 220 },
-            fat: { current: summary.grasas || 0, total: activeGoal?.fatGrams || 65 },
+            protein: { ...prev.macros.protein, current: Math.max(0, prev.macros.protein.current - deletedMeal.proteinas) },
+            carbs: { ...prev.macros.carbs, current: Math.max(0, prev.macros.carbs.current - deletedMeal.carbohidratos) },
+            fat: { ...prev.macros.fat, current: Math.max(0, prev.macros.fat.current - deletedMeal.grasas) }
           },
-          water: summary.vasosAgua || 0,
-          comidas: summary.comidas || [] // Guardamos las comidas reales de la DB
-        });
-      } catch (error) {
-        console.error('Error cargando datos del dashboard:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [user]);
+          comidas: newComidas
+        };
+      });
+    } catch (error) {
+      console.error('Error eliminando comida:', error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -121,7 +161,7 @@ export default function HomeScreen() {
         />
 
         {/* Comidas Recientes */}
-        <RecentMeals meals={dailyData.comidas as any[]} />
+        <RecentMeals meals={dailyData.comidas as any[]} onDelete={handleDeleteMeal} />
 
       </ScrollView>
     </SafeAreaView>

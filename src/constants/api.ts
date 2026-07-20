@@ -40,6 +40,8 @@ export const API_ROUTES = {
   // S-05 Tracking
   TRACKING: {
     REGISTER_MEAL: '/api/tracking/meals',
+    DELETE_MEAL: (id: number) => `/api/tracking/meals/${id}`,
+    UPLOAD_IMAGE: '/api/tracking/meals/upload-image',
     REGISTER_WATER: '/api/tracking/water',
     DAILY_SUMMARY: (userId: number, date: string) => `/api/tracking/meals/summary/${userId}/${date}`,
   },

@@ -1,5 +1,6 @@
 import api from './api';
-import { API_ROUTES } from '../constants/api';
+import { API_BASE_URL, API_ROUTES } from '../constants/api';
+import { useAuthStore } from '../stores/authStore';
 import { MealRecord, WaterRecord, DailySummary } from '../types/tracking';
 
 export const trackingService = {
@@ -16,8 +17,13 @@ export const trackingService = {
       proteinas: data.proteinas,
       grasas: data.grasas,
       carbohidratos: data.carbohidratos,
+      imageUrl: data.imageUrl,
     };
     await api.post(API_ROUTES.TRACKING.REGISTER_MEAL, payload);
+  },
+
+  deleteMeal: async (id: number): Promise<void> => {
+    await api.delete(API_ROUTES.TRACKING.DELETE_MEAL(id));
   },
 
   registerWater: async (data: WaterRecord): Promise<void> => {

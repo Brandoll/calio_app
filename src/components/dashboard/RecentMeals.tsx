@@ -1,13 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Trash2 } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { MealRecord } from '../../types/tracking';
+import { API_BASE_URL } from '../../constants/api';
 
 interface RecentMealsProps {
   meals: MealRecord[];
+  onDelete?: (id: number) => void;
 }
 
-export const RecentMeals = ({ meals = [] }: RecentMealsProps) => {
+export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,17 +20,33 @@ export const RecentMeals = ({ meals = [] }: RecentMealsProps) => {
       
       {meals.length > 0 ? (
         meals.map((meal, index) => (
-          <View key={index.toString()} style={styles.mealCard}>
-            <View style={styles.mealIconPlaceholder}>
-              <Text style={styles.mealIconText}>{meal.nombre ? meal.nombre.charAt(0).toUpperCase() : '?'}</Text>
-            </View>
+          <View key={meal.id ? meal.id.toString() : index.toString()} style={styles.mealCard}>
+            {meal.imageUrl ? (
+              <Image 
+                source={{ uri: meal.imageUrl.startsWith('file://') ? meal.imageUrl : `${API_BASE_URL}${meal.imageUrl}` }} 
+                style={styles.mealImage} 
+              />
+            ) : (
+              <View style={styles.mealIconPlaceholder}>
+                <Text style={styles.mealIconText}>{meal.nombre ? meal.nombre.charAt(0).toUpperCase() : '?'}</Text>
+              </View>
+            )}
+            
             <View style={styles.mealInfo}>
               <Text style={styles.mealName}>{meal.nombre}</Text>
               <Text style={styles.mealTime}>
                 {meal.tipoComida} • {meal.hora ? meal.hora.substring(0,5) : ''}
               </Text>
             </View>
-            <Text style={styles.mealCalories}>{meal.calorias} kcal</Text>
+            
+            <View style={styles.rightActions}>
+              <Text style={styles.mealCalories}>{meal.calorias} kcal</Text>
+              {(meal.id && onDelete) ? (
+                <TouchableOpacity onPress={() => onDelete(meal.id!)} style={styles.deleteButton}>
+                  <Trash2 color={colors.danger || '#FF3B30'} size={20} />
+                </TouchableOpacity>
+              ) : null}
+            </View>
           </View>
         ))
       ) : (
@@ -86,6 +105,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.textSecondary,
   },
+  mealImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    marginRight: 16,
+  },
   mealInfo: {
     flex: 1,
   },
@@ -104,6 +129,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: colors.secondary,
+  },
+  rightActions: {
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  deleteButton: {
+    padding: 4,
   },
   emptyState: {
     backgroundColor: colors.card,

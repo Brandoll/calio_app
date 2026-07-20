@@ -1,7 +1,9 @@
 export interface MealRecord {
+  id?: number;
   userId: number;
   alimentoId: number;
   nombre: string;
+  imageUrl?: string;
   calorias: number;
   proteinas: number;
   grasas: number;

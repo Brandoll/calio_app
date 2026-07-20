@@ -75,22 +75,24 @@ export default function AiCameraScreen() {
     setIsSaving(true);
     
     try {
+      // Usar fecha local ajustada para evitar guardar en un día distinto al local
       const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
       const fecha = now.toISOString().split('T')[0];
-      const hora = now.toTimeString().split(' ')[0].substring(0, 5); // HH:mm
       
-      let hourNumber = now.getHours();
+      const realNow = new Date(); // Para la hora usamos el original local
+      const hora = realNow.toTimeString().split(' ')[0].substring(0, 5); // HH:mm
+      
+      let hourNumber = realNow.getHours();
       let tipoComida: 'DESAYUNO' | 'ALMUERZO' | 'CENA' | 'SNACK' = 'SNACK';
       if (hourNumber > 5 && hourNumber < 11) tipoComida = 'DESAYUNO';
-      else if (hourNumber >= 11 && hourNumber < 16) tipoComida = 'ALMUERZO';
-      else if (hourNumber >= 18 && hourNumber < 23) tipoComida = 'CENA';
-
       // Registramos cada item encontrado
       for (const item of results.items) {
         await trackingService.registerMeal({
           userId: user.id,
           alimentoId: 0, // Alimento no catalogado (custom)
           nombre: item.nombre,
+          imageUrl: imageUri || undefined, // Guardar la URI local del teléfono
           calorias: item.calorias,
           proteinas: item.proteinas,
           grasas: item.grasas,
