@@ -13,12 +13,16 @@ interface HydrationBannerProps {
 export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses, goalGlasses, onPress }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
-      <GlassWater color="#3498db" size={32} style={styles.icon} />
-      <View style={styles.valuesContainer}>
-        <Text style={styles.currentValue}>{currentGlasses * 250}</Text>
-        <Text style={styles.totalValue}> /{goalGlasses * 250} ml</Text>
+      <View style={styles.leftSection}>
+        <GlassWater color="#3498db" size={28} style={styles.icon} />
+        <View style={styles.textContainer}>
+          <View style={styles.valuesContainer}>
+            <Text style={styles.currentValue}>{currentGlasses * 250}</Text>
+            <Text style={styles.totalValue}> /{goalGlasses * 250} ml</Text>
+          </View>
+          <Text style={styles.label}>Hidratación</Text>
+        </View>
       </View>
-      <Text style={styles.label}>Hidratación</Text>
     </TouchableOpacity>
   );
 };
@@ -26,19 +30,26 @@ export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
-    borderRadius: 24,
+    borderRadius: 20,
     padding: 16,
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 3,
-    borderWidth: 1,
-    borderColor: colors.border,
+  },
+  leftSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   icon: {
-    marginBottom: 16,
+    marginRight: 16,
+  },
+  textContainer: {
+    justifyContent: 'center',
   },
   valuesContainer: {
     flexDirection: 'row',

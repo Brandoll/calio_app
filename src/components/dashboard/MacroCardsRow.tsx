@@ -31,13 +31,13 @@ export const MacroCardsRow: React.FC<MacroCardsRowProps> = ({ protein, carbs, fa
     >
       <View style={styles.circleContainer}>
         <CircularProgress
-          size={50}
+          size={40}
           strokeWidth={4}
           progress={getProgress(data.current, data.total)}
           color={color}
           backgroundColor={colors.background}
         >
-          <Icon color={color} size={20} />
+          <Icon color={color} size={16} />
         </CircularProgress>
       </View>
       <View style={styles.valuesContainer}>
@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     backgroundColor: colors.card,
-    borderRadius: 20,
-    padding: 16,
+    borderRadius: 16,
+    padding: 12,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   currentValue: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '800',
     color: colors.secondary,
   },
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
   },
   label: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '600',
     color: colors.textSecondary,
   }

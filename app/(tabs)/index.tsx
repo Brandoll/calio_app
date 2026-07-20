@@ -15,7 +15,6 @@ import { MacroCardsRow } from '../../src/components/dashboard/MacroCardsRow';
 import { MacroInfoModal, MacroInfoData } from '../../src/components/dashboard/MacroInfoModal';
 import { RecentMeals } from '../../src/components/dashboard/RecentMeals';
 import { HydrationBanner } from '../../src/components/dashboard/HydrationBanner';
-import { DailyGoalCard } from '../../src/components/dashboard/DailyGoalCard';
 import { WaterModal } from '../../src/components/dashboard/WaterModal';
 
 export default function HomeScreen() {
@@ -202,23 +201,14 @@ export default function HomeScreen() {
           onCardPress={openMacroInfo}
         />
 
-        {/* Fila de Meta y Agua */}
-        <View style={{ flexDirection: 'row', gap: 16, marginBottom: 24 }}>
-          <View style={{ flex: 1 }}>
-            <DailyGoalCard 
-              title="Meta diaria" 
-              subtitle={`${Math.round(dailyData.calories.consumed)} / ${dailyData.calories.goal} kcal`} 
-              progress={dailyData.calories.goal > 0 ? Math.round((dailyData.calories.consumed / dailyData.calories.goal) * 100) : 0} 
-            />
-          </View>
-          <View style={{ flex: 1 }}>
-            <HydrationBanner 
-              currentGlasses={dailyData.water} 
-              goalGlasses={10} 
-              onAddGlass={() => handleChangeWater(1)} 
-              onPress={() => setIsWaterModalVisible(true)}
-            />
-          </View>
+        {/* Banner de Hidratación */}
+        <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
+          <HydrationBanner 
+            currentGlasses={dailyData.water} 
+            goalGlasses={10} 
+            onAddGlass={() => handleChangeWater(1)} 
+            onPress={() => setIsWaterModalVisible(true)}
+          />
         </View>
 
         {/* Comidas Recientes (ahora vertical con scroll libre) */}

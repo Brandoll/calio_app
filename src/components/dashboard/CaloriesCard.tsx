@@ -26,13 +26,13 @@ export const CaloriesCard: React.FC<CaloriesCardProps> = ({ consumed, goal, onPr
 
       <View style={styles.rightContent}>
         <CircularProgress
-          size={70}
-          strokeWidth={8}
+          size={55}
+          strokeWidth={6}
           progress={progress}
           color="#FF8A00" // Naranja/Fuego para calorías
           backgroundColor={colors.background}
         >
-          <Flame color="#FF8A00" size={28} />
+          <Flame color="#FF8A00" size={24} />
         </CircularProgress>
       </View>
     </TouchableOpacity>
@@ -42,9 +42,9 @@ export const CaloriesCard: React.FC<CaloriesCardProps> = ({ consumed, goal, onPr
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
-    borderRadius: 24,
-    padding: 24,
-    marginBottom: 16,
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -63,25 +63,24 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   consumedText: {
-    fontSize: 40,
+    fontSize: 32,
     fontWeight: '800',
     color: colors.secondary, // Gris oscuro / Negro
   },
   goalText: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '500',
     color: colors.textMuted, // Gris más claro
   },
   labelText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
     color: colors.textSecondary,
   },
   rightContent: {
     justifyContent: 'center',
     alignItems: 'center',
-    // Fondo sutil circular detrás del icono (como en el diseño, donde el circulo tiene un fondo ligeramente gris)
     backgroundColor: 'rgba(240, 240, 240, 0.4)',
-    borderRadius: 35, // Mitad de size (70)
+    borderRadius: 27.5,
   }
 });
