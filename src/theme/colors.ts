@@ -1,6 +1,6 @@
 // Paleta de colores extraída del diseño aprobado de CALIO
 export const colors = {
-  primary: '#9DFF20',       // Verde lima flourescente (cámara)
+  primary: '#D8FF2E',       // Verde lima (botones, acentos)
   primaryDark: '#B8D926',   // Verde lima oscuro (hover/press)
   secondary: '#1C1C1C',     // Negro (textos principales)
   background: '#F5F5F5',    // Gris claro (fondo de pantallas)
