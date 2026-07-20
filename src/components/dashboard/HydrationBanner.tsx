@@ -17,8 +17,8 @@ export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses
         <Droplet color="#3498db" size={32} style={styles.icon} fill="#3498db" fillOpacity={0.2} />
         <View style={styles.textContainer}>
           <View style={styles.valuesContainer}>
-            <Text style={styles.currentValue}>{currentGlasses}</Text>
-            <Text style={styles.totalValue}> /{goalGlasses} vasos</Text>
+            <Text style={styles.currentValue}>{currentGlasses * 250}</Text>
+            <Text style={styles.totalValue}> /{goalGlasses * 250} ml</Text>
           </View>
           <Text style={styles.label}>Hidratación</Text>
         </View>

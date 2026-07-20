@@ -108,8 +108,8 @@ export default function HomeScreen() {
     }
   };
 
-  const handleAddWater = async () => {
-    if (!user || isAddingWater) return;
+  const handleChangeWater = async (amount: number) => {
+    if (!user || isAddingWater || (amount < 0 && dailyData.water + amount < 0)) return;
     
     try {
       setIsAddingWater(true);
@@ -120,44 +120,16 @@ export default function HomeScreen() {
 
       await trackingService.registerWater({
         userId: user.id,
-        vasos: 1,
+        vasos: amount,
         fecha: today
       });
 
       setDailyData(prev => ({
         ...prev,
-        water: prev.water + 1
+        water: Math.max(0, prev.water + amount)
       }));
     } catch (error) {
-      console.error('Error agregando vaso de agua:', error);
-    } finally {
-      setIsAddingWater(false);
-    }
-  };
-
-  const handleRemoveWater = async () => {
-    if (!user || isAddingWater || dailyData.water <= 0) return;
-    
-    try {
-      setIsAddingWater(true);
-      
-      const d = new Date();
-      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-      const today = d.toISOString().split('T')[0];
-
-      // Enviar -1 vaso al backend para restar
-      await trackingService.registerWater({
-        userId: user.id,
-        vasos: -1,
-        fecha: today
-      });
-
-      setDailyData(prev => ({
-        ...prev,
-        water: Math.max(0, prev.water - 1)
-      }));
-    } catch (error) {
-      console.error('Error eliminando vaso de agua:', error);
+      console.error('Error modificando agua:', error);
     } finally {
       setIsAddingWater(false);
     }
@@ -214,8 +186,8 @@ export default function HomeScreen() {
         {/* Banner de Hidratación */}
         <HydrationBanner 
           currentGlasses={dailyData.water} 
-          goalGlasses={8} 
-          onAddGlass={handleAddWater} 
+          goalGlasses={10} 
+          onAddGlass={() => handleChangeWater(1)} 
           onPress={() => setIsWaterModalVisible(true)}
         />
 
@@ -229,9 +201,8 @@ export default function HomeScreen() {
         visible={isWaterModalVisible}
         onClose={() => setIsWaterModalVisible(false)}
         currentGlasses={dailyData.water}
-        goalGlasses={8}
-        onAddGlass={handleAddWater}
-        onRemoveGlass={handleRemoveWater}
+        goalGlasses={10}
+        onChangeWater={handleChangeWater}
         isAdding={isAddingWater}
       />
     </SafeAreaView>

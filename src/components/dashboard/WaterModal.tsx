@@ -1,15 +1,15 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Animated, Easing } from 'react-native';
-import { X, Plus, Droplets } from 'lucide-react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { X, Plus, Minus, Droplet, GlassWater } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
+import { CircularProgress } from '../ui/CircularProgress';
 
 interface WaterModalProps {
   visible: boolean;
   onClose: () => void;
   currentGlasses: number;
   goalGlasses: number;
-  onAddGlass: () => void;
-  onRemoveGlass: () => void;
+  onChangeWater: (amount: number) => void;
   isAdding: boolean;
 }
 
@@ -18,35 +18,52 @@ export const WaterModal: React.FC<WaterModalProps> = ({
   onClose,
   currentGlasses,
   goalGlasses,
-  onAddGlass,
-  onRemoveGlass,
+  onChangeWater,
   isAdding
 }) => {
-  // Animación para el nivel del agua
-  const fillAnimation = useRef(new Animated.Value(0)).current;
+  // Lógica de ML y Porcentaje
+  const currentMl = currentGlasses * 250;
+  const goalMl = goalGlasses * 250;
+  const fillPercentage = Math.min(Math.round((currentMl / goalMl) * 100), 100);
 
-  // Calculamos el porcentaje de llenado (0 a 1)
-  const fillPercentage = Math.min(currentGlasses / goalGlasses, 1);
-
-  useEffect(() => {
-    if (visible) {
-      Animated.timing(fillAnimation, {
-        toValue: fillPercentage,
-        duration: 800, // 800ms de animación suave
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: false, // height no soporta useNativeDriver
-      }).start();
-    } else {
-      // Resetear al cerrar para que anime al volver a abrir si se quiere
-      fillAnimation.setValue(fillPercentage);
-    }
-  }, [visible, currentGlasses, goalGlasses]);
-
-  // Interpolamos de 0 a 100% de la altura del vaso
-  const waterHeight = fillAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0%', '100%']
-  });
+  // Renderizador de filas (Vaso / Botella)
+  const renderItemRow = (
+    title: string, 
+    ml: number, 
+    Icon: any, 
+    glassesAmount: number, 
+    addedCount: number
+  ) => (
+    <View style={styles.itemRow}>
+      <View style={styles.itemInfo}>
+        <Icon color="#4facfe" size={32} />
+        <View style={styles.itemTextContainer}>
+          <Text style={styles.itemTitle}>{title}</Text>
+          <Text style={styles.itemSubtitle}>{ml}ml</Text>
+        </View>
+      </View>
+      <View style={styles.itemControls}>
+        <TouchableOpacity 
+          style={[styles.circleButton, styles.minusButton, (isAdding || currentGlasses < glassesAmount) && styles.disabled]}
+          onPress={() => onChangeWater(-glassesAmount)}
+          disabled={isAdding || currentGlasses < glassesAmount}
+        >
+          <Minus color="#A0A0A0" size={24} />
+        </TouchableOpacity>
+        
+        {/* Usamos un contador visual simple basado en la proporción, aunque la app mide el total de vasos */}
+        <Text style={styles.itemCount}>{addedCount}</Text>
+        
+        <TouchableOpacity 
+          style={[styles.circleButton, styles.plusButton, isAdding && styles.disabled]}
+          onPress={() => onChangeWater(glassesAmount)}
+          disabled={isAdding}
+        >
+          <Plus color="#FFFFFF" size={24} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   return (
     <Modal
@@ -59,57 +76,45 @@ export const WaterModal: React.FC<WaterModalProps> = ({
         <View style={styles.modalContent}>
           {/* Header */}
           <View style={styles.header}>
-            <Text style={styles.title}>¡Mantente Hidratado!</Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <View style={styles.headerSpacer} />
+            <Text style={styles.title}>Hidratación</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeIcon}>
               <X size={24} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
 
-          {/* Vaso y Animación */}
-          <View style={styles.glassContainer}>
-            <View style={styles.glass}>
-              {/* Agua animada */}
-              <Animated.View style={[styles.waterFill, { height: waterHeight }]} />
-              
-              {/* Medidor visual superpuesto */}
-              <View style={styles.glassMarks}>
-                <Droplets color="rgba(255,255,255,0.8)" size={40} />
-              </View>
-            </View>
+          {/* Círculo Principal */}
+          <View style={styles.circleContainer}>
+            <CircularProgress
+              size={200}
+              strokeWidth={8}
+              progress={fillPercentage}
+              color="#3498db"
+              backgroundColor="#E1F5FE"
+            >
+              <Text style={styles.percentageText}>{fillPercentage}%</Text>
+            </CircularProgress>
           </View>
 
-          {/* Estadísticas */}
-          <Text style={styles.statsText}>
-            <Text style={styles.highlight}>{currentGlasses}</Text> de {goalGlasses} vasos
-          </Text>
-          
-          <Text style={styles.subtitle}>
-            {(currentGlasses >= goalGlasses) 
-              ? '¡Meta diaria alcanzada! 🎉' 
-              : `Te faltan ${goalGlasses - currentGlasses} vasos para tu meta.`}
-          </Text>
-
-          {/* Botones de acción */}
-          <View style={styles.actionButtonsContainer}>
-            <TouchableOpacity 
-              style={[styles.removeButton, isAdding && styles.addButtonDisabled, currentGlasses <= 0 && styles.addButtonDisabled]} 
-              onPress={onRemoveGlass}
-              disabled={isAdding || currentGlasses <= 0}
-            >
-              <Text style={styles.removeButtonText}>-1</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={[styles.addButton, isAdding && styles.addButtonDisabled]} 
-              onPress={onAddGlass}
-              disabled={isAdding}
-            >
-              <Plus color={colors.white} size={28} />
-              <Text style={styles.addButtonText}>
-                {isAdding ? '...' : 'Añadir Vaso'}
-              </Text>
-            </TouchableOpacity>
+          {/* Píldora de Mililitros */}
+          <View style={styles.mlPill}>
+            <Text style={styles.mlPillText}>{currentMl} / {goalMl} ml</Text>
           </View>
+
+          {/* Opciones de Agregar */}
+          <View style={styles.optionsContainer}>
+            {/* Si sumamos todo, 1 vaso = 250ml. Si tenemos currentGlasses, podemos decir que todos son vasos para simplificar la cuenta en UI */}
+            {renderItemRow('Vaso', 250, GlassWater, 1, currentGlasses)}
+            
+            {/* Como la base de datos no distingue vasos vs botellas, solo mostramos 0 o la cantidad de "botellas" que caben */}
+            {renderItemRow('Botella', 500, Droplet, 2, Math.floor(currentGlasses / 2))}
+          </View>
+
+          {/* Botón de Cerrar */}
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>Cerrar</Text>
+          </TouchableOpacity>
+
         </View>
       </View>
     </Modal>
@@ -119,7 +124,7 @@ export const WaterModal: React.FC<WaterModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)', // Fondo oscuro
+    backgroundColor: 'rgba(0,0,0,0.6)',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -143,104 +148,107 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 30,
   },
+  headerSpacer: {
+    width: 24,
+  },
   title: {
     fontSize: 20,
+    fontWeight: '800',
+    color: colors.secondary,
+  },
+  closeIcon: {
+    padding: 4,
+  },
+  circleContainer: {
+    marginBottom: 20,
+  },
+  percentageText: {
+    fontSize: 48,
+    fontWeight: '800',
+    color: '#4facfe',
+  },
+  mlPill: {
+    backgroundColor: colors.background,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    marginBottom: 30,
+  },
+  mlPillText: {
+    fontSize: 14,
     fontWeight: '700',
     color: colors.secondary,
   },
-  closeButton: {
-    padding: 4,
-  },
-  glassContainer: {
-    height: 220,
-    width: 140,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    marginBottom: 30,
-  },
-  glass: {
-    width: 120,
-    height: 200,
-    borderWidth: 4,
-    borderColor: '#E0E0E0',
-    borderBottomLeftRadius: 60, // Mucho más redondo abajo, forma de vaso
-    borderBottomRightRadius: 60,
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-    justifyContent: 'flex-end',
-    overflow: 'hidden',
-    backgroundColor: 'rgba(240, 248, 255, 0.5)', 
-  },
-  waterFill: {
+  optionsContainer: {
     width: '100%',
-    backgroundColor: '#3498db',
-    position: 'absolute',
-    bottom: 0,
-    borderBottomLeftRadius: 55, // Se ajusta al borde interior
-    borderBottomRightRadius: 55,
-  },
-  glassMarks: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
-  },
-  statsText: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: colors.textSecondary,
-    marginBottom: 8,
-  },
-  highlight: {
-    color: '#3498db',
-    fontWeight: '800',
-    fontSize: 32,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: colors.textMuted,
-    marginBottom: 30,
-    textAlign: 'center',
-  },
-  addButton: {
-    backgroundColor: '#3498db',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 30,
-    flex: 1, // Toma el espacio restante
-  },
-  addButtonDisabled: {
-    opacity: 0.5,
-  },
-  addButtonText: {
-    color: colors.white,
-    fontSize: 18,
-    fontWeight: '700',
-    marginLeft: 8,
-  },
-  actionButtonsContainer: {
-    flexDirection: 'row',
-    width: '100%',
+    marginBottom: 20,
     gap: 12,
   },
-  removeButton: {
+  itemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: colors.background,
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
+    padding: 16,
+    borderRadius: 20,
+  },
+  itemInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  itemTextContainer: {
+    marginLeft: 12,
+  },
+  itemTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: colors.secondary,
+  },
+  itemSubtitle: {
+    fontSize: 13,
+    color: colors.textMuted,
+  },
+  itemControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  circleButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 30,
   },
-  removeButtonText: {
-    color: colors.textSecondary,
-    fontSize: 20,
+  minusButton: {
+    backgroundColor: colors.white,
+    borderWidth: 2,
+    borderColor: '#E0E0E0',
+  },
+  plusButton: {
+    backgroundColor: '#4facfe',
+  },
+  itemCount: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: colors.secondary,
+    minWidth: 16,
+    textAlign: 'center',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+  closeButton: {
+    width: '100%',
+    backgroundColor: '#41C4FF', // Azul claro estilo imagen
+    paddingVertical: 18,
+    borderRadius: 16,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  closeButtonText: {
+    color: colors.white,
+    fontSize: 18,
     fontWeight: '800',
   }
 });
