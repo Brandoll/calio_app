@@ -2,6 +2,8 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Bell, UserCircle, Flame } from 'lucide-react-native';
 import { colors } from '../../src/theme/colors';
 import { useAuthStore } from '../../src/stores/authStore';
@@ -214,6 +216,21 @@ export default function HomeScreen() {
         <RecentMeals meals={dailyData.comidas as any[]} onDelete={handleDeleteMeal} />
       </View>
 
+      {/* Gradiente de transición que empieza ANTES de la barra */}
+      <LinearGradient
+        colors={['rgba(245, 245, 245, 0)', 'rgba(255, 255, 255, 0.8)']}
+        style={styles.fadeGradient}
+        pointerEvents="none"
+      />
+
+      {/* Efecto borroso fuerte DETRÁS de la barra de navegación */}
+      <BlurView 
+        intensity={100} 
+        tint="light" 
+        style={styles.bottomBlur} 
+        pointerEvents="none"
+      />
+
       {/* Modal Interactivo de Agua */}
       <WaterModal 
         visible={isWaterModalVisible}
@@ -238,6 +255,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  fadeGradient: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 105 : 95, // Termina donde empieza el nav bar
+    left: 0,
+    right: 0,
+    height: 80, // Empieza 80px antes del nav bar para un desvanecimiento muy suave
+    zIndex: 1,
+  },
+  bottomBlur: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: Platform.OS === 'ios' ? 105 : 95,
+    zIndex: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
   },
   topSection: {
     padding: 24,

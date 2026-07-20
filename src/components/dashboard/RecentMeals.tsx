@@ -23,7 +23,7 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
       
       <ScrollView 
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: Platform.OS === 'ios' ? 105 : 95 }}
+        contentContainerStyle={{ paddingBottom: Platform.OS === 'ios' ? 200 : 190 }}
         showsVerticalScrollIndicator={false}
       >
         {meals.length > 0 ? (
