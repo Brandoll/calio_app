@@ -1,128 +1,136 @@
 import { Tabs } from 'expo-router';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Home, Dumbbell, Camera, UtensilsCrossed, User } from 'lucide-react-native';
-import { colors } from '../../src/theme/colors';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+
+function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+  // Filtramos los tabs normales en el orden deseado
+  const orderedRouteNames = ['index', 'exercises', 'foods', 'more'];
+  const normalTabs = orderedRouteNames.map(name => state.routes.find(r => r.name === name)).filter(Boolean) as typeof state.routes;
+  const cameraRoute = state.routes.find(r => r.name === 'ai-camera');
+
+  return (
+    <View style={styles.tabBarWrapper}>
+      {/* Píldora Blanca para los 4 iconos */}
+      <View style={styles.pillContainer}>
+        {normalTabs.map((route, index) => {
+          const isFocused = state.index === state.routes.findIndex(r => r.key === route.key);
+          
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          };
+
+          let Icon = Home;
+          if (route.name === 'exercises') Icon = Dumbbell;
+          if (route.name === 'foods') Icon = UtensilsCrossed;
+          if (route.name === 'more') Icon = User;
+
+          return (
+            <TouchableOpacity key={route.key} onPress={onPress} style={styles.tabItem}>
+              <View style={[styles.iconContainer, isFocused && styles.iconContainerFocused]}>
+                <Icon size={24} color={isFocused ? '#000000' : '#A0A0A0'} />
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      {/* Botón de Cámara Separado a la derecha */}
+      {cameraRoute && (
+        <TouchableOpacity
+          style={styles.cameraButtonWrapper}
+          onPress={() => {
+            navigation.navigate(cameraRoute.name);
+          }}
+        >
+          <View style={styles.cameraButton}>
+            <Camera size={28} color="#9DFF20" /> {/* Verde Neón */}
+          </View>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+}
 
 export default function TabsLayout() {
   return (
     <Tabs
+      tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        tabBarShowLabel: false, // El diseño de la imagen no tiene textos
-        tabBarStyle: {
-          position: 'absolute',
-          bottom: Platform.OS === 'ios' ? 30 : 25,
-          marginHorizontal: 25, // Deja espacio a los lados
-          backgroundColor: '#FFFFFF',
-          borderRadius: 40, // Forma de píldora
-          height: 70,
-          paddingBottom: 0, // Elimina el padding de iOS que empuja los iconos hacia arriba
-          paddingTop: 0,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 10 },
-          shadowOpacity: 0.1,
-          shadowRadius: 15,
-          elevation: 5,
-          borderTopWidth: 0,
-        },
-        tabBarItemStyle: {
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
       }}
     >
-      <Tabs.Screen
-        name="index"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={[styles.iconContainer, focused && styles.iconContainerFocused]}>
-              <Home size={24} color={focused ? '#000000' : '#A0A0A0'} />
-            </View>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="exercises"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={[styles.iconContainer, focused && styles.iconContainerFocused]}>
-              <Dumbbell size={24} color={focused ? '#000000' : '#A0A0A0'} />
-            </View>
-          ),
-        }}
-      />
-      
-      {/* Botón Flotante Central (Cámara) */}
-      <Tabs.Screen
-        name="ai-camera"
-        options={{
-          tabBarIcon: () => (
-            <View style={styles.floatingButtonContainer}>
-              <View style={styles.floatingButton}>
-                <Camera size={30} color="#9DFF20" />
-              </View>
-            </View>
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="foods"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={[styles.iconContainer, focused && styles.iconContainerFocused]}>
-              <UtensilsCrossed size={24} color={focused ? '#000000' : '#A0A0A0'} />
-            </View>
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="more"
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <View style={[styles.iconContainer, focused && styles.iconContainerFocused]}>
-              <User size={24} color={focused ? '#000000' : '#A0A0A0'} />
-            </View>
-          ),
-        }}
-      />
-      {/* Oculto de la barra inferior pero accesible por navegación */}
-      <Tabs.Screen
-        name="stats"
-        options={{
-          href: null,
-        }}
-      />
+      <Tabs.Screen name="index" />
+      <Tabs.Screen name="exercises" />
+      <Tabs.Screen name="ai-camera" />
+      <Tabs.Screen name="foods" />
+      <Tabs.Screen name="more" />
+      <Tabs.Screen name="stats" options={{ href: null }} />
     </Tabs>
   );
 }
 
 const styles = StyleSheet.create({
+  tabBarWrapper: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 35 : 25,
+    left: 20,
+    right: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between', // Separa el pill de la cámara
+  },
+  pillContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    height: 70,
+    borderRadius: 35,
+    marginRight: 15, // Espacio entre la píldora y la cámara
+    paddingHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 15,
+    elevation: 5,
+    justifyContent: 'space-around', // Espaciado equitativo
+    alignItems: 'center',
+  },
+  tabItem: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
   iconContainer: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
   iconContainerFocused: {
-    backgroundColor: '#F0F0F0', // Fondo gris claro cuando está activo como en la imagen
+    backgroundColor: '#F0F0F0',
   },
-  floatingButtonContainer: {
-    top: -20, // Sobresale de la barra
-    justifyContent: 'center',
-    alignItems: 'center',
+  cameraButtonWrapper: {
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 8,
   },
-  floatingButton: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: '#111111', // Negro oscuro
+  cameraButton: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: '#111111',
     justifyContent: 'center',
     alignItems: 'center',
   }
