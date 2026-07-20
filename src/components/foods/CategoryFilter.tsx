@@ -55,16 +55,16 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   chipSelected: {
-    backgroundColor: '#904616', // Color marrón/naranja oscuro del diseño
-    borderColor: '#904616',
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
   chipText: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '500',
     color: colors.textSecondary,
   },
   chipTextSelected: {
-    color: '#FFFFFF',
+    color: colors.secondary,
     fontWeight: '700',
   },
 });

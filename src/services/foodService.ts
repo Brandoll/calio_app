@@ -5,7 +5,7 @@ import { Food, FoodCategory } from '../types/food';
 export const foodService = {
   getCategories: async (): Promise<FoodCategory[]> => {
     const response = await api.get(API_ROUTES.FOODS.CATEGORIES);
-    return response.data;
+    return response.data.data || [];
   },
 
   getAll: async (search?: string, categoria?: number): Promise<Food[]> => {
@@ -13,7 +13,8 @@ export const foodService = {
     if (search) params.search = search;
     if (categoria) params.categoria = categoria;
     const response = await api.get(API_ROUTES.FOODS.ALL, { params });
-    return response.data;
+    // response.data es el ApiResponse, response.data.data es el PagedResponse
+    return response.data.data?.content || [];
   },
 
   getById: async (id: number): Promise<Food> => {
@@ -23,7 +24,7 @@ export const foodService = {
 
   getByCategory: async (categoryId: number): Promise<Food[]> => {
     const response = await api.get(API_ROUTES.FOODS.BY_CATEGORY(categoryId));
-    return response.data;
+    return response.data.data?.content || [];
   },
 
   addFavorite: async (foodId: number): Promise<void> => {
@@ -36,6 +37,6 @@ export const foodService = {
 
   getFavorites: async (): Promise<Food[]> => {
     const response = await api.get(API_ROUTES.FOODS.FAVORITES);
-    return response.data;
+    return response.data.data || [];
   },
 };

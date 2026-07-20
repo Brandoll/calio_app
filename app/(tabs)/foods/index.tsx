@@ -104,10 +104,10 @@ export default function FoodsScreen() {
         <Text style={styles.title}>Alimentos</Text>
         <View style={styles.headerActions}>
           <TouchableOpacity style={styles.iconButton}>
-            <ShoppingCart color="#6B4A3A" size={24} />
+            <ShoppingCart color={colors.secondary} size={24} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton}>
-            <Plus color="#6B4A3A" size={24} />
+            <Plus color={colors.secondary} size={24} />
           </TouchableOpacity>
         </View>
       </View>
@@ -181,7 +181,7 @@ export default function FoodsScreen() {
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
-    backgroundColor: '#FAF5EF', // Fondo color crema suave de la imagen
+    backgroundColor: colors.background, 
   },
   header: {
     flexDirection: 'row',
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   title: { 
     fontSize: 28, 
     fontWeight: '800', 
-    color: '#3A3A3A',
+    color: colors.secondary,
   },
   headerActions: {
     flexDirection: 'row',
@@ -207,10 +207,12 @@ const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: 'row',
     marginHorizontal: 20,
-    backgroundColor: '#EAE1D5', // Color crema un poco mas oscuro
+    backgroundColor: colors.card,
     borderRadius: 30,
     padding: 4,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   tab: {
     flex: 1,
@@ -219,7 +221,7 @@ const styles = StyleSheet.create({
     borderRadius: 26,
   },
   tabActive: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -229,27 +231,25 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#8D7F75',
+    color: colors.textSecondary,
   },
   tabTextActive: {
-    color: '#3A3A3A',
+    color: colors.secondary,
+    fontWeight: '700',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.card,
     marginHorizontal: 20,
     borderRadius: 16,
     paddingHorizontal: 16,
     height: 52,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   searchIcon: { marginRight: 12 },
-  searchInput: { flex: 1, fontSize: 16, color: '#3A3A3A' },
+  searchInput: { flex: 1, fontSize: 16, color: colors.secondary },
   listContent: { paddingHorizontal: 14, paddingBottom: 100 },
   columnWrapper: { justifyContent: 'space-between' },
   loader: { marginTop: 40 },
