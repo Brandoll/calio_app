@@ -51,7 +51,7 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           }}
         >
           <View style={styles.cameraButton}>
-            <Camera size={28} color="#9DFF20" /> {/* Verde Neón */}
+            <Camera size={28} color="#9DFF20" />
           </View>
         </TouchableOpacity>
       )}
@@ -120,11 +120,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F0F0',
   },
   cameraButtonWrapper: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 8,
+    // Wrapper para el botón
   },
   cameraButton: {
     width: 70,
@@ -133,5 +129,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#111111',
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 8,
   }
 });
