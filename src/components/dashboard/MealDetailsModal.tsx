@@ -1,9 +1,10 @@
-import React from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Image, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Image } from 'react-native';
 import { X, Trash2, Flame } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { MealRecord } from '../../types/tracking';
 import { API_BASE_URL } from '../../constants/api';
+import { CustomAlert } from '../ui/CustomAlert';
 
 interface MealDetailsModalProps {
   visible: boolean;
@@ -13,26 +14,24 @@ interface MealDetailsModalProps {
 }
 
 export const MealDetailsModal = ({ visible, onClose, meal, onDelete }: MealDetailsModalProps) => {
+  const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+
   if (!meal) return null;
 
   const handleDelete = () => {
-    Alert.alert(
-      "Eliminar Comida",
-      "¿Estás seguro de que deseas eliminar esta comida? Esta acción no se puede deshacer.",
-      [
-        { text: "Cancelar", style: "cancel" },
-        { 
-          text: "Eliminar", 
-          style: "destructive",
-          onPress: () => {
-            if (onDelete && meal.id) {
-              onDelete(meal.id);
-              onClose();
-            }
-          }
-        }
-      ]
-    );
+    setIsConfirmingDelete(true);
+  };
+
+  const confirmDelete = () => {
+    setIsConfirmingDelete(false);
+    if (onDelete && meal.id) {
+      onDelete(meal.id);
+      onClose();
+    }
+  };
+
+  const cancelDelete = () => {
+    setIsConfirmingDelete(false);
   };
 
   return (
@@ -95,9 +94,19 @@ export const MealDetailsModal = ({ visible, onClose, meal, onDelete }: MealDetai
               </View>
             </View>
           </View>
-
         </View>
       </View>
+
+      <CustomAlert 
+        visible={isConfirmingDelete}
+        title="Eliminar Comida"
+        message="¿Estás seguro de que deseas eliminar esta comida? Esta acción no se puede deshacer."
+        type="delete"
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+      />
     </Modal>
   );
 };

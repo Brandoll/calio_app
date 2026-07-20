@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, UploadCloud, CheckCircle, XCircle } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -8,6 +8,7 @@ import { colors } from '../../src/theme/colors';
 import { aiService, AiAnalysisResult } from '../../src/services/aiService';
 import { trackingService } from '../../src/services/trackingService';
 import { useAuthStore } from '../../src/stores/authStore';
+import { CustomAlert, AlertType } from '../../src/components/ui/CustomAlert';
 
 export default function AiCameraScreen() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function AiCameraScreen() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [results, setResults] = useState<AiAnalysisResult | null>(null);
+  const [alertData, setAlertData] = useState<{ visible: boolean; title: string; message: string; type: AlertType } | null>(null);
 
   const requestPermissions = async () => {
     const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
@@ -33,7 +35,7 @@ export default function AiCameraScreen() {
       setResults(data);
     } catch (error: any) {
       console.error('Error analyzing image:', error);
-      Alert.alert('Error', 'No se pudo analizar la imagen. Intenta de nuevo.');
+      setAlertData({ visible: true, title: 'Error', message: 'No se pudo analizar la imagen. Intenta de nuevo.', type: 'error' });
       setImageUri(null);
     } finally {
       setIsAnalyzing(false);
@@ -42,7 +44,7 @@ export default function AiCameraScreen() {
 
   const takePhoto = async () => {
     const hasPermission = await requestPermissions();
-    if (!hasPermission) return Alert.alert('Permisos requeridos', 'Necesitamos acceso a tu cámara.');
+    if (!hasPermission) return setAlertData({ visible: true, title: 'Permisos requeridos', message: 'Necesitamos acceso a tu cámara.', type: 'warning' });
     
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -57,7 +59,7 @@ export default function AiCameraScreen() {
 
   const pickImage = async () => {
     const hasPermission = await requestPermissions();
-    if (!hasPermission) return Alert.alert('Permisos requeridos', 'Necesitamos acceso a tu galería.');
+    if (!hasPermission) return setAlertData({ visible: true, title: 'Permisos requeridos', message: 'Necesitamos acceso a tu galería.', type: 'warning' });
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -104,11 +106,10 @@ export default function AiCameraScreen() {
         });
       }
 
-      Alert.alert('¡Éxito!', 'Comida registrada correctamente.');
-      router.replace('/(tabs)'); // Volver al inicio para ver los cambios
+      setAlertData({ visible: true, title: '¡Éxito!', message: 'Comida registrada correctamente.', type: 'success' });
     } catch (error) {
       console.error('Error guardando comida:', error);
-      Alert.alert('Error', 'No se pudo guardar la comida.');
+      setAlertData({ visible: true, title: 'Error', message: 'No se pudo guardar la comida.', type: 'error' });
     } finally {
       setIsSaving(false);
     }
@@ -189,6 +190,21 @@ export default function AiCameraScreen() {
           </View>
         )}
       </ScrollView>
+
+      {alertData && (
+        <CustomAlert
+          visible={alertData.visible}
+          title={alertData.title}
+          message={alertData.message}
+          type={alertData.type}
+          onConfirm={() => {
+            setAlertData(null);
+            if (alertData.type === 'success') {
+              router.replace('/(tabs)');
+            }
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 }
