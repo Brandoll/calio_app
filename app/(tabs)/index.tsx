@@ -15,6 +15,7 @@ import { QuickActions } from '../../src/components/dashboard/QuickActions';
 import { RecentMeals } from '../../src/components/dashboard/RecentMeals';
 import { HydrationBanner } from '../../src/components/dashboard/HydrationBanner';
 import { DailyGoalCard } from '../../src/components/dashboard/DailyGoalCard';
+import { WaterModal } from '../../src/components/dashboard/WaterModal';
 
 export default function HomeScreen() {
   const { user } = useAuthStore();
@@ -30,6 +31,8 @@ export default function HomeScreen() {
     water: 0,
     comidas: [] // Agregado para almacenar las comidas
   });
+  const [isWaterModalVisible, setIsWaterModalVisible] = useState(false);
+  const [isAddingWater, setIsAddingWater] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -105,6 +108,36 @@ export default function HomeScreen() {
     }
   };
 
+  const handleAddWater = async () => {
+    if (!user || isAddingWater) return;
+    
+    try {
+      setIsAddingWater(true);
+      
+      const d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      const today = d.toISOString().split('T')[0];
+
+      // Llamar al backend para registrar 1 vaso
+      await trackingService.registerWater({
+        userId: user.id,
+        vasos: 1,
+        fecha: today
+      });
+
+      // Actualizar el estado local para reflejar la animación inmediatamente
+      setDailyData(prev => ({
+        ...prev,
+        water: prev.water + 1
+      }));
+      
+    } catch (error) {
+      console.error('Error agregando vaso de agua:', error);
+    } finally {
+      setIsAddingWater(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
@@ -157,13 +190,24 @@ export default function HomeScreen() {
         <HydrationBanner 
           currentGlasses={dailyData.water} 
           goalGlasses={8} 
-          onAddGlass={() => console.log('Añadir vaso')} 
+          onAddGlass={handleAddWater} 
+          onPress={() => setIsWaterModalVisible(true)}
         />
 
         {/* Comidas Recientes */}
         <RecentMeals meals={dailyData.comidas as any[]} onDelete={handleDeleteMeal} />
 
       </ScrollView>
+
+      {/* Modal Interactivo de Agua */}
+      <WaterModal 
+        visible={isWaterModalVisible}
+        onClose={() => setIsWaterModalVisible(false)}
+        currentGlasses={dailyData.water}
+        goalGlasses={8}
+        onAddGlass={handleAddWater}
+        isAdding={isAddingWater}
+      />
     </SafeAreaView>
   );
 }

@@ -6,12 +6,13 @@ import { colors } from '../../theme/colors';
 interface HydrationBannerProps {
   currentGlasses: number;
   goalGlasses: number;
-  onAddGlass: () => void;
+  onAddGlass: () => void; // Para el botón rápido
+  onPress: () => void;    // Para abrir el modal
 }
 
-export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses, goalGlasses, onAddGlass }) => {
+export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses, goalGlasses, onAddGlass, onPress }) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.iconContainer}>
         <Droplets color={colors.primary} size={28} />
       </View>
@@ -24,7 +25,7 @@ export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses
       <TouchableOpacity style={styles.addButton} onPress={onAddGlass}>
         <Plus color={colors.secondary} size={24} />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
