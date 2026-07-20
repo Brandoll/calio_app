@@ -14,6 +14,7 @@ export default function FoodDetailScreen() {
   const [food, setFood] = useState<Food | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [mealType, setMealType] = useState('desayuno');
 
   useEffect(() => {
     loadFood();
@@ -30,13 +31,13 @@ export default function FoodDetailScreen() {
         id: parseInt(id),
         nombre: 'Manzana',
         categoria: 'Frutas',
-        calorias: 52,
-        proteinas: 0.3,
-        carbohidratos: 14,
-        grasas: 0.2,
-        fibra: 2.4,
+        energiaKcal: 52,
+        proteinasG: 0.3,
+        carbohidratosTotalesG: 14,
+        grasaTotalG: 0.2,
+        fibraDietariaG: 2.4,
         indiceGlucemico: 36,
-        porcion: '1 unidad mediana (182g)',
+        porcionRef: '1 unidad mediana (182g)',
       });
     } finally {
       setIsLoading(false);
@@ -78,8 +79,8 @@ export default function FoodDetailScreen() {
 
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.imageContainer}>
-          {food.imagen ? (
-            <Image source={{ uri: food.imagen }} style={styles.image} />
+          {food.imagenUrl ? (
+            <Image source={{ uri: food.imagenUrl }} style={styles.image} />
           ) : (
             <View style={styles.placeholder}>
               <Text style={styles.placeholderText}>{food.nombre.charAt(0)}</Text>
@@ -92,7 +93,7 @@ export default function FoodDetailScreen() {
           <Text style={styles.category}>{food.categoria}</Text>
         </View>
 
-        <Text style={styles.portionText}>Porción: {food.porcion || '100g'}</Text>
+        <Text style={styles.portionText}>Porción: {food.porcionRef || '100g'}</Text>
 
         <NutritionInfo 
           calories={food.energiaKcal}
@@ -146,10 +147,14 @@ const styles = StyleSheet.create({
   headerRight: { width: 40 },
   imageContainer: { width: '100%', height: 250, backgroundColor: colors.card, justifyContent: 'center', alignItems: 'center' },
   image: { width: '100%', height: '100%' },
+  placeholder: { width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' },
   placeholderText: { fontSize: 80, fontWeight: '800', color: colors.textMuted },
   content: { padding: 20 },
+  titleContainer: { marginBottom: 16 },
+  name: { fontSize: 28, fontWeight: '800', color: colors.secondary },
   title: { fontSize: 28, fontWeight: '800', color: colors.secondary, marginBottom: 8 },
-  category: { fontSize: 16, color: colors.textSecondary, marginBottom: 24 },
+  category: { fontSize: 16, color: colors.textSecondary },
+  portionText: { fontSize: 14, color: colors.textSecondary, marginBottom: 24, fontStyle: 'italic' },
   nutritionCard: {
     backgroundColor: colors.card,
     borderRadius: 20,

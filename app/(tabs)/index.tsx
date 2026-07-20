@@ -8,6 +8,7 @@ import { colors } from '../../src/theme/colors';
 import { useAuthStore } from '../../src/stores/authStore';
 import { authService } from '../../src/services/authService';
 import { trackingService } from '../../src/services/trackingService';
+import { MealRecord } from '../../src/types/tracking';
 
 // Componentes
 import { CaloriesCard } from '../../src/components/dashboard/CaloriesCard';
@@ -29,7 +30,7 @@ export default function HomeScreen() {
       fat: { current: 0, total: 65 },
     },
     water: 0,
-    comidas: [] // Agregado para almacenar las comidas
+    comidas: [] as MealRecord[] // Agregado para almacenar las comidas
   });
   const [isWaterModalVisible, setIsWaterModalVisible] = useState(false);
   const [isAddingWater, setIsAddingWater] = useState(false);
@@ -58,15 +59,15 @@ export default function HomeScreen() {
           if (isActive) {
             setDailyData({
               calories: { 
-                consumed: summary.totalCalorias || 0, 
+                consumed: summary.caloriasConsumidas || 0, 
                 goal: activeGoal?.dailyCalories || 2000 
               },
               macros: {
-                protein: { current: summary.totalProteinas || 0, total: activeGoal?.proteinGrams || 120 },
-                carbs: { current: summary.totalCarbohidratos || 0, total: activeGoal?.carbsGrams || 220 },
-                fat: { current: summary.totalGrasas || 0, total: activeGoal?.fatGrams || 65 },
+                protein: { current: summary.proteinas || 0, total: activeGoal?.proteinGrams || 120 },
+                carbs: { current: summary.carbohidratos || 0, total: activeGoal?.carbsGrams || 220 },
+                fat: { current: summary.grasas || 0, total: activeGoal?.fatGrams || 65 },
               },
-              water: summary.aguaVasos || 0,
+              water: summary.vasosAgua || 0,
               comidas: summary.comidas || [] // Guardamos las comidas reales de la DB
             });
           }

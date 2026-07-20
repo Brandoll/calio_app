@@ -179,9 +179,9 @@ export default function AiCameraScreen() {
                 ))}
 
                 <View style={styles.buttonRow}>
-                  <TouchableOpacity style={styles.btnSecondary} onPress={cancelAndRetry} disabled={isSaving}>
-                    <XCircle color={colors.danger || '#FF3B30'} size={20} />
-                    <Text style={[styles.btnText, { color: colors.danger || '#FF3B30' }]}>Descartar</Text>
+                  <TouchableOpacity style={[styles.btnSecondary, { borderColor: colors.error }]} onPress={cancelAndRetry} disabled={isSaving}>
+                    <XCircle color={colors.error} size={20} />
+                    <Text style={[styles.btnText, { color: colors.error }]}>Descartar</Text>
                   </TouchableOpacity>
                   
                   <TouchableOpacity style={styles.btnPrimary} onPress={handleSaveMeal} disabled={isSaving}>

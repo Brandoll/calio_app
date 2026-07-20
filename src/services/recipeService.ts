@@ -11,4 +11,9 @@ export const recipeService = {
     const response = await api.get(API_ROUTES.RECIPES.HISTORY(userId));
     return response.data;
   },
+
+  generateSingleRecipe: async (data: { userId: number; ingredientes: string[] }): Promise<any> => {
+    const response = await api.post(API_ROUTES.RECIPES.GENERATE_SINGLE, data);
+    return response.data;
+  },
 };

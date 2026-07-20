@@ -55,11 +55,11 @@ export default function MoreScreen() {
         <TouchableOpacity style={styles.profileCard}>
           <View style={styles.profileAvatar}>
             <Text style={styles.profileInitials}>
-              {user?.nombre?.charAt(0) || 'U'}
+              {user?.firstName?.charAt(0) || 'U'}
             </Text>
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>{user?.nombre || 'Usuario'}</Text>
+            <Text style={styles.profileName}>{user?.firstName || 'Usuario'}</Text>
             <Text style={styles.profileEmail}>{user?.email || 'usuario@email.com'}</Text>
           </View>
           <ChevronRight color={colors.textMuted} size={20} />

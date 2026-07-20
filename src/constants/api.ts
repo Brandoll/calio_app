@@ -35,6 +35,7 @@ export const API_ROUTES = {
   // S-04 Recipe & Meal Plan
   RECIPES: {
     GENERATE_PLAN: '/api/recipes/meal-plan/generate',
+    GENERATE_SINGLE: '/api/recipes/recipe/generate',
     HISTORY: (userId: number) => `/api/recipes/meal-plan/history/${userId}`,
   },
   // S-05 Tracking
