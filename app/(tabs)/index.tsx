@@ -242,7 +242,7 @@ export default function HomeScreen() {
 
       {/* Efecto borroso inferior (bajo la barra de navegación) */}
       <BlurView 
-        intensity={80} 
+        intensity={100} 
         tint="light" 
         style={styles.bottomBlur} 
         pointerEvents="none"
@@ -259,6 +259,7 @@ const styles = StyleSheet.create({
     right: 0,
     height: Platform.OS === 'ios' ? 105 : 95,
     zIndex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Añade más opacidad al blur
   },
   container: {
     flex: 1,
