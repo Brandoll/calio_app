@@ -8,58 +8,52 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textMuted,
-        tabBarShowLabel: true,
+        tabBarShowLabel: false, // El diseño de la imagen no tiene textos
         tabBarStyle: {
           position: 'absolute',
-          bottom: Platform.OS === 'ios' ? 30 : 20,
-          left: 20,
-          right: 20,
-          elevation: 10,
-          backgroundColor: colors.white,
-          borderRadius: 30,
+          bottom: Platform.OS === 'ios' ? 30 : 25,
+          marginHorizontal: 25, // Deja espacio a los lados
+          backgroundColor: '#FFFFFF',
+          borderRadius: 40, // Forma de píldora
           height: 70,
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 10 },
-          shadowOpacity: 0.15,
-          shadowRadius: 20,
+          shadowOpacity: 0.1,
+          shadowRadius: 15,
+          elevation: 5,
           borderTopWidth: 0,
-          paddingBottom: Platform.OS === 'ios' ? 20 : 10,
-          paddingTop: 10,
-        },
-        tabBarLabelStyle: {
-          fontSize: 10,
-          fontWeight: '700',
-          marginTop: 2,
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Inicio',
-          tabBarIcon: ({ color, size }) => <Home size={24} color={color} />,
+          tabBarIcon: ({ focused }) => (
+            <View style={[styles.iconContainer, focused && styles.iconContainerFocused]}>
+              <Home size={24} color={focused ? '#000000' : '#A0A0A0'} />
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
         name="exercises"
         options={{
-          title: 'Ejercicios',
-          tabBarIcon: ({ color, size }) => <Dumbbell size={24} color={color} />,
+          tabBarIcon: ({ focused }) => (
+            <View style={[styles.iconContainer, focused && styles.iconContainerFocused]}>
+              <Dumbbell size={24} color={focused ? '#000000' : '#A0A0A0'} />
+            </View>
+          ),
         }}
       />
       
-      {/* Botón Flotante Central */}
+      {/* Botón Flotante Central (Cámara) */}
       <Tabs.Screen
         name="ai-camera"
         options={{
-          title: 'Cámara',
-          tabBarLabel: () => null, // Ocultar el texto para que resalte el botón
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: () => (
             <View style={styles.floatingButtonContainer}>
-              <View style={[styles.floatingButton, focused && styles.floatingButtonFocused]}>
-                <Camera size={28} color={colors.white} />
+              <View style={styles.floatingButton}>
+                <Camera size={30} color="#9DFF20" /> {/* Verde neón como en la imagen */}
               </View>
             </View>
           ),
@@ -69,18 +63,23 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="foods"
         options={{
-          title: 'Comida',
-          tabBarIcon: ({ color, size }) => <UtensilsCrossed size={24} color={color} />,
+          tabBarIcon: ({ focused }) => (
+            <View style={[styles.iconContainer, focused && styles.iconContainerFocused]}>
+              <UtensilsCrossed size={24} color={focused ? '#000000' : '#A0A0A0'} />
+            </View>
+          ),
         }}
       />
       <Tabs.Screen
         name="more"
         options={{
-          title: 'Cuenta',
-          tabBarIcon: ({ color, size }) => <User size={24} color={color} />,
+          tabBarIcon: ({ focused }) => (
+            <View style={[styles.iconContainer, focused && styles.iconContainerFocused]}>
+              <User size={24} color={focused ? '#000000' : '#A0A0A0'} />
+            </View>
+          ),
         }}
       />
-
       {/* Oculto de la barra inferior pero accesible por navegación */}
       <Tabs.Screen
         name="stats"
@@ -93,28 +92,32 @@ export default function TabsLayout() {
 }
 
 const styles = StyleSheet.create({
-  floatingButtonContainer: {
-    top: -20,
+  iconContainer: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: colors.primary,
+  },
+  iconContainerFocused: {
+    backgroundColor: '#F0F0F0', // Fondo gris claro cuando está activo como en la imagen
+  },
+  floatingButtonContainer: {
+    top: -20, // Sobresale de la barra
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
     elevation: 8,
   },
   floatingButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: colors.primary,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#111111', // Negro oscuro
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 4,
-    borderColor: colors.background, // Da el efecto de separación
-  },
-  floatingButtonFocused: {
-    backgroundColor: colors.primaryDark,
-    transform: [{ scale: 1.05 }],
   }
 });
