@@ -5,16 +5,16 @@ import { Food, FoodCategory } from '../types/food';
 export const foodService = {
   getCategories: async (): Promise<FoodCategory[]> => {
     const response = await api.get(API_ROUTES.FOODS.CATEGORIES);
-    return response.data.data || [];
+    return response.data || [];
   },
 
   getAll: async (search?: string, categoria?: number): Promise<Food[]> => {
     const params: Record<string, any> = {};
-    if (search) params.search = search;
-    if (categoria) params.categoria = categoria;
+    if (search) params.q = search;
+    if (categoria) params.categoriaId = categoria;
     const response = await api.get(API_ROUTES.FOODS.ALL, { params });
-    // response.data es el ApiResponse, response.data.data es el PagedResponse
-    return response.data.data?.content || [];
+    // El interceptor ya desempaquetó ApiResponse. response.data es PagedResponse.
+    return response.data?.content || [];
   },
 
   getById: async (id: number): Promise<Food> => {
@@ -24,7 +24,7 @@ export const foodService = {
 
   getByCategory: async (categoryId: number): Promise<Food[]> => {
     const response = await api.get(API_ROUTES.FOODS.BY_CATEGORY(categoryId));
-    return response.data.data?.content || [];
+    return response.data?.content || [];
   },
 
   addFavorite: async (foodId: number): Promise<void> => {
@@ -37,6 +37,6 @@ export const foodService = {
 
   getFavorites: async (): Promise<Food[]> => {
     const response = await api.get(API_ROUTES.FOODS.FAVORITES);
-    return response.data.data || [];
+    return response.data || [];
   },
 };
