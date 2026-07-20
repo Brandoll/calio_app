@@ -23,6 +23,10 @@ export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses
           <Text style={styles.label}>Hidratación</Text>
         </View>
       </View>
+
+      <View style={styles.button}>
+        <Text style={styles.buttonText}>Registrar</Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -70,5 +74,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.textSecondary,
     marginTop: 4,
+  },
+  button: {
+    backgroundColor: 'rgba(240, 240, 240, 0.8)',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  buttonText: {
+    color: '#8D6E63',
+    fontWeight: '700',
+    fontSize: 14,
   }
 });

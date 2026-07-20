@@ -159,11 +159,8 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView 
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
-        style={{ marginBottom: Platform.OS === 'ios' ? 105 : 95 }}
-      >
+      {/* Parte superior fija */}
+      <View style={styles.topSection}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.userInfo}>
@@ -210,10 +207,15 @@ export default function HomeScreen() {
             onPress={() => setIsWaterModalVisible(true)}
           />
         </View>
+      </View>
 
-        {/* Comidas Recientes */}
+      {/* Comidas Recientes (ahora scrolleable y ocupa el espacio restante) */}
+      <ScrollView 
+        style={styles.scrollableSection}
+        contentContainerStyle={{ paddingBottom: Platform.OS === 'ios' ? 105 : 95 }}
+        showsVerticalScrollIndicator={false}
+      >
         <RecentMeals meals={dailyData.comidas as any[]} onDelete={handleDeleteMeal} />
-
       </ScrollView>
 
       {/* Modal Interactivo de Agua */}
@@ -241,9 +243,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  scrollContent: {
+  topSection: {
     padding: 24,
-    paddingBottom: 120,
+    paddingBottom: 0,
+  },
+  scrollableSection: {
+    flex: 1,
+    paddingHorizontal: 24,
   },
   header: {
     flexDirection: 'row',
