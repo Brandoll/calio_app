@@ -1,71 +1,90 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Droplets, Plus } from 'lucide-react-native';
+import { Droplet } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 
 interface HydrationBannerProps {
   currentGlasses: number;
   goalGlasses: number;
-  onAddGlass: () => void; // Para el botón rápido
-  onPress: () => void;    // Para abrir el modal
+  onAddGlass: () => void; // Función para añadir directamente (opcional)
+  onPress: () => void;    // Función para abrir el modal
 }
 
-export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses, goalGlasses, onAddGlass, onPress }) => {
+export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses, goalGlasses, onPress }) => {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.iconContainer}>
-        <Droplets color={colors.primary} size={28} />
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
+      <View style={styles.leftSection}>
+        <Droplet color="#3498db" size={32} style={styles.icon} fill="#3498db" fillOpacity={0.2} />
+        <View style={styles.textContainer}>
+          <View style={styles.valuesContainer}>
+            <Text style={styles.currentValue}>{currentGlasses}</Text>
+            <Text style={styles.totalValue}> /{goalGlasses} vasos</Text>
+          </View>
+          <Text style={styles.label}>Hidratación</Text>
+        </View>
       </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>¡Hidrátate!</Text>
-        <Text style={styles.subtitle}>
-          Llevas {currentGlasses} de {goalGlasses} vasos de agua hoy
-        </Text>
+
+      <View style={styles.button}>
+        <Text style={styles.buttonText}>Registrar agua</Text>
       </View>
-      <TouchableOpacity style={styles.addButton} onPress={onAddGlass}>
-        <Plus color={colors.secondary} size={24} />
-      </TouchableOpacity>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  card: {
+    backgroundColor: colors.card,
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 24,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.secondary,
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 24,
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
   },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(216, 255, 46, 0.1)', // primary con opacidad
-    justifyContent: 'center',
+  leftSection: {
+    flexDirection: 'row',
     alignItems: 'center',
+  },
+  icon: {
     marginRight: 16,
   },
   textContainer: {
-    flex: 1,
+    justifyContent: 'center',
   },
-  title: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.white,
-    marginBottom: 4,
+  valuesContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
   },
-  subtitle: {
-    fontSize: 13,
+  currentValue: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.secondary,
+  },
+  totalValue: {
+    fontSize: 14,
+    fontWeight: '500',
     color: colors.textMuted,
   },
-  addButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.textSecondary,
+    marginTop: 2,
   },
+  button: {
+    backgroundColor: 'rgba(240, 240, 240, 0.8)', // Fondo gris claro sutil
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+  },
+  buttonText: {
+    color: '#8D6E63', // Un tono tierra claro como en el diseño (marrón suave)
+    fontWeight: '700',
+    fontSize: 14,
+  }
 });

@@ -10,7 +10,7 @@ import { trackingService } from '../../src/services/trackingService';
 
 // Componentes
 import { CaloriesCard } from '../../src/components/dashboard/CaloriesCard';
-import { MacronutrientsBar } from '../../src/components/dashboard/MacronutrientsBar';
+import { MacroCardsRow } from '../../src/components/dashboard/MacroCardsRow';
 import { QuickActions } from '../../src/components/dashboard/QuickActions';
 import { RecentMeals } from '../../src/components/dashboard/RecentMeals';
 import { HydrationBanner } from '../../src/components/dashboard/HydrationBanner';
@@ -194,8 +194,8 @@ export default function HomeScreen() {
         {/* Resumen de Calorías */}
         <CaloriesCard consumed={dailyData.calories.consumed} goal={dailyData.calories.goal} />
 
-        {/* Macronutrientes */}
-        <MacronutrientsBar 
+        {/* Macronutrientes (Tarjetas) */}
+        <MacroCardsRow 
           protein={dailyData.macros.protein}
           carbs={dailyData.macros.carbs}
           fat={dailyData.macros.fat}

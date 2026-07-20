@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { Flame } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
+import { CircularProgress } from '../ui/CircularProgress';
 import { formatCalories } from '../../utils/formatters';
 
 interface CaloriesCardProps {
@@ -9,28 +11,28 @@ interface CaloriesCardProps {
 }
 
 export const CaloriesCard: React.FC<CaloriesCardProps> = ({ consumed, goal }) => {
-  const remaining = Math.max(0, goal - consumed);
-  const progress = Math.min(100, (consumed / goal) * 100);
+  const progress = goal > 0 ? (consumed / goal) * 100 : 0;
 
   return (
     <View style={styles.card}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Resumen diario</Text>
-        <Text style={styles.subtitle}>Calorías</Text>
-      </View>
-      
-      <View style={styles.content}>
-        <View style={styles.mainInfo}>
-          <Text style={styles.consumed}>{formatCalories(consumed)}</Text>
-          <Text style={styles.goal}>/ {formatCalories(goal)} kcal</Text>
+      <View style={styles.leftContent}>
+        <View style={styles.valuesContainer}>
+          <Text style={styles.consumedText}>{Math.round(consumed)}</Text>
+          <Text style={styles.goalText}> /{Math.round(goal)}</Text>
         </View>
-        <View style={styles.remainingInfo}>
-          <Text style={styles.remainingText}>Faltan {formatCalories(remaining)} kcal</Text>
-        </View>
+        <Text style={styles.labelText}>Calorías</Text>
       </View>
 
-      <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: `${progress}%` }]} />
+      <View style={styles.rightContent}>
+        <CircularProgress
+          size={70}
+          strokeWidth={8}
+          progress={progress}
+          color="#FF8A00" // Naranja/Fuego para calorías
+          backgroundColor={colors.background}
+        >
+          <Flame color="#FF8A00" size={28} />
+        </CircularProgress>
       </View>
     </View>
   );
@@ -39,71 +41,46 @@ export const CaloriesCard: React.FC<CaloriesCardProps> = ({ consumed, goal }) =>
 const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
-    borderRadius: 20,
-    padding: 20,
+    borderRadius: 24,
+    padding: 24,
     marginBottom: 16,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 3,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
+  leftContent: {
+    flex: 1,
   },
-  title: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.secondary,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: colors.textSecondary,
-  },
-  content: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    marginBottom: 16,
-  },
-  mainInfo: {
+  valuesContainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
+    marginBottom: 8,
   },
-  consumed: {
-    fontSize: 36,
+  consumedText: {
+    fontSize: 40,
     fontWeight: '800',
-    color: colors.secondary,
+    color: colors.secondary, // Gris oscuro / Negro
   },
-  goal: {
+  goalText: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: colors.textMuted, // Gris más claro
+  },
+  labelText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: colors.textMuted,
-    marginLeft: 4,
-  },
-  remainingInfo: {
-    backgroundColor: colors.background,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  remainingText: {
-    fontSize: 12,
     fontWeight: '600',
     color: colors.textSecondary,
   },
-  progressBarContainer: {
-    height: 12,
-    backgroundColor: colors.background,
-    borderRadius: 6,
-    overflow: 'hidden',
-  },
-  progressBar: {
-    height: '100%',
-    backgroundColor: colors.primary,
-    borderRadius: 6,
-  },
+  rightContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // Fondo sutil circular detrás del icono (como en el diseño, donde el circulo tiene un fondo ligeramente gris)
+    backgroundColor: 'rgba(240, 240, 240, 0.4)',
+    borderRadius: 35, // Mitad de size (70)
+  }
 });
