@@ -6,7 +6,6 @@ import { Bell, UserCircle, Flame } from 'lucide-react-native';
 import { colors } from '../../src/theme/colors';
 import { useAuthStore } from '../../src/stores/authStore';
 import { authService } from '../../src/services/authService';
-import { BlurView } from 'expo-blur';
 import { trackingService } from '../../src/services/trackingService';
 
 // Componentes
@@ -162,7 +161,8 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView 
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 150, padding: 20 }}
+        contentContainerStyle={styles.scrollContent}
+        style={{ marginBottom: Platform.OS === 'ios' ? 105 : 95 }}
       >
         {/* Header */}
         <View style={styles.header}>
@@ -202,7 +202,7 @@ export default function HomeScreen() {
         />
 
         {/* Banner de Hidratación */}
-        <View style={{ paddingHorizontal: 24, marginBottom: 24 }}>
+        <View style={{ marginBottom: 24 }}>
           <HydrationBanner 
             currentGlasses={dailyData.water} 
             goalGlasses={10} 
@@ -211,7 +211,7 @@ export default function HomeScreen() {
           />
         </View>
 
-        {/* Comidas Recientes (ahora vertical con scroll libre) */}
+        {/* Comidas Recientes */}
         <RecentMeals meals={dailyData.comidas as any[]} onDelete={handleDeleteMeal} />
 
       </ScrollView>
@@ -232,35 +232,18 @@ export default function HomeScreen() {
         onClose={() => setMacroInfoData(null)} 
         data={macroInfoData} 
       />
-
-      {/* Efecto borroso inferior (bajo la barra de navegación) */}
-      <BlurView 
-        intensity={100} 
-        tint="light" 
-        style={styles.bottomBlur} 
-        pointerEvents="none"
-      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  bottomBlur: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: Platform.OS === 'ios' ? 105 : 95,
-    zIndex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)', // Añade más opacidad al blur
-  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
   },
-  content: {
-    padding: 20,
-    paddingBottom: 40,
+  scrollContent: {
+    padding: 24,
+    paddingBottom: 120,
   },
   header: {
     flexDirection: 'row',

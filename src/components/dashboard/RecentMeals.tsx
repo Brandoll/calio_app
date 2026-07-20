@@ -16,7 +16,7 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { paddingHorizontal: 24 }]}>
+      <View style={styles.header}>
         <Text style={styles.headerTitle}>Comidas del día</Text>
         <Text style={styles.seeAll}>Ver todo</Text>
       </View>
@@ -81,7 +81,7 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
           ))}
         </View>
       ) : (
-        <View style={[styles.emptyState, { marginHorizontal: 24 }]}>
+        <View style={styles.emptyState}>
           <Text style={styles.emptyTitle}>No hay comidas registradas</Text>
           <Text style={styles.emptyText}>Comienza a registrar tus comidas tomando una foto.</Text>
         </View>
@@ -120,7 +120,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     gap: 16,
-    paddingHorizontal: 24,
   },
   card: {
     flexDirection: 'row',
