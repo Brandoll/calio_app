@@ -21,11 +21,10 @@ export interface WaterRecord {
 }
 
 export interface DailySummary {
-  caloriasConsumidas: number;
-  metaCalorias: number;
-  proteinas: number;
-  carbohidratos: number;
-  grasas: number;
-  vasosAgua: number;
+  totalCalorias: number;
+  totalProteinas: number;
+  totalCarbohidratos: number;
+  totalGrasas: number;
+  aguaVasos: number;
   comidas: MealRecord[];
 }

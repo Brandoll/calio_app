@@ -59,15 +59,15 @@ export default function HomeScreen() {
           if (isActive) {
             setDailyData({
               calories: { 
-                consumed: summary.caloriasConsumidas || 0, 
+                consumed: summary.totalCalorias || 0, 
                 goal: activeGoal?.dailyCalories || 2000 
               },
               macros: {
-                protein: { current: summary.proteinas || 0, total: activeGoal?.proteinGrams || 120 },
-                carbs: { current: summary.carbohidratos || 0, total: activeGoal?.carbsGrams || 220 },
-                fat: { current: summary.grasas || 0, total: activeGoal?.fatGrams || 65 },
+                protein: { current: summary.totalProteinas || 0, total: activeGoal?.proteinGrams || 120 },
+                carbs: { current: summary.totalCarbohidratos || 0, total: activeGoal?.carbsGrams || 220 },
+                fat: { current: summary.totalGrasas || 0, total: activeGoal?.fatGrams || 65 },
               },
-              water: summary.vasosAgua || 0,
+              water: summary.aguaVasos || 0,
               comidas: summary.comidas || [] // Guardamos las comidas reales de la DB
             });
           }
