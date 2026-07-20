@@ -155,9 +155,7 @@ export default function FoodsScreen() {
         <FlatList
           data={foods}
           keyExtractor={(item) => item.id.toString()}
-          numColumns={2}
           contentContainerStyle={styles.listContent}
-          columnWrapperStyle={styles.columnWrapper}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <FoodCard 
@@ -250,8 +248,7 @@ const styles = StyleSheet.create({
   },
   searchIcon: { marginRight: 12 },
   searchInput: { flex: 1, fontSize: 16, color: colors.secondary },
-  listContent: { paddingHorizontal: 14, paddingBottom: 100 },
-  columnWrapper: { justifyContent: 'space-between' },
+  listContent: { paddingHorizontal: 20, paddingBottom: 100 },
   loader: { marginTop: 40 },
   emptyContainer: { alignItems: 'center', marginTop: 40 },
   emptyText: { color: colors.textSecondary, fontSize: 16 },

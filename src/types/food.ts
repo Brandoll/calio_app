@@ -2,14 +2,14 @@ export interface Food {
   id: number;
   nombre: string;
   categoria: string;
-  calorias: number;
-  proteinas: number;
-  grasas: number;
-  carbohidratos: number;
-  fibra?: number;
-  indiceGlucemico?: number;
-  porcion?: string;
-  imagen?: string;
+  energiaKcal: number;
+  proteinasG: number;
+  grasaTotalG: number;
+  carbohidratosTotalesG: number;
+  fibraDietariaG?: number;
+  porcionRef?: string;
+  imagenUrl?: string; // no parece usar imagen, pero por si acaso
+  esFavorito?: boolean;
 }
 
 export interface FoodCategory {

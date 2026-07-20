@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Heart, Flame } from 'lucide-react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Heart, Apple, Carrot, Beef, Milk, Fish, Wheat, Salad, Flame } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { Food } from '../../types/food';
 
@@ -11,56 +11,63 @@ interface FoodCardProps {
   isFavorite?: boolean;
 }
 
+const getCategoryIcon = (category: string) => {
+  const cat = category?.toLowerCase() || '';
+  if (cat.includes('fruta')) return <Apple color="#FF4B4B" size={28} />;
+  if (cat.includes('verdura') || cat.includes('vegetal')) return <Carrot color="#FF8A00" size={28} />;
+  if (cat.includes('carne') || cat.includes('ave') || cat.includes('pollo')) return <Beef color="#795548" size={28} />;
+  if (cat.includes('lácteo') || cat.includes('leche') || cat.includes('queso')) return <Milk color="#0080FF" size={28} />;
+  if (cat.includes('pescado') || cat.includes('marisco')) return <Fish color="#00BCD4" size={28} />;
+  if (cat.includes('cereal') || cat.includes('grano') || cat.includes('arroz')) return <Wheat color="#FFB800" size={28} />;
+  return <Salad color={colors.primaryDark} size={28} />;
+};
+
 export const FoodCard: React.FC<FoodCardProps> = ({ food, onPress, onFavoritePress, isFavorite = false }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.imageContainer}>
-        {food.imagen ? (
-          <Image source={{ uri: food.imagen }} style={styles.image} resizeMode="cover" />
-        ) : (
-          <View style={styles.placeholderContainer}>
-            <Text style={styles.placeholderText}>{food.nombre.charAt(0)}</Text>
-          </View>
-        )}
-        
-        {/* Calorie Badge */}
-        <View style={styles.calorieBadge}>
-          <Flame color="#FF8A00" size={14} fill="#FF8A00" />
-          <Text style={styles.calorieText}>{Math.round(food.calorias)}</Text>
-        </View>
-        
-        {/* Favorite Button */}
-        <TouchableOpacity 
-          style={styles.favoriteButton} 
-          onPress={(e) => {
-            e.stopPropagation();
-            if (onFavoritePress) onFavoritePress();
-          }}
-          activeOpacity={0.7}
-        >
-          <Heart 
-            color={isFavorite ? "#FF4B4B" : colors.textMuted} 
-            size={18} 
-            fill={isFavorite ? "#FF4B4B" : "transparent"} 
-          />
-        </TouchableOpacity>
+      <View style={styles.iconContainer}>
+        {getCategoryIcon(food.categoria)}
       </View>
       
       <View style={styles.infoContainer}>
-        <Text style={styles.name} numberOfLines={2}>{food.nombre}</Text>
+        <View style={styles.headerRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.name} numberOfLines={1}>{food.nombre}</Text>
+            <Text style={styles.category}>{food.categoria} • {food.porcionRef || '100g'}</Text>
+          </View>
+          <TouchableOpacity 
+            style={styles.favoriteButton} 
+            onPress={(e) => {
+              e.stopPropagation();
+              if (onFavoritePress) onFavoritePress();
+            }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Heart 
+              color={isFavorite ? "#FF4B4B" : colors.border} 
+              size={22} 
+              fill={isFavorite ? "#FF4B4B" : "transparent"} 
+            />
+          </TouchableOpacity>
+        </View>
         
         <View style={styles.macrosContainer}>
-          <View style={styles.macroColumn}>
-            <Text style={[styles.macroValue, { color: '#FF4B4B' }]}>{Math.round(food.proteinas)}g</Text>
-            <Text style={styles.macroLabel}>Prot</Text>
+          <View style={styles.caloriePill}>
+            <Flame color="#FF8A00" size={12} fill="#FF8A00" />
+            <Text style={styles.calorieText}>{Math.round(food.energiaKcal || 0)} kcal</Text>
           </View>
-          <View style={styles.macroColumn}>
-            <Text style={[styles.macroValue, { color: '#FFB800' }]}>{Math.round(food.carbohidratos)}g</Text>
-            <Text style={styles.macroLabel}>Carbs</Text>
+          
+          <View style={styles.macroItem}>
+            <Text style={[styles.macroValue, { color: '#FF4B4B' }]}>{Math.round(food.proteinasG || 0)}g</Text>
+            <Text style={styles.macroLabel}> P</Text>
           </View>
-          <View style={styles.macroColumn}>
-            <Text style={[styles.macroValue, { color: '#0080FF' }]}>{Math.round(food.grasas)}g</Text>
-            <Text style={styles.macroLabel}>Grasa</Text>
+          <View style={styles.macroItem}>
+            <Text style={[styles.macroValue, { color: '#FFB800' }]}>{Math.round(food.carbohidratosTotalesG || 0)}g</Text>
+            <Text style={styles.macroLabel}> C</Text>
+          </View>
+          <View style={styles.macroItem}>
+            <Text style={[styles.macroValue, { color: '#0080FF' }]}>{Math.round(food.grasaTotalG || 0)}g</Text>
+            <Text style={styles.macroLabel}> G</Text>
           </View>
         </View>
       </View>
@@ -70,98 +77,77 @@ export const FoodCard: React.FC<FoodCardProps> = ({ food, onPress, onFavoritePre
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
-    backgroundColor: colors.card,
-    borderRadius: 20,
-    margin: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
-    overflow: 'hidden',
-  },
-  imageContainer: {
-    width: '100%',
-    height: 140,
-    position: 'relative',
-    backgroundColor: '#F0F0F0',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-  },
-  placeholderContainer: {
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EAEAEA',
-  },
-  placeholderText: {
-    fontSize: 48,
-    fontWeight: '800',
-    color: colors.textMuted,
-  },
-  calorieBadge: {
-    position: 'absolute',
-    top: 12,
-    left: 12,
-    backgroundColor: 'rgba(0, 0, 0, 0.65)',
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    gap: 4,
-  },
-  calorieText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  favoriteButton: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    width: 32,
-    height: 32,
+    backgroundColor: colors.card,
     borderRadius: 16,
-    backgroundColor: '#FFF',
+    marginBottom: 12,
+    padding: 12,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  iconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: colors.background,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    marginRight: 14,
   },
   infoContainer: {
-    padding: 12,
+    flex: 1,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 6,
   },
   name: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700',
     color: colors.secondary,
-    marginBottom: 12,
-    height: 38, // Para mantener alinedas las tarjetas si el texto tiene 1 o 2 lineas
+    marginBottom: 2,
+  },
+  category: {
+    fontSize: 12,
+    color: colors.textSecondary,
+  },
+  favoriteButton: {
+    paddingLeft: 8,
   },
   macrosContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  macroColumn: {
+  caloriePill: {
+    flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#FFF0E0',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginRight: 12,
+    gap: 4,
+  },
+  calorieText: {
+    color: '#FF8A00',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  macroItem: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginRight: 10,
   },
   macroValue: {
-    fontSize: 12,
-    fontWeight: '800',
-    marginBottom: 2,
+    fontSize: 13,
+    fontWeight: '700',
   },
   macroLabel: {
-    fontSize: 10,
+    fontSize: 11,
     color: colors.textMuted,
-    fontWeight: '500',
+    fontWeight: '600',
   }
 });
