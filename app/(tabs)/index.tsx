@@ -118,21 +118,46 @@ export default function HomeScreen() {
       d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
       const today = d.toISOString().split('T')[0];
 
-      // Llamar al backend para registrar 1 vaso
       await trackingService.registerWater({
         userId: user.id,
         vasos: 1,
         fecha: today
       });
 
-      // Actualizar el estado local para reflejar la animación inmediatamente
       setDailyData(prev => ({
         ...prev,
         water: prev.water + 1
       }));
-      
     } catch (error) {
       console.error('Error agregando vaso de agua:', error);
+    } finally {
+      setIsAddingWater(false);
+    }
+  };
+
+  const handleRemoveWater = async () => {
+    if (!user || isAddingWater || dailyData.water <= 0) return;
+    
+    try {
+      setIsAddingWater(true);
+      
+      const d = new Date();
+      d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      const today = d.toISOString().split('T')[0];
+
+      // Enviar -1 vaso al backend para restar
+      await trackingService.registerWater({
+        userId: user.id,
+        vasos: -1,
+        fecha: today
+      });
+
+      setDailyData(prev => ({
+        ...prev,
+        water: Math.max(0, prev.water - 1)
+      }));
+    } catch (error) {
+      console.error('Error eliminando vaso de agua:', error);
     } finally {
       setIsAddingWater(false);
     }
@@ -206,6 +231,7 @@ export default function HomeScreen() {
         currentGlasses={dailyData.water}
         goalGlasses={8}
         onAddGlass={handleAddWater}
+        onRemoveGlass={handleRemoveWater}
         isAdding={isAddingWater}
       />
     </SafeAreaView>

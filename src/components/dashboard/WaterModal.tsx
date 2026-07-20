@@ -9,6 +9,7 @@ interface WaterModalProps {
   currentGlasses: number;
   goalGlasses: number;
   onAddGlass: () => void;
+  onRemoveGlass: () => void;
   isAdding: boolean;
 }
 
@@ -18,6 +19,7 @@ export const WaterModal: React.FC<WaterModalProps> = ({
   currentGlasses,
   goalGlasses,
   onAddGlass,
+  onRemoveGlass,
   isAdding
 }) => {
   // Animación para el nivel del agua
@@ -87,17 +89,27 @@ export const WaterModal: React.FC<WaterModalProps> = ({
               : `Te faltan ${goalGlasses - currentGlasses} vasos para tu meta.`}
           </Text>
 
-          {/* Botón de añadir */}
-          <TouchableOpacity 
-            style={[styles.addButton, isAdding && styles.addButtonDisabled]} 
-            onPress={onAddGlass}
-            disabled={isAdding}
-          >
-            <Plus color={colors.white} size={28} />
-            <Text style={styles.addButtonText}>
-              {isAdding ? 'Registrando...' : 'Añadir Vaso'}
-            </Text>
-          </TouchableOpacity>
+          {/* Botones de acción */}
+          <View style={styles.actionButtonsContainer}>
+            <TouchableOpacity 
+              style={[styles.removeButton, isAdding && styles.addButtonDisabled, currentGlasses <= 0 && styles.addButtonDisabled]} 
+              onPress={onRemoveGlass}
+              disabled={isAdding || currentGlasses <= 0}
+            >
+              <Text style={styles.removeButtonText}>-1</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.addButton, isAdding && styles.addButtonDisabled]} 
+              onPress={onAddGlass}
+              disabled={isAdding}
+            >
+              <Plus color={colors.white} size={28} />
+              <Text style={styles.addButtonText}>
+                {isAdding ? '...' : 'Añadir Vaso'}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </Modal>
@@ -150,22 +162,22 @@ const styles = StyleSheet.create({
     width: 120,
     height: 200,
     borderWidth: 4,
-    borderColor: '#E0E0E0', // Borde del vaso
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderColor: '#E0E0E0',
+    borderBottomLeftRadius: 60, // Mucho más redondo abajo, forma de vaso
+    borderBottomRightRadius: 60,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
     justifyContent: 'flex-end',
     overflow: 'hidden',
-    backgroundColor: 'rgba(240, 248, 255, 0.5)', // Tono ligero azul cielo para el vaso vacío
+    backgroundColor: 'rgba(240, 248, 255, 0.5)', 
   },
   waterFill: {
     width: '100%',
-    backgroundColor: '#3498db', // Azul agua vibrante
+    backgroundColor: '#3498db',
     position: 'absolute',
     bottom: 0,
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25,
+    borderBottomLeftRadius: 55, // Se ajusta al borde interior
+    borderBottomRightRadius: 55,
   },
   glassMarks: {
     position: 'absolute',
@@ -198,17 +210,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 16,
-    paddingHorizontal: 32,
+    paddingHorizontal: 24,
     borderRadius: 30,
-    width: '100%',
+    flex: 1, // Toma el espacio restante
   },
   addButtonDisabled: {
-    opacity: 0.7,
+    opacity: 0.5,
   },
   addButtonText: {
     color: colors.white,
     fontSize: 18,
     fontWeight: '700',
-    marginLeft: 12,
+    marginLeft: 8,
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    gap: 12,
+  },
+  removeButton: {
+    backgroundColor: colors.background,
+    borderWidth: 2,
+    borderColor: '#E0E0E0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 30,
+  },
+  removeButtonText: {
+    color: colors.textSecondary,
+    fontSize: 20,
+    fontWeight: '800',
   }
 });
