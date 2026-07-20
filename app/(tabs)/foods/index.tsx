@@ -9,6 +9,10 @@ import { CategoryFilter } from '../../../src/components/foods/CategoryFilter';
 import { FoodCard } from '../../../src/components/foods/FoodCard';
 import { useRouter } from 'expo-router';
 import { useBasketStore } from '../../../src/stores/basketStore';
+import { useAuthStore } from '../../../src/stores/authStore';
+import { recipeService } from '../../../src/services/recipeService';
+import { RecipeCard } from '../../../src/components/recipes/RecipeCard';
+import { RecipeModal } from '../../../src/components/recipes/RecipeModal';
 
 export default function FoodsScreen() {
   const router = useRouter();
@@ -18,8 +22,11 @@ export default function FoodsScreen() {
   const [foods, setFoods] = useState<Food[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [activeTab, setActiveTab] = useState<'explorar' | 'mis_recetas'>('explorar');
+  const [activeTab, setActiveTab] = useState<'explorar' | 'favoritos' | 'recetas'>('explorar');
   const [favoritesMap, setFavoritesMap] = useState<Record<number, boolean>>({});
+  const [recipes, setRecipes] = useState<any[]>([]);
+  const { user } = useAuthStore();
+  const [selectedRecipeForModal, setSelectedRecipeForModal] = useState<any>(null);
   
   const { items: basketItems } = useBasketStore();
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
@@ -44,7 +51,12 @@ export default function FoodsScreen() {
       setFavoritesMap(favMap);
 
       let items: Food[] = [];
-      if (activeTab === 'mis_recetas') {
+      if (activeTab === 'recetas') {
+        if (user) {
+          const history = await recipeService.getHistory(user.id);
+          setRecipes(history);
+        }
+      } else if (activeTab === 'favoritos') {
         items = favs;
         if (search) {
           items = items.filter(f => f.nombre.toLowerCase().includes(search.toLowerCase()));
@@ -57,7 +69,9 @@ export default function FoodsScreen() {
         items = await foodService.getAll(search, selectedCategory || undefined);
       }
       
-      setFoods(items.map(f => ({ ...f, esFavorito: !!favMap[f.id] })));
+      if (activeTab !== 'recetas') {
+        setFoods(items.map(f => ({ ...f, esFavorito: !!favMap[f.id] })));
+      }
     } catch (error) {
       console.error('Error loading foods:', error);
     } finally {
@@ -129,11 +143,18 @@ export default function FoodsScreen() {
           <Text style={[styles.tabText, activeTab === 'explorar' && styles.tabTextActive]}>Explorar</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.tab, activeTab === 'mis_recetas' && styles.tabActive]}
-          onPress={() => setActiveTab('mis_recetas')}
+          style={[styles.tab, activeTab === 'favoritos' && styles.tabActive]}
+          onPress={() => setActiveTab('favoritos')}
           activeOpacity={0.8}
         >
-          <Text style={[styles.tabText, activeTab === 'mis_recetas' && styles.tabTextActive]}>Mis Alimentos</Text>
+          <Text style={[styles.tabText, activeTab === 'favoritos' && styles.tabTextActive]}>Favoritos</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.tab, activeTab === 'recetas' && styles.tabActive]}
+          onPress={() => setActiveTab('recetas')}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.tabText, activeTab === 'recetas' && styles.tabTextActive]}>Mis Recetas</Text>
         </TouchableOpacity>
       </View>
 
@@ -158,6 +179,35 @@ export default function FoodsScreen() {
 
       {isLoading ? (
         <ActivityIndicator size="large" color={colors.primary} style={styles.loader} />
+      ) : activeTab === 'recetas' ? (
+        <FlatList
+          data={recipes}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <RecipeCard 
+              recipeJson={item.planJson} 
+              date={item.semana}
+              onPress={() => {
+                 try {
+                   let parsed = JSON.parse(item.planJson);
+                   if (typeof parsed === 'string') {
+                      parsed = JSON.parse(parsed.replace(/```json/g, '').replace(/```/g, ''));
+                   }
+                   setSelectedRecipeForModal(parsed);
+                 } catch (e) {
+                   console.error("Error al leer receta:", e);
+                 }
+              }}
+            />
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>Aún no has generado recetas</Text>
+            </View>
+          }
+        />
       ) : (
         <FlatList
           data={foods}
@@ -253,6 +303,12 @@ export default function FoodsScreen() {
           </View>
         </View>
       </Modal>
+
+      <RecipeModal 
+        visible={!!selectedRecipeForModal} 
+        recipe={selectedRecipeForModal}
+        onClose={() => setSelectedRecipeForModal(null)}
+      />
 
     </SafeAreaView>
   );
