@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Wheat, Droplet, Drumstick } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { CircularProgress } from '../ui/CircularProgress';
@@ -8,9 +8,10 @@ interface MacroCardsRowProps {
   protein: { current: number; total: number };
   carbs: { current: number; total: number };
   fat: { current: number; total: number };
+  onCardPress?: (title: string, data: { current: number; total: number }, color: string, Icon: any, description: string) => void;
 }
 
-export const MacroCardsRow: React.FC<MacroCardsRowProps> = ({ protein, carbs, fat }) => {
+export const MacroCardsRow: React.FC<MacroCardsRowProps> = ({ protein, carbs, fat, onCardPress }) => {
   const getProgress = (current: number, total: number) => {
     if (total === 0) return 0;
     return (current / total) * 100;
@@ -20,9 +21,14 @@ export const MacroCardsRow: React.FC<MacroCardsRowProps> = ({ protein, carbs, fa
     label: string, 
     data: { current: number; total: number }, 
     color: string, 
-    Icon: any
+    Icon: any,
+    description: string
   ) => (
-    <View style={styles.card}>
+    <TouchableOpacity 
+      style={styles.card} 
+      activeOpacity={0.8}
+      onPress={() => onCardPress && onCardPress(label, data, color, Icon, description)}
+    >
       <View style={styles.circleContainer}>
         <CircularProgress
           size={50}
@@ -39,14 +45,32 @@ export const MacroCardsRow: React.FC<MacroCardsRowProps> = ({ protein, carbs, fa
         <Text style={styles.totalValue}> /{Math.round(data.total)}g</Text>
       </View>
       <Text style={styles.label}>{label}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      {renderCard('Proteínas', protein, '#FF4B4B', Drumstick)}
-      {renderCard('Carbos', carbs, '#FFB020', Wheat)}
-      {renderCard('Grasas', fat, '#0080FF', Droplet)}
+      {renderCard(
+        'Proteínas', 
+        protein, 
+        '#FF4B4B', 
+        Drumstick, 
+        'Son como los obreros de tu cuerpo: construyen y reparan tus músculos, te mantienen fuerte y con las defensas a tope.'
+      )}
+      {renderCard(
+        'Carbos', 
+        carbs, 
+        '#FFB020', 
+        Wheat,
+        'Los carbos son tu principal fuente de energía. Son la gasolina que tu cuerpo y tu cerebro necesitan para funcionar al 100%.'
+      )}
+      {renderCard(
+        'Grasas', 
+        fat, 
+        '#0080FF', 
+        Droplet,
+        'Las grasas buenas son súper importantes. Ayudan a que tu cuerpo absorba vitaminas, protegen tus órganos y le dan un empujón a tus hormonas.'
+      )}
     </View>
   );
 };

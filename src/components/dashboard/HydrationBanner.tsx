@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Droplet } from 'lucide-react-native';
+import { GlassWater } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 
 interface HydrationBannerProps {
@@ -14,7 +14,7 @@ export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.leftSection}>
-        <Droplet color="#3498db" size={32} style={styles.icon} fill="#3498db" fillOpacity={0.2} />
+        <GlassWater color="#3498db" size={32} style={styles.icon} />
         <View style={styles.textContainer}>
           <View style={styles.valuesContainer}>
             <Text style={styles.currentValue}>{currentGlasses * 250}</Text>

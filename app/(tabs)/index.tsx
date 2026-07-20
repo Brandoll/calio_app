@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Bell, UserCircle } from 'lucide-react-native';
+import { Bell, UserCircle, Flame } from 'lucide-react-native';
 import { colors } from '../../src/theme/colors';
 import { useAuthStore } from '../../src/stores/authStore';
 import { authService } from '../../src/services/authService';
@@ -11,6 +11,7 @@ import { trackingService } from '../../src/services/trackingService';
 // Componentes
 import { CaloriesCard } from '../../src/components/dashboard/CaloriesCard';
 import { MacroCardsRow } from '../../src/components/dashboard/MacroCardsRow';
+import { MacroInfoModal, MacroInfoData } from '../../src/components/dashboard/MacroInfoModal';
 import { QuickActions } from '../../src/components/dashboard/QuickActions';
 import { RecentMeals } from '../../src/components/dashboard/RecentMeals';
 import { HydrationBanner } from '../../src/components/dashboard/HydrationBanner';
@@ -33,6 +34,9 @@ export default function HomeScreen() {
   });
   const [isWaterModalVisible, setIsWaterModalVisible] = useState(false);
   const [isAddingWater, setIsAddingWater] = useState(false);
+  
+  // Estado para el modal de información de macros
+  const [macroInfoData, setMacroInfoData] = useState<MacroInfoData | null>(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -135,6 +139,17 @@ export default function HomeScreen() {
     }
   };
 
+  const openMacroInfo = (title: string, data: { current: number; total: number }, color: string, Icon: any, description: string) => {
+    setMacroInfoData({
+      title,
+      current: data.current,
+      total: data.total,
+      color,
+      Icon,
+      description
+    });
+  };
+
   if (isLoading) {
     return (
       <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
@@ -164,13 +179,24 @@ export default function HomeScreen() {
         </View>
 
         {/* Resumen de Calorías */}
-        <CaloriesCard consumed={dailyData.calories.consumed} goal={dailyData.calories.goal} />
+        <CaloriesCard 
+          consumed={dailyData.calories.consumed} 
+          goal={dailyData.calories.goal} 
+          onPress={() => openMacroInfo(
+            'Calorías', 
+            { current: dailyData.calories.consumed, total: dailyData.calories.goal }, 
+            '#FF8A00', 
+            Flame, 
+            'Las calorías son la energía que obtienes de los alimentos. Piensa en ellas como el combustible para tu cuerpo. Necesitas un equilibrio: consumir suficientes para tus actividades, pero no tantas como para que tu cuerpo las almacene.'
+          )}
+        />
 
         {/* Macronutrientes (Tarjetas) */}
         <MacroCardsRow 
           protein={dailyData.macros.protein}
           carbs={dailyData.macros.carbs}
           fat={dailyData.macros.fat}
+          onCardPress={openMacroInfo}
         />
 
         {/* Meta Diaria */}
@@ -204,6 +230,13 @@ export default function HomeScreen() {
         goalGlasses={10}
         onChangeWater={handleChangeWater}
         isAdding={isAddingWater}
+      />
+
+      {/* Modal de Información de Macros/Calorías */}
+      <MacroInfoModal 
+        visible={!!macroInfoData} 
+        onClose={() => setMacroInfoData(null)} 
+        data={macroInfoData} 
       />
     </SafeAreaView>
   );

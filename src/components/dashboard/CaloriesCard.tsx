@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Flame } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { CircularProgress } from '../ui/CircularProgress';
@@ -8,13 +8,14 @@ import { formatCalories } from '../../utils/formatters';
 interface CaloriesCardProps {
   consumed: number;
   goal: number;
+  onPress?: () => void;
 }
 
-export const CaloriesCard: React.FC<CaloriesCardProps> = ({ consumed, goal }) => {
+export const CaloriesCard: React.FC<CaloriesCardProps> = ({ consumed, goal, onPress }) => {
   const progress = goal > 0 ? (consumed / goal) * 100 : 0;
 
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.leftContent}>
         <View style={styles.valuesContainer}>
           <Text style={styles.consumedText}>{Math.round(consumed)}</Text>
@@ -34,7 +35,7 @@ export const CaloriesCard: React.FC<CaloriesCardProps> = ({ consumed, goal }) =>
           <Flame color="#FF8A00" size={28} />
         </CircularProgress>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
