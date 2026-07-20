@@ -107,7 +107,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         user,
         isAuthenticated: !!accessToken,
         hasCompletedOnboarding: onboardingStr === 'true',
-        hasCompletedSetup: setupStr === 'true',
+        hasCompletedSetup: setupStr === 'true' || !!(user && (user.birthDate || user.gender)),
         isLoading: false,
       });
     } catch (error) {
