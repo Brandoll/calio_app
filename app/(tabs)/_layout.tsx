@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Home, Dumbbell, Camera, UtensilsCrossed, User } from 'lucide-react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { BlurView } from 'expo-blur';
 
 function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   // Filtramos los tabs normales en el orden deseado
@@ -11,8 +12,8 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
   return (
     <View style={styles.tabBarWrapper}>
-      {/* Píldora Blanca para los 4 iconos */}
-      <View style={styles.pillContainer}>
+      {/* Píldora con efecto borroso (Glassmorphism) para los 4 iconos */}
+      <BlurView intensity={80} tint="light" style={styles.pillContainer}>
         {normalTabs.map((route, index) => {
           const isFocused = state.index === state.routes.findIndex(r => r.key === route.key);
           
@@ -40,7 +41,7 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             </TouchableOpacity>
           );
         })}
-      </View>
+      </BlurView>
 
       {/* Botón de Cámara Separado a la derecha */}
       {cameraRoute && (
@@ -90,10 +91,10 @@ const styles = StyleSheet.create({
   pillContainer: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255, 255, 255, 0.65)', // Fondo semi-transparente para que el blur se note
     height: 70,
     borderRadius: 35,
-    marginRight: 15, // Espacio entre la píldora y la cámara
+    marginRight: 15,
     paddingHorizontal: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },
