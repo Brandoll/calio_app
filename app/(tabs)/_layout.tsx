@@ -1,4 +1,4 @@
-import { Tabs } from 'expo-router';
+import { Tabs, useSegments } from 'expo-router';
 import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Home, Dumbbell, Camera, UtensilsCrossed, User } from 'lucide-react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
@@ -8,6 +8,11 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const orderedRouteNames = ['index', 'exercises', 'foods', 'more'];
   const normalTabs = orderedRouteNames.map(name => state.routes.find(r => r.name === name)).filter(Boolean) as typeof state.routes;
   const cameraRoute = state.routes.find(r => r.name === 'ai-camera');
+  const segments = useSegments();
+  
+  // Ocultar tab bar en subpantallas (como detalle o basket)
+  const hideTabBar = segments.includes('basket') || segments.includes('[id]');
+  if (hideTabBar) return null;
 
   return (
     <View style={styles.tabBarWrapper}>
