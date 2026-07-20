@@ -1,6 +1,31 @@
 import { create } from 'zustand';
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 import { User } from '../types/auth';
+
+const setStorageItemAsync = async (key: string, value: string) => {
+  if (Platform.OS === 'web') {
+    try { localStorage.setItem(key, value); } catch (e) {}
+  } else {
+    await SecureStore.setItemAsync(key, value);
+  }
+};
+
+const getStorageItemAsync = async (key: string) => {
+  if (Platform.OS === 'web') {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  } else {
+    return await SecureStore.getItemAsync(key);
+  }
+};
+
+const deleteStorageItemAsync = async (key: string) => {
+  if (Platform.OS === 'web') {
+    try { localStorage.removeItem(key); } catch (e) {}
+  } else {
+    await SecureStore.deleteItemAsync(key);
+  }
+};
 
 interface AuthState {
   accessToken: string | null;
@@ -30,20 +55,20 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   hasCompletedSetup: false,
 
   setTokens: async (accessToken: string, refreshToken: string) => {
-    await SecureStore.setItemAsync('accessToken', accessToken);
-    await SecureStore.setItemAsync('refreshToken', refreshToken);
+    await setStorageItemAsync('accessToken', accessToken);
+    await setStorageItemAsync('refreshToken', refreshToken);
     set({ accessToken, refreshToken, isAuthenticated: true });
   },
 
   setUser: async (user: User) => {
-    await SecureStore.setItemAsync('user', JSON.stringify(user));
+    await setStorageItemAsync('user', JSON.stringify(user));
     set({ user });
   },
 
   logout: async () => {
-    await SecureStore.deleteItemAsync('accessToken');
-    await SecureStore.deleteItemAsync('refreshToken');
-    await SecureStore.deleteItemAsync('user');
+    await deleteStorageItemAsync('accessToken');
+    await deleteStorageItemAsync('refreshToken');
+    await deleteStorageItemAsync('user');
     set({
       accessToken: null,
       refreshToken: null,
@@ -53,23 +78,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   setOnboardingCompleted: async () => {
-    await SecureStore.setItemAsync('onboardingCompleted', 'true');
+    await setStorageItemAsync('onboardingCompleted', 'true');
     set({ hasCompletedOnboarding: true });
   },
 
   setSetupCompleted: async () => {
-    await SecureStore.setItemAsync('setupCompleted', 'true');
+    await setStorageItemAsync('setupCompleted', 'true');
     set({ hasCompletedSetup: true });
   },
 
   // Cargar datos persistidos al abrir la app (Auto Login)
   loadStoredAuth: async () => {
     try {
-      const accessToken = await SecureStore.getItemAsync('accessToken');
-      const refreshToken = await SecureStore.getItemAsync('refreshToken');
-      const onboardingCompleted = await SecureStore.getItemAsync('onboardingCompleted');
-      const setupCompleted = await SecureStore.getItemAsync('setupCompleted');
-      const userStr = await SecureStore.getItemAsync('user');
+      const accessToken = await getStorageItemAsync('accessToken');
+      const refreshToken = await getStorageItemAsync('refreshToken');
+      const userStr = await getStorageItemAsync('user');
+      const onboardingStr = await getStorageItemAsync('onboardingCompleted');
+      const setupStr = await getStorageItemAsync('setupCompleted');
       
       let user = null;
       if (userStr) {
@@ -81,8 +106,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         refreshToken,
         user,
         isAuthenticated: !!accessToken,
-        hasCompletedOnboarding: onboardingCompleted === 'true',
-        hasCompletedSetup: setupCompleted === 'true',
+        hasCompletedOnboarding: onboardingStr === 'true',
+        hasCompletedSetup: setupStr === 'true',
         isLoading: false,
       });
     } catch (error) {
