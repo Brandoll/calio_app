@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Wheat, Droplet, Drumstick } from 'lucide-react-native';
+import { Leaf, Droplet, Drumstick } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { CircularProgress } from '../ui/CircularProgress';
 
@@ -60,8 +60,8 @@ export const MacroCardsRow: React.FC<MacroCardsRowProps> = ({ protein, carbs, fa
       {renderCard(
         'Carbos', 
         carbs, 
-        '#FFB020', 
-        Wheat,
+        '#85C872', 
+        Leaf,
         'Los carbos son tu principal fuente de energía. Son la gasolina que tu cuerpo y tu cerebro necesitan para funcionar al 100%.'
       )}
       {renderCard(

@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Trash2 } from 'lucide-react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { Trash2, Flame, UserCircle } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { MealRecord } from '../../types/tracking';
 import { API_BASE_URL } from '../../constants/api';
+
+const { width } = Dimensions.get('window');
+const CARD_WIDTH = (width - 48 - 16) / 2; // 48 = padding horizontal (24*2), 16 = gap
 
 interface RecentMealsProps {
   meals: MealRecord[];
@@ -14,44 +17,78 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Comidas de hoy</Text>
+        <Text style={styles.headerTitle}>Comidas del día</Text>
         <Text style={styles.seeAll}>Ver todo</Text>
       </View>
       
       {meals.length > 0 ? (
-        meals.map((meal, index) => (
-          <View key={meal.id ? meal.id.toString() : index.toString()} style={styles.mealCard}>
-            {meal.imageUrl ? (
-              <Image 
-                source={{ uri: meal.imageUrl.startsWith('file://') ? meal.imageUrl : `${API_BASE_URL}${meal.imageUrl}` }} 
-                style={styles.mealImage} 
-              />
-            ) : (
-              <View style={styles.mealIconPlaceholder}>
-                <Text style={styles.mealIconText}>{meal.nombre ? meal.nombre.charAt(0).toUpperCase() : '?'}</Text>
+        <View style={styles.gridContainer}>
+          {meals.map((meal, index) => (
+            <View key={meal.id ? meal.id.toString() : index.toString()} style={styles.card}>
+              
+              {/* Imagen y Badges superpuestos */}
+              <View style={styles.imageContainer}>
+                {meal.imageUrl ? (
+                  <Image 
+                    source={{ uri: meal.imageUrl.startsWith('file://') ? meal.imageUrl : `${API_BASE_URL}${meal.imageUrl}` }} 
+                    style={styles.image} 
+                  />
+                ) : (
+                  <View style={[styles.image, styles.placeholderImage]}>
+                    <Text style={styles.placeholderText}>{meal.nombre ? meal.nombre.charAt(0).toUpperCase() : '?'}</Text>
+                  </View>
+                )}
+                
+                <View style={styles.overlayTop}>
+                  <View style={styles.badgeCal}>
+                    <Flame color="#FF8A00" size={14} fill="#FF8A00" />
+                    <Text style={styles.badgeCalText}>{Math.round(meal.calorias)}</Text>
+                  </View>
+                  
+                  {(meal.id && onDelete) ? (
+                    <TouchableOpacity onPress={() => onDelete(meal.id!)} style={styles.badgeDelete}>
+                      <Trash2 color={colors.white} size={16} />
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
               </View>
-            )}
-            
-            <View style={styles.mealInfo}>
-              <Text style={styles.mealName}>{meal.nombre}</Text>
-              <Text style={styles.mealTime}>
-                {meal.tipoComida} • {meal.hora ? meal.hora.substring(0,5) : ''}
-              </Text>
+
+              {/* Información de la comida */}
+              <View style={styles.infoContainer}>
+                <Text style={styles.title} numberOfLines={2}>
+                  {meal.nombre}
+                </Text>
+                
+                {/* Macros */}
+                <View style={styles.macrosRow}>
+                  <View style={styles.macroCol}>
+                    <Text style={[styles.macroVal, { color: '#FF4B4B' }]}>{Math.round(meal.proteinas)}g</Text>
+                    <Text style={styles.macroLabel}>Prot</Text>
+                  </View>
+                  <View style={styles.macroCol}>
+                    <Text style={[styles.macroVal, { color: '#85C872' }]}>{Math.round(meal.carbohidratos)}g</Text>
+                    <Text style={styles.macroLabel}>Carbs</Text>
+                  </View>
+                  <View style={styles.macroCol}>
+                    <Text style={[styles.macroVal, { color: '#0080FF' }]}>{Math.round(meal.grasas)}g</Text>
+                    <Text style={styles.macroLabel}>Grasa</Text>
+                  </View>
+                </View>
+
+                {/* Footer del perfil */}
+                <View style={styles.footerRow}>
+                  <UserCircle size={16} color={colors.textSecondary} />
+                  <Text style={styles.footerText}>Calio AI</Text>
+                </View>
+              </View>
+
             </View>
-            
-            <View style={styles.rightActions}>
-              <Text style={styles.mealCalories}>{meal.calorias} kcal</Text>
-              {(meal.id && onDelete) ? (
-                <TouchableOpacity onPress={() => onDelete(meal.id!)} style={styles.deleteButton}>
-                  <Trash2 color={colors.danger || '#FF3B30'} size={20} />
-                </TouchableOpacity>
-              ) : null}
-            </View>
-          </View>
-        ))
+          ))}
+        </View>
       ) : (
         <View style={styles.emptyState}>
-          <Text style={styles.emptyText}>Aún no has registrado comidas hoy</Text>
+          <Text style={styles.emptyTitle}>No hay comidas registradas</Text>
+          <Text style={styles.emptyText}>Comienza a registrar tus comidas tomando una foto.</Text>
         </View>
       )}
     </View>
@@ -60,7 +97,7 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 24,
+    marginBottom: 40,
   },
   header: {
     flexDirection: 'row',
@@ -68,9 +105,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  title: {
+  headerTitle: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: '800',
     color: colors.secondary,
   },
   seeAll: {
@@ -78,74 +115,130 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.primaryDark,
   },
-  mealCard: {
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  card: {
+    width: CARD_WIDTH,
+    backgroundColor: colors.card,
+    borderRadius: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
+  },
+  imageContainer: {
+    width: '100%',
+    height: 120,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+  placeholderImage: {
+    backgroundColor: '#F0F0F0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  placeholderText: {
+    fontSize: 40,
+    fontWeight: '800',
+    color: colors.textMuted,
+  },
+  overlayTop: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    right: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  badgeCal: {
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.03,
-    shadowRadius: 5,
-    elevation: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    gap: 4,
   },
-  mealIconPlaceholder: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.background,
+  badgeCalText: {
+    color: colors.white,
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  badgeDelete: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 16,
   },
-  mealIconText: {
-    fontSize: 20,
+  infoContainer: {
+    padding: 12,
+  },
+  title: {
+    fontSize: 14,
     fontWeight: '700',
-    color: colors.textSecondary,
-  },
-  mealImage: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    marginRight: 16,
-  },
-  mealInfo: {
-    flex: 1,
-  },
-  mealName: {
-    fontSize: 16,
-    fontWeight: '600',
     color: colors.secondary,
-    marginBottom: 4,
+    height: 40, // Espacio fijo para 2 líneas
+    marginBottom: 10,
   },
-  mealTime: {
+  macrosRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  macroCol: {
+    alignItems: 'center',
+  },
+  macroVal: {
     fontSize: 13,
+    fontWeight: '800',
+    marginBottom: 2,
+  },
+  macroLabel: {
+    fontSize: 10,
+    color: colors.textMuted,
+    fontWeight: '500',
+  },
+  footerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  footerText: {
+    fontSize: 12,
     color: colors.textSecondary,
-    textTransform: 'capitalize',
-  },
-  mealCalories: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.secondary,
-  },
-  rightActions: {
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  deleteButton: {
-    padding: 4,
+    fontWeight: '500',
   },
   emptyState: {
     backgroundColor: colors.card,
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 24,
-    alignItems: 'center',
+  },
+  emptyTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: colors.secondary,
+    marginBottom: 8,
   },
   emptyText: {
     color: colors.textSecondary,
     fontSize: 14,
+    lineHeight: 20,
   },
 });
