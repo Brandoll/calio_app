@@ -6,7 +6,7 @@ import { LoginRequest, RegisterRequest } from '../../types/auth';
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { setTokens, setUser, logout: storeLogout, refreshToken } = useAuthStore();
+  const { setTokens, setUser, logout: storeLogout, refreshToken, setSetupCompleted } = useAuthStore();
 
   const login = async (data: LoginRequest) => {
     setIsLoading(true);
@@ -14,6 +14,12 @@ export const useAuth = () => {
       const response = await authService.login(data);
       await setTokens(response.accessToken, response.refreshToken);
       setUser(response.user);
+      
+      // Si el usuario ya completó su registro previamente, lo marcamos para que no vuelva a 'goals' al recargar
+      if (response.user.birthDate || response.user.gender) {
+        await setSetupCompleted();
+      }
+
       return true;
     } catch (error: any) {
       console.error('Error en login:', error.message, error.response?.data, error.config?.url);
