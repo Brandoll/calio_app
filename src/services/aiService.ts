@@ -1,5 +1,6 @@
 import { API_BASE_URL, API_ROUTES } from '../constants/api';
 import { useAuthStore } from '../stores/authStore';
+import { Platform } from 'react-native';
 
 export interface FoodItem {
   nombre: string;
@@ -19,11 +20,22 @@ export const aiService = {
     // Usar FormData nativo
     const formData = new FormData();
 
-    formData.append('imagen', {
-      uri: imageUri,
-      name: fileName,
-      type: mimeType,
-    } as any);
+    if (Platform.OS === 'web') {
+      try {
+        const response = await fetch(imageUri);
+        const blob = await response.blob();
+        formData.append('imagen', blob, fileName);
+      } catch (e) {
+        console.error("Error creating Blob on web", e);
+        throw e;
+      }
+    } else {
+      formData.append('imagen', {
+        uri: imageUri,
+        name: fileName,
+        type: mimeType,
+      } as any);
+    }
 
     // Obtenemos el token de zustand
     const token = useAuthStore.getState().accessToken;
