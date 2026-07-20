@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Camera, UploadCloud, CheckCircle, XCircle } from 'lucide-react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -21,9 +21,15 @@ export default function AiCameraScreen() {
   const [alertData, setAlertData] = useState<{ visible: boolean; title: string; message: string; type: AlertType } | null>(null);
 
   const requestPermissions = async () => {
-    const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
-    const libraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    return cameraStatus.status === 'granted' && libraryStatus.status === 'granted';
+    if (Platform.OS === 'web') return true;
+    try {
+      const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
+      const libraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      return cameraStatus.status === 'granted' && libraryStatus.status === 'granted';
+    } catch (e) {
+      console.warn("Error requesting permissions", e);
+      return false;
+    }
   };
 
   const processImage = async (uri: string) => {
