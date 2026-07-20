@@ -97,13 +97,23 @@ export default function AiCameraScreen() {
       else if (hourNumber >= 11 && hourNumber < 17) tipoComida = 'ALMUERZO';
       else if (hourNumber >= 18 && hourNumber < 23) tipoComida = 'CENA';
       
+      let finalImageUrl: string | undefined = undefined;
+      
+      if (imageUri) {
+        try {
+          finalImageUrl = await trackingService.uploadMealImage(imageUri);
+        } catch (uploadError) {
+          console.warn('No se pudo subir la imagen al servidor, guardando sin foto', uploadError);
+        }
+      }
+
       // Registramos cada item encontrado
       for (const item of results.items) {
         await trackingService.registerMeal({
           userId: user.id,
           alimentoId: 0, // Alimento no catalogado (custom)
           nombre: item.nombre,
-          imageUrl: imageUri || undefined, // Guardar la URI local del teléfono
+          imageUrl: finalImageUrl, // Guardar la URI remota en lugar de la del teléfono
           calorias: item.calorias,
           proteinas: item.proteinas,
           grasas: item.grasas,
