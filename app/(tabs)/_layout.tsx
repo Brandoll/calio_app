@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import { View, StyleSheet, Platform } from 'react-native';
-import { Home, Dumbbell, Camera, BarChart3, User } from 'lucide-react-native';
+import { Home, Dumbbell, Camera, UtensilsCrossed, User } from 'lucide-react-native';
 import { colors } from '../../src/theme/colors';
 
 export default function TabsLayout() {
@@ -67,10 +67,10 @@ export default function TabsLayout() {
       />
 
       <Tabs.Screen
-        name="stats"
+        name="foods"
         options={{
-          title: 'Estadísticas',
-          tabBarIcon: ({ color, size }) => <BarChart3 size={24} color={color} />,
+          title: 'Comida',
+          tabBarIcon: ({ color, size }) => <UtensilsCrossed size={24} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -83,9 +83,10 @@ export default function TabsLayout() {
 
       {/* Oculto de la barra inferior pero accesible por navegación */}
       <Tabs.Screen
-        name="foods"
+        name="stats"
         options={{
           href: null,
+          tabBarButton: () => null,
         }}
       />
     </Tabs>
