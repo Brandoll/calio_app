@@ -54,7 +54,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="ai-camera"
         options={{
-          title: 'Comida',
+          title: 'Cámara',
           tabBarLabel: () => null, // Ocultar el texto para que resalte el botón
           tabBarIcon: ({ focused }) => (
             <View style={styles.floatingButtonContainer}>
@@ -86,7 +86,6 @@ export default function TabsLayout() {
         name="stats"
         options={{
           href: null,
-          tabBarButton: () => null,
         }}
       />
     </Tabs>
