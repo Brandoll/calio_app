@@ -14,8 +14,14 @@ export interface Exercise {
 
 export interface Rutina {
   id: number;
-  nombre: string;
-  ejercicios: Exercise[];
+  nombre?: string;
+  ejercicios?: Exercise[];
   duracionMinutos?: number;
   caloriasEstimadas?: number;
+  userId?: number;
+  semana?: string;
+  objetivo?: string;
+  diasPorSemana?: number;
+  equipoDisponible?: string;
+  rutinaJson?: string;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Search } from 'lucide-react-native';
 import { colors } from '../../../src/theme/colors';
@@ -8,6 +8,7 @@ import { Exercise } from '../../../src/types/exercise';
 import { MuscleGroupFilter } from '../../../src/components/exercises/MuscleGroupFilter';
 import { EquipmentFilter } from '../../../src/components/exercises/EquipmentFilter';
 import { ExerciseCard } from '../../../src/components/exercises/ExerciseCard';
+import { MyWorkoutView } from '../../../src/components/exercises/MyWorkoutView';
 import { useRouter } from 'expo-router';
 
 export default function ExercisesScreen() {
@@ -19,6 +20,7 @@ export default function ExercisesScreen() {
   const [selectedEquipment, setSelectedEquipment] = useState<string | null>(null);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'explorar' | 'mi_rutina'>('explorar');
 
   // Mock data
   const mockExercises: Exercise[] = [
@@ -75,12 +77,8 @@ export default function ExercisesScreen() {
     }
   };
 
-  return (
-    <SafeAreaView style={styles.container} edges={['top']}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Ejercicios</Text>
-      </View>
-
+  const renderExplorar = () => (
+    <>
       <View style={styles.searchContainer}>
         <Search color={colors.textMuted} size={20} style={styles.searchIcon} />
         <TextInput 
@@ -126,14 +124,74 @@ export default function ExercisesScreen() {
           }
         />
       )}
+    </>
+  );
+
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Ejercicios</Text>
+      </View>
+
+      <View style={styles.tabsContainer}>
+        <TouchableOpacity 
+          style={[styles.tab, activeTab === 'explorar' && styles.tabActive]}
+          onPress={() => setActiveTab('explorar')}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.tabText, activeTab === 'explorar' && styles.tabTextActive]}>Explorar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.tab, activeTab === 'mi_rutina' && styles.tabActive]}
+          onPress={() => setActiveTab('mi_rutina')}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.tabText, activeTab === 'mi_rutina' && styles.tabTextActive]}>Mi Rutina</Text>
+        </TouchableOpacity>
+      </View>
+
+      {activeTab === 'explorar' ? renderExplorar() : <MyWorkoutView />}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
-  header: { paddingHorizontal: 20, marginBottom: 16 },
+  header: { paddingHorizontal: 20, marginBottom: 16, marginTop: 10 },
   title: { fontSize: 24, fontWeight: '800', color: colors.secondary },
+  tabsContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    backgroundColor: colors.card,
+    borderRadius: 30,
+    padding: 4,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderRadius: 26,
+  },
+  tabActive: {
+    backgroundColor: colors.background,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  tabText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.textSecondary,
+  },
+  tabTextActive: {
+    color: colors.secondary,
+    fontWeight: '700',
+  },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
