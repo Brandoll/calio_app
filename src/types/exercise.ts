@@ -2,12 +2,14 @@ export interface Exercise {
   id: number;
   nombre: string;
   grupoMuscular: string;
+  equipo: string;
   dificultad: string;
-  descripcion?: string;
-  series?: number;
-  repeticiones?: number;
-  caloriasEstimadas?: number;
+  caloriasPorMinuto?: number;
   gifUrl?: string;
+  instrucciones?: string;
+  seriesRecomendadas?: number;
+  repeticionesRecomendadas?: string;
+  activo?: boolean;
 }
 
 export interface Rutina {

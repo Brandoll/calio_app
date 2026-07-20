@@ -22,8 +22,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({ exercise, onPress })
       <View style={styles.info}>
         <Text style={styles.name} numberOfLines={1}>{exercise.nombre}</Text>
         <Text style={styles.group}>{exercise.grupoMuscular} • {exercise.dificultad}</Text>
+        <View style={styles.badgesRow}>
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>{exercise.equipo || 'Sin equipo'}</Text>
+          </View>
+        </View>
         <View style={styles.details}>
-          <Text style={styles.detailText}>{exercise.series || 3} Series x {exercise.repeticiones || 12} Reps</Text>
+          <Text style={styles.detailText}>{exercise.seriesRecomendadas || 3} Series x {exercise.repeticionesRecomendadas || '12'} Reps</Text>
         </View>
       </View>
       <View style={styles.playButton}>
@@ -58,7 +63,10 @@ const styles = StyleSheet.create({
   placeholderText: { fontSize: 24, fontWeight: '700', color: colors.textMuted },
   info: { flex: 1 },
   name: { fontSize: 16, fontWeight: '700', color: colors.secondary, marginBottom: 2 },
-  group: { fontSize: 12, color: colors.textSecondary, marginBottom: 6 },
+  group: { fontSize: 12, color: colors.textSecondary, marginBottom: 4 },
+  badgesRow: { flexDirection: 'row', marginBottom: 6 },
+  badge: { backgroundColor: 'rgba(0,0,0,0.05)', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 },
+  badgeText: { fontSize: 10, color: colors.textSecondary, fontWeight: '600' },
   details: {
     backgroundColor: colors.background,
     alignSelf: 'flex-start',

@@ -28,11 +28,12 @@ export default function ExerciseDetailScreen() {
         id: parseInt(id),
         nombre: 'Sentadillas',
         grupoMuscular: 'Piernas',
+        equipo: 'Sin equipo',
         dificultad: 'Principiante',
-        series: 4,
-        repeticiones: 12,
-        caloriasEstimadas: 15,
-        descripcion: 'Párate con los pies separados a la altura de los hombros. Baja las caderas como si te fueras a sentar en una silla, manteniendo la espalda recta.',
+        seriesRecomendadas: 4,
+        repeticionesRecomendadas: '12',
+        caloriasPorMinuto: 8.5,
+        instrucciones: 'Párate con los pies separados a la altura de los hombros. Baja las caderas como si te fueras a sentar en una silla, manteniendo la espalda recta.',
       });
     } finally {
       setIsLoading(false);
@@ -80,6 +81,9 @@ export default function ExerciseDetailScreen() {
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{exercise.grupoMuscular}</Text>
             </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{exercise.equipo || 'Sin equipo'}</Text>
+            </View>
             <View style={[styles.badge, { backgroundColor: 'rgba(0,0,0,0.05)' }]}>
               <Text style={[styles.badgeText, { color: colors.textSecondary }]}>{exercise.dificultad}</Text>
             </View>
@@ -88,16 +92,16 @@ export default function ExerciseDetailScreen() {
 
         <View style={styles.statsGrid}>
           <View style={styles.statItem}>
-            <Text style={styles.statValue}>{exercise.series || 3}</Text>
+            <Text style={styles.statValue}>{exercise.seriesRecomendadas || 3}</Text>
             <Text style={styles.statLabel}>Series</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={styles.statValue}>{exercise.repeticiones || 12}</Text>
+            <Text style={styles.statValue}>{exercise.repeticionesRecomendadas || '12'}</Text>
             <Text style={styles.statLabel}>Repeticiones</Text>
           </View>
           <View style={styles.statItem}>
-            <Text style={styles.statValue}>{exercise.caloriasEstimadas || 20}</Text>
-            <Text style={styles.statLabel}>Kcal (est.)</Text>
+            <Text style={styles.statValue}>{exercise.caloriasPorMinuto || 5}</Text>
+            <Text style={styles.statLabel}>Kcal / min</Text>
           </View>
         </View>
 
@@ -107,7 +111,7 @@ export default function ExerciseDetailScreen() {
             <Text style={styles.descriptionTitle}>Técnica</Text>
           </View>
           <Text style={styles.descriptionText}>
-            {exercise.descripcion || 'Técnica no especificada. Asegúrate de mantener una buena postura durante todo el movimiento.'}
+            {exercise.instrucciones || 'Técnica no especificada. Asegúrate de mantener una buena postura durante todo el movimiento.'}
           </Text>
         </View>
 

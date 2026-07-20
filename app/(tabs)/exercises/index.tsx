@@ -19,9 +19,9 @@ export default function ExercisesScreen() {
 
   // Mock data
   const mockExercises: Exercise[] = [
-    { id: 1, nombre: 'Sentadillas', grupoMuscular: 'Piernas', dificultad: 'Principiante', series: 4, repeticiones: 12 },
-    { id: 2, nombre: 'Flexiones', grupoMuscular: 'Pecho', dificultad: 'Intermedio', series: 3, repeticiones: 15 },
-    { id: 3, nombre: 'Dominadas', grupoMuscular: 'Espalda', dificultad: 'Avanzado', series: 3, repeticiones: 8 },
+    { id: 1, nombre: 'Sentadillas', grupoMuscular: 'Piernas', equipo: 'Sin equipo', dificultad: 'Principiante', seriesRecomendadas: 4, repeticionesRecomendadas: '12', caloriasPorMinuto: 8, instrucciones: 'Párate con los pies separados. Baja las caderas.' },
+    { id: 2, nombre: 'Flexiones', grupoMuscular: 'Pecho', equipo: 'Sin equipo', dificultad: 'Intermedio', seriesRecomendadas: 3, repeticionesRecomendadas: '15', caloriasPorMinuto: 7, instrucciones: 'Boca abajo, empuja tu peso hacia arriba.' },
+    { id: 3, nombre: 'Dominadas', grupoMuscular: 'Espalda', equipo: 'Barra', dificultad: 'Avanzado', seriesRecomendadas: 3, repeticionesRecomendadas: '8', caloriasPorMinuto: 9, instrucciones: 'Cuélgate de una barra y sube hasta que tu barbilla la pase.' },
   ];
   const mockGroups = ['Pecho', 'Espalda', 'Piernas', 'Brazos', 'Core'];
 
