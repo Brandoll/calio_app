@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Flame } from 'lucide-react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { Trash2, Flame, UserCircle } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { MealRecord } from '../../types/tracking';
 import { API_BASE_URL } from '../../constants/api';
-import { MealDetailsModal } from './MealDetailsModal';
+
+const { width } = Dimensions.get('window');
+const CARD_WIDTH = (width - 48 - 16) / 2; // 48 = padding horizontal (24*2), 16 = gap
 
 interface RecentMealsProps {
   meals: MealRecord[];
@@ -12,72 +14,75 @@ interface RecentMealsProps {
 }
 
 export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
-  const [selectedMeal, setSelectedMeal] = useState<MealRecord | null>(null);
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Comidas del día</Text>
         <Text style={styles.seeAll}>Ver todo</Text>
       </View>
-      
+
       {meals.length > 0 ? (
-        <View style={styles.listContainer}>
+        <View style={styles.gridContainer}>
           {meals.map((meal, index) => (
-            <TouchableOpacity 
-              key={meal.id ? meal.id.toString() : index.toString()} 
-              style={styles.card}
-              activeOpacity={0.8}
-              onPress={() => setSelectedMeal(meal)}
-            >
-              {/* Imagen a la Izquierda */}
+            <View key={meal.id ? meal.id.toString() : index.toString()} style={styles.card}>
+
+              {/* Imagen y Badges superpuestos */}
               <View style={styles.imageContainer}>
                 {meal.imageUrl ? (
-                  <Image 
-                    source={{ uri: meal.imageUrl.startsWith('file://') ? meal.imageUrl : `${API_BASE_URL}${meal.imageUrl}` }} 
-                    style={styles.image} 
+                  <Image
+                    source={{ uri: meal.imageUrl.startsWith('file://') ? meal.imageUrl : `${API_BASE_URL}${meal.imageUrl}` }}
+                    style={styles.image}
                   />
                 ) : (
                   <View style={[styles.image, styles.placeholderImage]}>
                     <Text style={styles.placeholderText}>{meal.nombre ? meal.nombre.charAt(0).toUpperCase() : '?'}</Text>
                   </View>
                 )}
+
+                <View style={styles.overlayTop}>
+                  <View style={styles.badgeCal}>
+                    <Flame color="#FF8A00" size={14} fill="#FF8A00" />
+                    <Text style={styles.badgeCalText}>{Math.round(meal.calorias)}</Text>
+                  </View>
+
+                  {(meal.id && onDelete) ? (
+                    <TouchableOpacity onPress={() => onDelete(meal.id!)} style={styles.badgeDelete}>
+                      <Trash2 color={colors.white} size={16} />
+                    </TouchableOpacity>
+                  ) : null}
+                </View>
               </View>
 
-              {/* Información a la Derecha */}
+              {/* Información de la comida */}
               <View style={styles.infoContainer}>
-                <View style={styles.infoHeader}>
-                  <Text style={styles.title} numberOfLines={2}>
-                    {meal.nombre}
-                  </Text>
-                  
-                  <View style={styles.calBadge}>
-                    <Flame color="#FF8A00" size={12} fill="#FF8A00" />
-                    <Text style={styles.calBadgeText}>{Math.round(meal.calorias)}</Text>
-                  </View>
-                </View>
-                
-                <Text style={styles.timeText}>
-                  {meal.tipoComida} • {meal.hora ? meal.hora.substring(0, 5) : ''}
+                <Text style={styles.title} numberOfLines={2}>
+                  {meal.nombre}
                 </Text>
 
                 {/* Macros */}
                 <View style={styles.macrosRow}>
-                  <View style={styles.macroItem}>
+                  <View style={styles.macroCol}>
                     <Text style={[styles.macroVal, { color: '#FF4B4B' }]}>{Math.round(meal.proteinas)}g</Text>
                     <Text style={styles.macroLabel}>Prot</Text>
                   </View>
-                  <View style={styles.macroItem}>
+                  <View style={styles.macroCol}>
                     <Text style={[styles.macroVal, { color: '#85C872' }]}>{Math.round(meal.carbohidratos)}g</Text>
                     <Text style={styles.macroLabel}>Carbs</Text>
                   </View>
-                  <View style={styles.macroItem}>
+                  <View style={styles.macroCol}>
                     <Text style={[styles.macroVal, { color: '#0080FF' }]}>{Math.round(meal.grasas)}g</Text>
                     <Text style={styles.macroLabel}>Grasa</Text>
                   </View>
                 </View>
+
+                {/* Footer del perfil */}
+                <View style={styles.footerRow}>
+                  <UserCircle size={16} color={colors.textSecondary} />
+                  <Text style={styles.footerText}>Calio AI</Text>
+                </View>
               </View>
-            </TouchableOpacity>
+
+            </View>
           ))}
         </View>
       ) : (
@@ -86,14 +91,6 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
           <Text style={styles.emptyText}>Comienza a registrar tus comidas tomando una foto.</Text>
         </View>
       )}
-
-      {/* Modal de Detalles de la Comida */}
-      <MealDetailsModal 
-        visible={!!selectedMeal} 
-        onClose={() => setSelectedMeal(null)} 
-        meal={selectedMeal} 
-        onDelete={onDelete}
-      />
     </View>
   );
 };
@@ -118,26 +115,30 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.primaryDark,
   },
-  listContainer: {
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     gap: 16,
   },
   card: {
-    flexDirection: 'row',
+    width: CARD_WIDTH,
     backgroundColor: colors.card,
     borderRadius: 20,
+    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 3,
-    padding: 12,
-    alignItems: 'center',
   },
   imageContainer: {
-    width: 90,
-    height: 90,
-    borderRadius: 16,
+    width: '100%',
+    height: 120,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     overflow: 'hidden',
+    position: 'relative',
   },
   image: {
     width: '100%',
@@ -149,63 +150,78 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   placeholderText: {
-    fontSize: 32,
+    fontSize: 40,
     fontWeight: '800',
     color: colors.textMuted,
   },
-  infoContainer: {
-    flex: 1,
-    marginLeft: 16,
-    justifyContent: 'space-between',
-  },
-  infoHeader: {
+  overlayTop: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    right: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
   },
-  title: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: colors.secondary,
-    flex: 1,
-    marginRight: 8,
-  },
-  calBadge: {
+  badgeCal: {
+    backgroundColor: 'rgba(0, 0, 0, 0.65)',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 138, 0, 0.1)', // Fondo naranjo muy suave
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 10,
+    borderRadius: 12,
     gap: 4,
   },
-  calBadgeText: {
-    color: '#FF8A00',
+  badgeCalText: {
+    color: colors.white,
     fontSize: 12,
     fontWeight: '700',
   },
-  timeText: {
-    fontSize: 12,
-    color: colors.textSecondary,
+  badgeDelete: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  infoContainer: {
+    padding: 12,
+  },
+  title: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors.secondary,
+    height: 40, // Espacio fijo para 2 líneas
     marginBottom: 10,
-    marginTop: 2,
-    textTransform: 'capitalize',
   },
   macrosRow: {
     flexDirection: 'row',
-    gap: 16,
+    justifyContent: 'space-between',
+    marginBottom: 12,
   },
-  macroItem: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: 4,
+  macroCol: {
+    alignItems: 'center',
   },
   macroVal: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '800',
+    marginBottom: 2,
   },
   macroLabel: {
-    fontSize: 11,
+    fontSize: 10,
+    color: colors.textMuted,
+    fontWeight: '500',
+  },
+  footerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  footerText: {
+    fontSize: 12,
     color: colors.textSecondary,
     fontWeight: '500',
   },

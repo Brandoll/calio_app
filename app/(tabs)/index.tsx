@@ -6,6 +6,7 @@ import { Bell, UserCircle, Flame } from 'lucide-react-native';
 import { colors } from '../../src/theme/colors';
 import { useAuthStore } from '../../src/stores/authStore';
 import { authService } from '../../src/services/authService';
+import { BlurView } from 'expo-blur';
 import { trackingService } from '../../src/services/trackingService';
 
 // Componentes
@@ -238,11 +239,27 @@ export default function HomeScreen() {
         onClose={() => setMacroInfoData(null)} 
         data={macroInfoData} 
       />
+
+      {/* Efecto borroso inferior (bajo la barra de navegación) */}
+      <BlurView 
+        intensity={30} 
+        tint="light" 
+        style={styles.bottomBlur} 
+        pointerEvents="none"
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  bottomBlur: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 120,
+    zIndex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
