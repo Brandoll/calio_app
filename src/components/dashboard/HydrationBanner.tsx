@@ -13,20 +13,12 @@ interface HydrationBannerProps {
 export const HydrationBanner: React.FC<HydrationBannerProps> = ({ currentGlasses, goalGlasses, onPress }) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
-      <View style={styles.leftSection}>
-        <GlassWater color="#3498db" size={32} style={styles.icon} />
-        <View style={styles.textContainer}>
-          <View style={styles.valuesContainer}>
-            <Text style={styles.currentValue}>{currentGlasses * 250}</Text>
-            <Text style={styles.totalValue}> /{goalGlasses * 250} ml</Text>
-          </View>
-          <Text style={styles.label}>Hidratación</Text>
-        </View>
+      <GlassWater color="#3498db" size={32} style={styles.icon} />
+      <View style={styles.valuesContainer}>
+        <Text style={styles.currentValue}>{currentGlasses * 250}</Text>
+        <Text style={styles.totalValue}> /{goalGlasses * 250} ml</Text>
       </View>
-
-      <View style={styles.button}>
-        <Text style={styles.buttonText}>Registrar agua</Text>
-      </View>
+      <Text style={styles.label}>Hidratación</Text>
     </TouchableOpacity>
   );
 };
@@ -35,56 +27,37 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.card,
     borderRadius: 24,
-    padding: 20,
-    marginBottom: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    padding: 16,
+    alignItems: 'flex-start',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
     shadowRadius: 10,
     elevation: 3,
-  },
-  leftSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   icon: {
-    marginRight: 16,
-  },
-  textContainer: {
-    justifyContent: 'center',
+    marginBottom: 16,
   },
   valuesContainer: {
     flexDirection: 'row',
     alignItems: 'baseline',
   },
   currentValue: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '800',
     color: colors.secondary,
   },
   totalValue: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
     color: colors.textMuted,
   },
   label: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: colors.textSecondary,
-    marginTop: 2,
-  },
-  button: {
-    backgroundColor: 'rgba(240, 240, 240, 0.8)', // Fondo gris claro sutil
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-  },
-  buttonText: {
-    color: '#8D6E63', // Un tono tierra claro como en el diseño (marrón suave)
-    fontWeight: '700',
-    fontSize: 14,
+    marginTop: 4,
   }
 });

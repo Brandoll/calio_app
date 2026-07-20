@@ -10,77 +10,71 @@ interface DailyGoalCardProps {
 }
 
 export const DailyGoalCard: React.FC<DailyGoalCardProps> = ({ title, progress, subtitle }) => {
+  const current = subtitle.split(' / ')[0] || '0';
+  const total = subtitle.split(' / ')[1] || '0 kcal';
+
   return (
     <View style={styles.container}>
-      <View style={styles.infoContainer}>
-        <View style={styles.iconContainer}>
-          <Target color={colors.primary} size={24} />
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
-        </View>
-      </View>
-      
-      {/* Simple Text Progress for now, can be replaced by SVG Circle Progress */}
       <View style={styles.progressContainer}>
         <Text style={styles.progressText}>{progress}%</Text>
       </View>
+      
+      <View style={styles.valuesContainer}>
+        <Text style={styles.currentValue}>{current}</Text>
+        <Text style={styles.totalValue}> /{total}</Text>
+      </View>
+      <Text style={styles.label}>{title}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
     backgroundColor: colors.card,
-    borderRadius: 20,
+    borderRadius: 24,
     padding: 16,
-    marginBottom: 16,
     borderWidth: 1,
     borderColor: colors.border,
-  },
-  infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: 'rgba(216, 255, 46, 0.2)', // primary opacity
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  textContainer: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: colors.secondary,
-    marginBottom: 2,
-  },
-  subtitle: {
-    fontSize: 13,
-    color: colors.textSecondary,
+    alignItems: 'flex-start',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 3,
   },
   progressContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     borderWidth: 4,
     borderColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 12,
   },
   progressText: {
     fontSize: 12,
     fontWeight: '700',
     color: colors.secondary,
+  },
+  valuesContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+  },
+  currentValue: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: colors.secondary,
+  },
+  totalValue: {
+    fontSize: 12,
+    fontWeight: '500',
+    color: colors.textMuted,
+  },
+  label: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: colors.textSecondary,
+    marginTop: 4,
   },
 });

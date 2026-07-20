@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { Flame } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { MealRecord } from '../../types/tracking';
@@ -22,11 +22,7 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
       </View>
       
       {meals.length > 0 ? (
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.listContainer}
-        >
+        <View style={styles.listContainer}>
           {meals.map((meal, index) => (
             <TouchableOpacity 
               key={meal.id ? meal.id.toString() : index.toString()} 
@@ -83,7 +79,7 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
               </View>
             </TouchableOpacity>
           ))}
-        </ScrollView>
+        </View>
       ) : (
         <View style={[styles.emptyState, { marginHorizontal: 24 }]}>
           <Text style={styles.emptyTitle}>No hay comidas registradas</Text>
@@ -137,7 +133,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     padding: 12,
     alignItems: 'center',
-    width: Dimensions.get('window').width * 0.85, // 85% de la pantalla para ver el siguiente
+    width: '100%',
   },
   imageContainer: {
     width: 90,

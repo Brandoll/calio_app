@@ -161,7 +161,10 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 150, padding: 20 }}
+      >
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.userInfo}>
@@ -199,24 +202,26 @@ export default function HomeScreen() {
           onCardPress={openMacroInfo}
         />
 
-        {/* Meta Diaria */}
-        <DailyGoalCard 
-          title="Meta Diaria" 
-          subtitle="Completada" 
-          progress={dailyData.calories.goal > 0 ? Math.round((dailyData.calories.consumed / dailyData.calories.goal) * 100) : 0} 
-        />
-
-        {/* Banner de Hidratación */}
-        <View style={{ paddingHorizontal: 24 }}>
-          <HydrationBanner 
-            currentGlasses={dailyData.water} 
-            goalGlasses={10} 
-            onAddGlass={() => handleChangeWater(1)} 
-            onPress={() => setIsWaterModalVisible(true)}
-          />
+        {/* Fila de Meta y Agua */}
+        <View style={{ flexDirection: 'row', gap: 16, marginBottom: 24 }}>
+          <View style={{ flex: 1 }}>
+            <DailyGoalCard 
+              title="Meta diaria" 
+              subtitle={`${Math.round(dailyData.calories.consumed)} / ${dailyData.calories.goal} kcal`} 
+              progress={dailyData.calories.goal > 0 ? Math.round((dailyData.calories.consumed / dailyData.calories.goal) * 100) : 0} 
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <HydrationBanner 
+              currentGlasses={dailyData.water} 
+              goalGlasses={10} 
+              onAddGlass={() => handleChangeWater(1)} 
+              onPress={() => setIsWaterModalVisible(true)}
+            />
+          </View>
         </View>
 
-        {/* Comidas Recientes (ahora en carrusel, el padding lo maneja adentro) */}
+        {/* Comidas Recientes (ahora vertical con scroll libre) */}
         <RecentMeals meals={dailyData.comidas as any[]} onDelete={handleDeleteMeal} />
 
       </ScrollView>
