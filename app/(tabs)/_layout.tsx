@@ -110,11 +110,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 60,
+    height: 60,
+    borderRadius: 30, // Redondo perfecto
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'hidden', // Asegura que el fondo no sea cuadrado en algunos dispositivos
   },
   iconContainerFocused: {
     backgroundColor: '#F0F0F0',
