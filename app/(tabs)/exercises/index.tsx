@@ -6,6 +6,7 @@ import { colors } from '../../../src/theme/colors';
 import { exerciseService } from '../../../src/services/exerciseService';
 import { Exercise } from '../../../src/types/exercise';
 import { MuscleGroupFilter } from '../../../src/components/exercises/MuscleGroupFilter';
+import { EquipmentFilter } from '../../../src/components/exercises/EquipmentFilter';
 import { ExerciseCard } from '../../../src/components/exercises/ExerciseCard';
 import { useRouter } from 'expo-router';
 
@@ -14,6 +15,8 @@ export default function ExercisesScreen() {
   const [search, setSearch] = useState('');
   const [groups, setGroups] = useState<string[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+  const [equipments, setEquipments] = useState<string[]>([]);
+  const [selectedEquipment, setSelectedEquipment] = useState<string | null>(null);
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,23 +27,34 @@ export default function ExercisesScreen() {
     { id: 3, nombre: 'Dominadas', grupoMuscular: 'Espalda', equipo: 'Barra', dificultad: 'Avanzado', seriesRecomendadas: 3, repeticionesRecomendadas: '8', caloriasPorMinuto: 9, instrucciones: 'Cuélgate de una barra y sube hasta que tu barbilla la pase.' },
   ];
   const mockGroups = ['Pecho', 'Espalda', 'Piernas', 'Brazos', 'Core'];
+  const mockEquipments = ['Sin equipo', 'Mancuernas', 'Barra', 'Máquina'];
 
   useEffect(() => {
     loadData();
-  }, [selectedGroup]);
+  }, [selectedGroup, selectedEquipment]);
 
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const allExercises = await exerciseService.getAll();
+      const allExercises = await exerciseService.getAll({ 
+        grupoMuscular: selectedGroup || undefined,
+        equipo: selectedEquipment || undefined
+      });
       let filtered = allExercises.length > 0 ? allExercises : mockExercises;
       
-      // Extraer grupos únicos
+      // Extraer grupos y equipos únicos
       const uniqueGroups = Array.from(new Set(filtered.map(e => e.grupoMuscular)));
       setGroups(uniqueGroups.length > 0 ? uniqueGroups : mockGroups);
+      
+      const uniqueEquipments = Array.from(new Set(filtered.map(e => e.equipo).filter(e => e)));
+      setEquipments(uniqueEquipments.length > 0 ? uniqueEquipments : mockEquipments);
 
+      // Si la API no filtró, lo hacemos aquí (fallback)
       if (selectedGroup) {
         filtered = filtered.filter(e => e.grupoMuscular === selectedGroup);
+      }
+      if (selectedEquipment) {
+        filtered = filtered.filter(e => e.equipo === selectedEquipment);
       }
       if (search) {
         filtered = filtered.filter(e => e.nombre.toLowerCase().includes(search.toLowerCase()));
@@ -50,9 +64,11 @@ export default function ExercisesScreen() {
     } catch (error) {
       let filtered = mockExercises;
       if (selectedGroup) filtered = filtered.filter(e => e.grupoMuscular === selectedGroup);
+      if (selectedEquipment) filtered = filtered.filter(e => e.equipo === selectedEquipment);
       if (search) filtered = filtered.filter(e => e.nombre.toLowerCase().includes(search.toLowerCase()));
       
       setGroups(mockGroups);
+      setEquipments(mockEquipments);
       setExercises(filtered);
     } finally {
       setIsLoading(false);
@@ -81,6 +97,12 @@ export default function ExercisesScreen() {
         groups={groups}
         selectedGroup={selectedGroup}
         onSelectGroup={setSelectedGroup}
+      />
+      
+      <EquipmentFilter 
+        equipments={equipments}
+        selectedEquipment={selectedEquipment}
+        onSelectEquipment={setSelectedEquipment}
       />
 
       {isLoading ? (

@@ -3,8 +3,8 @@ import { API_ROUTES } from '../constants/api';
 import { Exercise, Rutina } from '../types/exercise';
 
 export const exerciseService = {
-  getAll: async (): Promise<Exercise[]> => {
-    const response = await api.get(API_ROUTES.EXERCISES.ALL);
+  getAll: async (params?: { grupoMuscular?: string; equipo?: string; dificultad?: string }): Promise<Exercise[]> => {
+    const response = await api.get(API_ROUTES.EXERCISES.ALL, { params });
     return response.data;
   },
 
