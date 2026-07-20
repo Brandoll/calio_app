@@ -67,11 +67,11 @@ export default function FoodDetailScreen() {
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.header} edges={['top']}>
-        <TouchableOpacity style={styles.iconButton} onPress={() => router.back()}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
           <ArrowLeft color={colors.secondary} size={24} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Detalle</Text>
-        <TouchableOpacity style={styles.iconButton} onPress={toggleFavorite}>
+        <TouchableOpacity style={styles.backButton} onPress={toggleFavorite}>
           <Heart color={isFavorite ? colors.error : colors.secondary} size={24} fill={isFavorite ? colors.error : 'transparent'} />
         </TouchableOpacity>
       </SafeAreaView>
@@ -95,20 +95,40 @@ export default function FoodDetailScreen() {
         <Text style={styles.portionText}>Porción: {food.porcion || '100g'}</Text>
 
         <NutritionInfo 
-          calories={food.calorias}
-          protein={food.proteinas}
-          carbs={food.carbohidratos}
-          fat={food.grasas}
-          fiber={food.fibra}
-          glycemicIndex={food.indiceGlucemico}
+          calories={food.energiaKcal}
+          protein={food.proteinasG}
+          carbs={food.carbohidratosTotalesG}
+          fat={food.grasaTotalG}
+          fiber={food.fibraDietariaG}
         />
-
-        <TouchableOpacity style={styles.addButton}>
-          <Plus color={colors.secondary} size={20} style={{ marginRight: 8 }} />
-          <Text style={styles.addButtonText}>Agregar a mi comida</Text>
-        </TouchableOpacity>
       </ScrollView>
-    </View>
+
+      <View style={styles.footer}>
+        <View style={styles.mealSelector}>
+          {['desayuno', 'almuerzo', 'cena', 'snack'].map((type) => (
+            <TouchableOpacity 
+              key={type} 
+              style={[styles.mealOption, mealType === type && styles.mealOptionSelected]}
+              onPress={() => setMealType(type)}
+            >
+              <Text style={[styles.mealOptionText, mealType === type && styles.mealOptionTextSelected]}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <TouchableOpacity style={styles.addButton} onPress={() => console.log('Adding', {
+          id: food.id,
+          nombre: food.nombre,
+          calorias: food.energiaKcal,
+          proteinas: food.proteinasG,
+          carbohidratos: food.carbohidratosTotalesG,
+          grasas: food.grasaTotalG,
+        })}>
+          <Text style={styles.addButtonText}>Añadir a {mealType}</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -119,49 +139,53 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-    backgroundColor: colors.white,
+    padding: 20,
   },
-  headerTitle: { fontSize: 16, fontWeight: '700', color: colors.secondary },
-  iconButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.background,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  content: { padding: 20 },
-  imageContainer: {
-    width: '100%',
-    height: 200,
-    borderRadius: 20,
-    backgroundColor: colors.white,
-    overflow: 'hidden',
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
-  },
+  headerTitle: { fontSize: 20, fontWeight: '700', color: colors.secondary },
+  backButton: { width: 40, height: 40, justifyContent: 'center' },
+  headerRight: { width: 40 },
+  imageContainer: { width: '100%', height: 250, backgroundColor: colors.card, justifyContent: 'center', alignItems: 'center' },
   image: { width: '100%', height: '100%' },
-  placeholder: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.card },
-  placeholderText: { fontSize: 64, fontWeight: '800', color: colors.textMuted },
-  titleContainer: { marginBottom: 8 },
-  name: { fontSize: 24, fontWeight: '800', color: colors.secondary, marginBottom: 4 },
-  category: { fontSize: 14, color: colors.textSecondary },
-  portionText: { fontSize: 14, fontWeight: '600', color: colors.primaryDark, marginBottom: 24 },
-  addButton: {
-    flexDirection: 'row',
-    backgroundColor: colors.primary,
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
-    marginBottom: 40,
+  placeholderText: { fontSize: 80, fontWeight: '800', color: colors.textMuted },
+  content: { padding: 20 },
+  title: { fontSize: 28, fontWeight: '800', color: colors.secondary, marginBottom: 8 },
+  category: { fontSize: 16, color: colors.textSecondary, marginBottom: 24 },
+  nutritionCard: {
+    backgroundColor: colors.card,
+    borderRadius: 20,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  addButtonText: { fontSize: 16, fontWeight: '700', color: colors.secondary },
+  nutritionTitle: { fontSize: 18, fontWeight: '700', color: colors.secondary, marginBottom: 16 },
+  macroRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: colors.border },
+  macroLabel: { fontSize: 16, color: colors.textSecondary, fontWeight: '500' },
+  macroValue: { fontSize: 16, fontWeight: '700', color: colors.secondary },
+  footer: {
+    padding: 20,
+    paddingBottom: 40,
+    backgroundColor: colors.background,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  mealSelector: { flexDirection: 'row', gap: 12, marginBottom: 20 },
+  mealOption: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: colors.card,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  mealOptionSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
+  mealOptionText: { fontSize: 14, fontWeight: '500', color: colors.textSecondary },
+  mealOptionTextSelected: { color: colors.secondary, fontWeight: '700' },
+  addButton: {
+    backgroundColor: colors.secondary,
+    borderRadius: 16,
+    height: 56,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  addButtonText: { color: colors.background, fontSize: 18, fontWeight: '700' },
 });
