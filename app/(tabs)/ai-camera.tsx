@@ -224,8 +224,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   content: {
-    flexGrow: 1,
     padding: 24,
+    paddingBottom: 100, // Espacio extra para el Bottom Nav Bar
+    flexGrow: 1,
     justifyContent: 'center',
   },
   header: {
