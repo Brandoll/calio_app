@@ -179,6 +179,81 @@ export default function FoodsScreen() {
           }
         />
       )}
+
+      {/* Bottom Sheet Modal */}
+      <Modal visible={isSheetVisible} animationType="slide" transparent={true} onRequestClose={closeFoodSheet}>
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity style={styles.modalDismiss} onPress={closeFoodSheet} activeOpacity={1} />
+          
+          <View style={styles.sheetContainer}>
+            <View style={styles.sheetIndicator} />
+            
+            {selectedFood && (
+              <>
+                <Text style={styles.sheetTitle}>{selectedFood.nombre}</Text>
+                <Text style={styles.sheetCategory}>{selectedFood.categoria} • {selectedFood.porcionRef || '100g'}</Text>
+                
+                <View style={styles.sheetMacros}>
+                  <View style={styles.sheetMacroItem}>
+                    <Text style={[styles.sheetMacroValue, { color: colors.primaryDark }]}>
+                      {Math.round(selectedFood.energiaKcal || 0)} kcal
+                    </Text>
+                    <Text style={styles.sheetMacroLabel}>Energía</Text>
+                  </View>
+                  <View style={styles.sheetMacroItem}>
+                    <Text style={[styles.sheetMacroValue, { color: '#FF4B4B' }]}>{Math.round(selectedFood.proteinasG || 0)}g</Text>
+                    <Text style={styles.sheetMacroLabel}>Proteína</Text>
+                  </View>
+                  <View style={styles.sheetMacroItem}>
+                    <Text style={[styles.sheetMacroValue, { color: '#FFB800' }]}>{Math.round(selectedFood.carbohidratosTotalesG || 0)}g</Text>
+                    <Text style={styles.sheetMacroLabel}>Carbs</Text>
+                  </View>
+                  <View style={styles.sheetMacroItem}>
+                    <Text style={[styles.sheetMacroValue, { color: '#0080FF' }]}>{Math.round(selectedFood.grasaTotalG || 0)}g</Text>
+                    <Text style={styles.sheetMacroLabel}>Grasas</Text>
+                  </View>
+                </View>
+
+                <View style={styles.sheetActions}>
+                  <TouchableOpacity 
+                    style={[styles.sheetButton, styles.sheetFavoriteButton]} 
+                    onPress={() => {
+                      handleToggleFavorite(selectedFood);
+                    }}
+                  >
+                    <Heart 
+                      color={selectedFood.esFavorito ? "#FF4B4B" : colors.secondary} 
+                      size={24} 
+                      fill={selectedFood.esFavorito ? "#FF4B4B" : "transparent"} 
+                    />
+                    <Text style={styles.sheetButtonTextSecondary}>
+                      {selectedFood.esFavorito ? 'Favorito' : 'Guardar'}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity 
+                    style={[styles.sheetButton, styles.sheetBasketButton]} 
+                    onPress={() => {
+                      const exists = basketItems.some(i => i.id === selectedFood.id);
+                      if (exists) {
+                        removeBasketItem(selectedFood.id);
+                      } else {
+                        addBasketItem(selectedFood);
+                      }
+                    }}
+                  >
+                    <ShoppingBasket color={colors.background} size={24} />
+                    <Text style={styles.sheetButtonTextPrimary}>
+                      {basketItems.some(i => i.id === selectedFood.id) ? 'Quitar de cesta' : 'Añadir a la cesta'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
+
     </SafeAreaView>
   );
 }

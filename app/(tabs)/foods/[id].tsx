@@ -36,7 +36,6 @@ export default function FoodDetailScreen() {
         carbohidratosTotalesG: 14,
         grasaTotalG: 0.2,
         fibraDietariaG: 2.4,
-        indiceGlucemico: 36,
         porcionRef: '1 unidad mediana (182g)',
       });
     } finally {
