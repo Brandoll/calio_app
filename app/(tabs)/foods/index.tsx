@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Search, Camera } from 'lucide-react-native';
+import { Search, ShoppingCart, Plus } from 'lucide-react-native';
 import { colors } from '../../../src/theme/colors';
 import { foodService } from '../../../src/services/foodService';
 import { Food, FoodCategory } from '../../../src/types/food';
@@ -16,38 +16,52 @@ export default function FoodsScreen() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [foods, setFoods] = useState<Food[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Mock data for initial rendering if backend is not available
-  const mockCategories = [
-    { id: 1, nombre: 'Frutas' },
-    { id: 2, nombre: 'Verduras' },
-    { id: 3, nombre: 'Carnes' },
-    { id: 4, nombre: 'Cereales' },
-  ];
-
-  const mockFoods: Food[] = [
-    { id: 1, nombre: 'Manzana', categoria: 'Frutas', calorias: 52, proteinas: 0.3, carbohidratos: 14, grasas: 0.2 },
-    { id: 2, nombre: 'Pechuga de pollo', categoria: 'Carnes', calorias: 165, proteinas: 31, carbohidratos: 0, grasas: 3.6 },
-    { id: 3, nombre: 'Arroz integral', categoria: 'Cereales', calorias: 111, proteinas: 2.6, carbohidratos: 23, grasas: 0.9 },
-  ];
+  const [activeTab, setActiveTab] = useState<'explorar' | 'mis_recetas'>('explorar');
+  const [favoritesMap, setFavoritesMap] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     loadData();
-  }, [selectedCategory]);
+  }, [selectedCategory, activeTab]);
 
   const loadData = async () => {
     setIsLoading(true);
     try {
-      // Intenta obtener del backend
-      const cats = await foodService.getCategories();
-      setCategories(cats.length > 0 ? cats : mockCategories);
+      // Cargar categorías si no existen
+      if (categories.length === 0) {
+        const cats = await foodService.getCategories();
+        setCategories(cats);
+      }
       
-      const items = await foodService.getAll(search, selectedCategory || undefined);
-      setFoods(items.length > 0 ? items : mockFoods);
+      // Obtener lista de favoritos actuales para marcar los corazones
+      const favs = await foodService.getFavorites();
+      const favMap: Record<number, boolean> = {};
+      favs.forEach(f => { favMap[f.id] = true; });
+      setFavoritesMap(favMap);
+
+      // Cargar alimentos según la pestaña
+      let items: Food[] = [];
+      if (activeTab === 'mis_recetas') {
+        // Para "Mis Alimentos", usamos los favoritos
+        // Y aplicamos los filtros localmente ya que el endpoint de favoritos no soporta busqueda (asumiendo)
+        items = favs;
+        if (search) {
+          items = items.filter(f => f.nombre.toLowerCase().includes(search.toLowerCase()));
+        }
+        if (selectedCategory) {
+          items = items.filter(f => {
+            // El backend retorna categoria (string). Habría que ver como filtrar por ID de categoría en favoritos
+            // Por simplicidad, obtenemos el nombre de la categoría seleccionada
+            const catName = categories.find(c => c.id === selectedCategory)?.nombre;
+            return f.categoria === catName;
+          });
+        }
+      } else {
+        items = await foodService.getAll(search, selectedCategory || undefined);
+      }
+      
+      setFoods(items);
     } catch (error) {
-      // Fallback a mock data
-      setCategories(mockCategories);
-      setFoods(mockFoods);
+      console.error('Error loading foods:', error);
     } finally {
       setIsLoading(false);
     }
@@ -57,24 +71,75 @@ export default function FoodsScreen() {
     loadData();
   };
 
+  const toggleFavorite = async (food: Food) => {
+    const isFav = favoritesMap[food.id];
+    
+    // Actualización optimista
+    setFavoritesMap(prev => ({ ...prev, [food.id]: !isFav }));
+    
+    // Si estamos en la pestaña de favoritos y desmarcamos uno, lo quitamos de la lista
+    if (activeTab === 'mis_recetas' && isFav) {
+      setFoods(prev => prev.filter(f => f.id !== food.id));
+    }
+
+    try {
+      if (isFav) {
+        await foodService.removeFavorite(food.id);
+      } else {
+        await foodService.addFavorite(food.id);
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      // Revertir optimista
+      setFavoritesMap(prev => ({ ...prev, [food.id]: isFav }));
+      if (activeTab === 'mis_recetas' && isFav) {
+        loadData(); // Recargar completo para estar seguros
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.header}>
         <Text style={styles.title}>Alimentos</Text>
         <View style={styles.headerActions}>
-          <Camera color={colors.secondary} size={24} />
+          <TouchableOpacity style={styles.iconButton}>
+            <ShoppingCart color="#6B4A3A" size={24} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.iconButton}>
+            <Plus color="#6B4A3A" size={24} />
+          </TouchableOpacity>
         </View>
+      </View>
+
+      {/* Tabs (Toggle) */}
+      <View style={styles.tabsContainer}>
+        <TouchableOpacity 
+          style={[styles.tab, activeTab === 'explorar' && styles.tabActive]}
+          onPress={() => setActiveTab('explorar')}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.tabText, activeTab === 'explorar' && styles.tabTextActive]}>Explorar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.tab, activeTab === 'mis_recetas' && styles.tabActive]}
+          onPress={() => setActiveTab('mis_recetas')}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.tabText, activeTab === 'mis_recetas' && styles.tabTextActive]}>Mis Alimentos</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.searchContainer}>
         <Search color={colors.textMuted} size={20} style={styles.searchIcon} />
         <TextInput 
           style={styles.searchInput}
-          placeholder="Busca un alimento..."
+          placeholder="Buscar alimentos..."
           placeholderTextColor={colors.textMuted}
           value={search}
           onChangeText={setSearch}
           onSubmitEditing={handleSearch}
+          returnKeyType="search"
         />
       </View>
 
@@ -90,13 +155,16 @@ export default function FoodsScreen() {
         <FlatList
           data={foods}
           keyExtractor={(item) => item.id.toString()}
+          numColumns={2}
           contentContainerStyle={styles.listContent}
+          columnWrapperStyle={styles.columnWrapper}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <FoodCard 
               food={item} 
+              isFavorite={favoritesMap[item.id] || false}
+              onFavoritePress={() => toggleFavorite(item)}
               onPress={() => router.push(`/(tabs)/foods/${item.id}`)}
-              onAdd={() => console.log('Añadir a comida')}
             />
           )}
           ListEmptyComponent={
@@ -111,39 +179,79 @@ export default function FoodsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: { 
+    flex: 1, 
+    backgroundColor: '#FAF5EF', // Fondo color crema suave de la imagen
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginBottom: 16,
+    marginBottom: 20,
+    marginTop: 10,
   },
-  title: { fontSize: 24, fontWeight: '800', color: colors.secondary },
+  title: { 
+    fontSize: 28, 
+    fontWeight: '800', 
+    color: '#3A3A3A',
+  },
   headerActions: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.card,
+    flexDirection: 'row',
+    gap: 16,
+  },
+  iconButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.border,
+  },
+  tabsContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    backgroundColor: '#EAE1D5', // Color crema un poco mas oscuro
+    borderRadius: 30,
+    padding: 4,
+    marginBottom: 20,
+  },
+  tab: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderRadius: 26,
+  },
+  tabActive: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  tabText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#8D7F75',
+  },
+  tabTextActive: {
+    color: '#3A3A3A',
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.card,
+    backgroundColor: '#FFFFFF',
     marginHorizontal: 20,
-    borderRadius: 12,
+    borderRadius: 16,
     paddingHorizontal: 16,
-    height: 48,
-    borderWidth: 1,
-    borderColor: colors.border,
+    height: 52,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  searchIcon: { marginRight: 8 },
-  searchInput: { flex: 1, fontSize: 16, color: colors.secondary },
-  listContent: { paddingHorizontal: 20, paddingBottom: 20 },
+  searchIcon: { marginRight: 12 },
+  searchInput: { flex: 1, fontSize: 16, color: '#3A3A3A' },
+  listContent: { paddingHorizontal: 14, paddingBottom: 100 },
+  columnWrapper: { justifyContent: 'space-between' },
   loader: { marginTop: 40 },
   emptyContainer: { alignItems: 'center', marginTop: 40 },
   emptyText: { color: colors.textSecondary, fontSize: 16 },
