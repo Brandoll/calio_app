@@ -128,7 +128,7 @@ export default function FoodDetailScreen() {
           <Text style={styles.addButtonText}>Añadir a {mealType}</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
