@@ -209,14 +209,10 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* Comidas Recientes (ahora scrolleable y ocupa el espacio restante) */}
-      <ScrollView 
-        style={styles.scrollableSection}
-        contentContainerStyle={{ paddingBottom: Platform.OS === 'ios' ? 105 : 95 }}
-        showsVerticalScrollIndicator={false}
-      >
+      {/* Comidas Recientes (ahora scrolleable internamente y ocupa el espacio restante) */}
+      <View style={styles.scrollableSection}>
         <RecentMeals meals={dailyData.comidas as any[]} onDelete={handleDeleteMeal} />
-      </ScrollView>
+      </View>
 
       {/* Modal Interactivo de Agua */}
       <WaterModal 

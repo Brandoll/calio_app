@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { Flame } from 'lucide-react-native';
 import { colors } from '../../theme/colors';
 import { MealRecord } from '../../types/tracking';
@@ -21,71 +21,77 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
         <Text style={styles.seeAll}>Ver todo</Text>
       </View>
       
-      {meals.length > 0 ? (
-        <View style={styles.listContainer}>
-          {meals.map((meal, index) => (
-            <TouchableOpacity 
-              key={meal.id ? meal.id.toString() : index.toString()} 
-              style={styles.card}
-              activeOpacity={0.8}
-              onPress={() => setSelectedMeal(meal)}
-            >
-              {/* Imagen a la Izquierda */}
-              <View style={styles.imageContainer}>
-                {meal.imageUrl ? (
-                  <Image 
-                    source={{ uri: meal.imageUrl.startsWith('file://') ? meal.imageUrl : `${API_BASE_URL}${meal.imageUrl}` }} 
-                    style={styles.image} 
-                  />
-                ) : (
-                  <View style={[styles.image, styles.placeholderImage]}>
-                    <Text style={styles.placeholderText}>{meal.nombre ? meal.nombre.charAt(0).toUpperCase() : '?'}</Text>
-                  </View>
-                )}
-              </View>
+      <ScrollView 
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: Platform.OS === 'ios' ? 105 : 95 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {meals.length > 0 ? (
+          <View style={styles.listContainer}>
+            {meals.map((meal, index) => (
+              <TouchableOpacity 
+                key={meal.id ? meal.id.toString() : index.toString()} 
+                style={styles.card}
+                activeOpacity={0.8}
+                onPress={() => setSelectedMeal(meal)}
+              >
+                {/* Imagen a la Izquierda */}
+                <View style={styles.imageContainer}>
+                  {meal.imageUrl ? (
+                    <Image 
+                      source={{ uri: meal.imageUrl.startsWith('file://') ? meal.imageUrl : `${API_BASE_URL}${meal.imageUrl}` }} 
+                      style={styles.image} 
+                    />
+                  ) : (
+                    <View style={[styles.image, styles.placeholderImage]}>
+                      <Text style={styles.placeholderText}>{meal.nombre ? meal.nombre.charAt(0).toUpperCase() : '?'}</Text>
+                    </View>
+                  )}
+                </View>
 
-              {/* Información a la Derecha */}
-              <View style={styles.infoContainer}>
-                <View style={styles.infoHeader}>
-                  <Text style={styles.title} numberOfLines={2}>
-                    {meal.nombre}
-                  </Text>
+                {/* Información a la Derecha */}
+                <View style={styles.infoContainer}>
+                  <View style={styles.infoHeader}>
+                    <Text style={styles.title} numberOfLines={2}>
+                      {meal.nombre}
+                    </Text>
+                    
+                    <View style={styles.calBadge}>
+                      <Flame color="#FF8A00" size={12} fill="#FF8A00" />
+                      <Text style={styles.calBadgeText}>{Math.round(meal.calorias)}</Text>
+                    </View>
+                  </View>
                   
-                  <View style={styles.calBadge}>
-                    <Flame color="#FF8A00" size={12} fill="#FF8A00" />
-                    <Text style={styles.calBadgeText}>{Math.round(meal.calorias)}</Text>
-                  </View>
-                </View>
-                
-                <Text style={styles.timeText}>
-                  {meal.tipoComida} • {meal.hora ? meal.hora.substring(0, 5) : ''}
-                </Text>
+                  <Text style={styles.timeText}>
+                    {meal.tipoComida} • {meal.hora ? meal.hora.substring(0, 5) : ''}
+                  </Text>
 
-                {/* Macros */}
-                <View style={styles.macrosRow}>
-                  <View style={styles.macroItem}>
-                    <Text style={[styles.macroVal, { color: '#FF4B4B' }]}>{Math.round(meal.proteinas)}g</Text>
-                    <Text style={styles.macroLabel}>Prot</Text>
-                  </View>
-                  <View style={styles.macroItem}>
-                    <Text style={[styles.macroVal, { color: '#85C872' }]}>{Math.round(meal.carbohidratos)}g</Text>
-                    <Text style={styles.macroLabel}>Carbs</Text>
-                  </View>
-                  <View style={styles.macroItem}>
-                    <Text style={[styles.macroVal, { color: '#0080FF' }]}>{Math.round(meal.grasas)}g</Text>
-                    <Text style={styles.macroLabel}>Grasas</Text>
+                  {/* Macros */}
+                  <View style={styles.macrosRow}>
+                    <View style={styles.macroItem}>
+                      <Text style={[styles.macroVal, { color: '#FF4B4B' }]}>{Math.round(meal.proteinas)}g</Text>
+                      <Text style={styles.macroLabel}>Prot</Text>
+                    </View>
+                    <View style={styles.macroItem}>
+                      <Text style={[styles.macroVal, { color: '#85C872' }]}>{Math.round(meal.carbohidratos)}g</Text>
+                      <Text style={styles.macroLabel}>Carbs</Text>
+                    </View>
+                    <View style={styles.macroItem}>
+                      <Text style={[styles.macroVal, { color: '#0080FF' }]}>{Math.round(meal.grasas)}g</Text>
+                      <Text style={styles.macroLabel}>Grasas</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
-      ) : (
-        <View style={styles.emptyState}>
-          <Text style={styles.emptyTitle}>No hay comidas registradas</Text>
-          <Text style={styles.emptyText}>Comienza a registrar tus comidas tomando una foto.</Text>
-        </View>
-      )}
+              </TouchableOpacity>
+            ))}
+          </View>
+        ) : (
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyTitle}>No hay comidas registradas</Text>
+            <Text style={styles.emptyText}>Comienza a registrar tus comidas tomando una foto.</Text>
+          </View>
+        )}
+      </ScrollView>
 
       {/* Modal de Detalles de la Comida */}
       <MealDetailsModal 
@@ -100,7 +106,7 @@ export const RecentMeals = ({ meals = [], onDelete }: RecentMealsProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 40,
+    flex: 1, // Permite que tome todo el espacio de su padre para scrollear internamente
   },
   header: {
     flexDirection: 'row',
